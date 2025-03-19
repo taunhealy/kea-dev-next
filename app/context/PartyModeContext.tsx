@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState } from "react";
 
 type PartyModeContextType = {
   isPartyMode: boolean;
@@ -12,24 +12,13 @@ const PartyModeContext = createContext<PartyModeContextType | undefined>(
 );
 
 export function PartyModeProvider({ children }: { children: React.ReactNode }) {
-  const [isPartyMode, setIsPartyModeState] = useState(true);
+  const [isPartyMode, setIsPartyModeState] = useState(false);
 
   const setPartyMode = (isParty: boolean) => {
+    console.log("Setting party mode:", isParty); // Debug log
     setIsPartyModeState(isParty);
-    const partyMode = document.getElementById("party-mode");
 
-    if (partyMode) {
-      if (!isParty) {
-        partyMode.classList.add("fade-out");
-        setTimeout(() => {
-          partyMode.classList.add("hidden");
-          partyMode.classList.remove("fade-out");
-        }, 7000);
-      } else {
-        partyMode.classList.remove("hidden", "fade-out");
-      }
-    }
-
+    // Handle party mode button styling
     document.querySelectorAll("[data-party-mode]").forEach((element) => {
       if (isParty) {
         element.classList.add("party-button");
@@ -38,7 +27,7 @@ export function PartyModeProvider({ children }: { children: React.ReactNode }) {
         element.classList.add("party-fade-out");
         setTimeout(() => {
           element.classList.remove("party-button");
-        }, 7000);
+        }, 500);
       }
     });
   };

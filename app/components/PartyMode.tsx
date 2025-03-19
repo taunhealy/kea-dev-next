@@ -1,26 +1,25 @@
-import { useEffect, useState } from "react";
-import { $partyMode } from "../utils/partyModeStore";
-import HeroBeams from "./HeroBeams";
-import PartyButton from "./PartyButton";
+"use client";
+
+import { usePartyMode } from "../context/PartyModeContext";
+import PartyModeBeams from "./PartyModeBeams";
+import PartyModeFireworks from "./PartyModeFireworks";
+import Confetti from "./Confetti";
 
 export default function PartyMode() {
-  const [isActive, setIsActive] = useState(false);
-
-  useEffect(() => {
-    return $partyMode.subscribe((value: any) => {
-      setIsActive(value);
-    });
-  }, []);
+  const { isPartyMode } = usePartyMode();
 
   return (
-    <div
-      id="party-mode"
-      className={`fixed inset-0 pointer-events-none z-[9999] transition-opacity duration-5000 ease-out ${
-        isActive ? "opacity-100" : "opacity-0"
-      }`}
-    >
-      <HeroBeams />
-      <PartyButton />
-    </div>
+    <>
+      <div
+        id="party-mode"
+        className={`fixed inset-0 pointer-events-none z-[9999] transition-opacity duration-500 ease-out ${
+          isPartyMode ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <PartyModeBeams isActive={isPartyMode} />
+        <PartyModeFireworks isActive={isPartyMode} />
+      </div>
+      <Confetti isActive={isPartyMode} />
+    </>
   );
 }

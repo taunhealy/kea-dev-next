@@ -29,7 +29,7 @@ export default function WorkSection({
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const cards = containerRef.current.children;
+    const cards = Array.from(containerRef.current.children); // Convert HTMLCollection to Array
 
     // Create single timeline for better performance
     const tl = gsap.timeline();
@@ -63,9 +63,12 @@ export default function WorkSection({
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const imageContainers =
-      containerRef.current.querySelectorAll(".work-card-image");
-    const cards = containerRef.current.querySelectorAll(".work-card");
+    const imageContainers = Array.from(
+      containerRef.current.querySelectorAll(".work-card-image")
+    );
+    const cards = Array.from(
+      containerRef.current.querySelectorAll(".work-card")
+    );
 
     // Set initial opacity to 0
     gsap.set(imageContainers, { opacity: 0 });
