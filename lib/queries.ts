@@ -2,13 +2,15 @@ import { groq } from "next-sanity";
 
 export const homePageQuery = groq`{
   "hero": *[_type == "hero"][0],
-  "work": *[_type == "workSection"][0],
-  "blog": *[_type == "blogSection"][0],
+  "workSection": *[_type == "page" && slug.current == "home"][0].sections[_type == "workSection"][0],
   "works": *[_type == "work"] | order(orderRank) {
     ...,
     categories[]->{ title, slug { current } }
   },
-  "categories": *[_type == "category"] | order(title asc) { title, slug { current } }
+  "categories": *[_type == "workCategory"] | order(order asc) { 
+    title, 
+    slug { current } 
+  }
 }`;
 
 export const pageQuery = `*[_type == "page" && slug.current == $slug][0]{
@@ -52,7 +54,7 @@ export const blogPostsQuery = `*[_type == "post"] | order(publishedAt desc) {
   categories[]->{title}
 }`;
 
-  export const postQuery = `*[_type == "post" && slug.current == $slug][0]{
+export const postQuery = `*[_type == "post" && slug.current == $slug][0]{
     _id,
     title,
     content,

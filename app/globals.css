@@ -59,7 +59,7 @@
     --color-text-tertiary: #9ca3af;
 
     /* Background Colors */
-    --color-bg-primary: var(--color-white);
+    --color-background-primary: var(--color-white);
     --color-bg-secondary: #f3f4f6;
     --color-bg-tertiary: #e5e7eb;
 
@@ -231,8 +231,8 @@
   .text-secondary {
     color: var(--color-text-secondary);
   }
-  .bg-primary {
-    background-color: var(--color-bg-primary);
+  .bg-background-primary {
+    background-color: var(--color-background-primary);
   }
   /* Animation utilities */
   .party-button {

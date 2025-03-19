@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import type { Work } from "../types/workType";
 import gsap from "gsap";
+import { urlForImage } from "@/lib/sanity";
 
 const BORDER_WIDTHS = ["3px", "5px", "7px"];
 
@@ -24,6 +25,12 @@ export default function WorkSection({
   const [loading, setLoading] = useState(!works || !categories);
   const [error, setError] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Add console log to debug
+  useEffect(() => {
+    console.log("Categories:", categories);
+    console.log("Works:", works);
+  }, [categories, works]);
 
   // ANIMATION EFFECT
   useEffect(() => {
@@ -204,12 +211,14 @@ export default function WorkSection({
                 }}
               />
 
-              {/* Image with hover effect */}
-              <img
-                src={work.coverImage.asset.url}
-                alt={work.title}
-                className="w-full h-full object-cover transition-all duration-300 scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-[85%]"
-              />
+              {/* Image with hover effect - UPDATED */}
+              {work.coverImage && work.coverImage.asset && (
+                <img
+                  src={urlForImage(work.coverImage).url()}
+                  alt={work.title}
+                  className="w-full h-full object-cover transition-all duration-300 scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-[85%]"
+                />
+              )}
 
               {/* Category indicators */}
               <div className="absolute top-4 left-4 flex gap-1.5">

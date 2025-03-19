@@ -5,19 +5,20 @@ import WorkSection from "@/app/sections/WorkSection";
 import HeroSection from "@/app/sections/HeroSection";
 
 export default async function Home() {
-  const data = await client.fetch(
-    homePageQuery,
-    {},
-    {
-      next: { revalidate: 3600 },
-    }
-  );
+  const data = await client.fetch(homePageQuery);
+
+  // Add console log to debug
+  console.log("Home data:", {
+    workData: data.work,
+    works: data.works,
+    categories: data.categories,
+  });
 
   return (
     <>
       <HeroSection data={data.hero} />
       <WorkSection
-        data={data.work}
+        data={{ sectionTitle: "Our Work" }} // Default section title
         works={data.works}
         categories={data.categories}
       />

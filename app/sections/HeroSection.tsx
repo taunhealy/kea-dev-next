@@ -32,14 +32,15 @@ export default function HeroSection({ data }: { data?: SectionData }) {
   }, [data]);
 
   return (
-    <section className="flex flex-col h-[100vh] relative z-0 bg-primary">
-      <div className="section-padding flex flex-col items-start py-0 gap-[90px] pt-[120px]">
-        <div className="titles-container flex flex-col gap-[16px] max-w-[540px] h-full px-[32px]">
-          <h4 className="text-white font-primary">Kea Logic</h4>
-          <h1 className="text-white font-primary">
-            Creating <span className="word-fast">performant</span> and{" "}
-            <span className="word-minimal">interactive</span>{" "}
-            <span className="word-content">websites</span>.
+    <section className="flex flex-col h-[100vh] relative z-0 bg-black">
+      <div className="flex flex-col items-start py-0 gap-[90px] pt-[120px] px-8">
+        <div className="titles-container flex flex-col gap-[16px] max-w-[540px] h-full relative">
+          <div className="absolute inset-0 -m-4 blur-sm bg-black/20 rounded-xl  backdrop-opacity-10" />
+          <h4 className="text-white font-primary relative">Kea Logic</h4>
+          <h1 className="text-white font-primary relative">
+            <span className="word-fast">Custom</span>{" "}
+            <span className="word-minimal">websites</span> that solve business
+            <span className="word-content"> challenges</span>.
           </h1>
         </div>
         <HeroBeams />
