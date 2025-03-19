@@ -1,0 +1,32 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+type Props = HTMLAttributes<'a'>;
+
+const { href, class: className, ...props } = Astro.props;
+const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '');
+const subpath = pathname.match(/[^\/]+/g);
+const isActive = href === pathname || href === `/${subpath?.[0] || ''}`;
+
+// Combine clsx with twMerge to handle both conditional classes and class conflicts
+const cn = (...inputs: any) => twMerge(clsx(inputs));
+---
+
+<!-- <slot /> is for child content/elements, such as page.title in Header.astro -->
+
+<a 
+  href={href} 
+  class={cn(
+    'inline-block no-underline transition-colors',
+    {
+      'font-semibold text-[#00FF88]': isActive,
+      'font-normal text-gray-700 hover:text-[#FF7957]': !isActive,
+    },
+    className
+  )} 
+  {...props}
+>
+	<slot />
+</a>

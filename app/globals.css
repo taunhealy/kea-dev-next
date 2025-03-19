@@ -1,0 +1,350 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@theme {
+  /* Font Families */
+  --font-family-primary: "Inter", sans-serif;
+  --font-family-secondary: "Inria Sans", sans-serif;
+
+  /* Color Variables */
+  --color-primary: #22c55e;
+  --color-secondary: #f97316;
+  --color-tertiary: #a855f7;
+}
+
+@layer base {
+  /* Set base styles for HTML elements directly */
+  h1 {
+    @apply font-primary font-normal tracking-[-0.02em] leading-tight
+      text-primary dark:text-secondary;
+    font-size: 32px;
+  }
+
+  h2 {
+    @apply font-primary font-normal tracking-[-0.02em] leading-tight
+      text-primary dark:text-secondary;
+    font-size: 21px;
+  }
+
+  h3 {
+    @apply font-secondary font-bold tracking-[-0.015em] leading-snug
+      text-primary dark:text-secondary;
+    font-size: 21px;
+  }
+
+  h4 {
+    @apply font-secondary font-bold tracking-[-0.01em] leading-snug
+      text-primary dark:text-secondary;
+    font-size: 16px;
+  }
+
+  :root {
+    /* Brand Colors */
+    --color-primary: #22c55e; /* Green */
+    --color-secondary: #f97316; /* Orange */
+    --color-tertiary: #a855f7; /* Purple */
+
+    /* Base Colors */
+    --color-black: #000000;
+    --color-white: #ffffff;
+
+    /* Text Colors */
+    --color-text-primary: var(--color-black);
+    --color-text-secondary: #4b5563;
+    --color-text-tertiary: #9ca3af;
+
+    /* Background Colors */
+    --color-bg-primary: var(--color-white);
+    --color-bg-secondary: #f3f4f6;
+    --color-bg-tertiary: #e5e7eb;
+
+    /* Border Colors */
+    --color-border-light: #e5e7eb;
+    --color-border-medium: #d1d5db;
+    --color-border-dark: #9ca3af;
+  }
+
+  /* Dark mode overrides */
+  [data-theme="dark"] {
+    --color-text-primary: var(--color-white);
+    --color-text-secondary: #e5e7eb;
+    --color-text-tertiary: #9ca3af;
+
+    --color-bg-primary: var(--color-black);
+    --color-bg-secondary: #1f2937;
+    --color-bg-tertiary: #374151;
+
+    --color-border-light: #374151;
+    --color-border-medium: #4b5563;
+    --color-border-dark: #6b7280;
+  }
+
+  /* Add base styles for buttons to preserve cursor behavior */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  /* Display & Heading Styles */
+  .display {
+    @apply font-primary font-semibold tracking-[-0.02em] leading-tight
+    text-primary dark:text-secondary;
+    font-size: 72px;
+  }
+
+  /* Text Styles */
+  .text-extra-small {
+    @apply font-primary leading-relaxed
+    text-primary dark:text-secondary;
+    font-size: 12px;
+  }
+
+  .text-small {
+    @apply font-primary leading-relaxed
+    text-primary dark:text-secondary;
+    font-size: 14px;
+  }
+
+  .text-main {
+    @apply font-primary leading-relaxed
+    text-primary dark:text-secondary;
+    font-size: 16px;
+  }
+
+  .text-large {
+    @apply font-primary leading-relaxed
+    text-primary dark:text-secondary;
+    font-size: 24px;
+  }
+
+  /* Layout Spacing System */
+  .container-large {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-medium {
+    @apply max-w-5xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-small {
+    @apply max-w-3xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Section Spacing */
+  .section-space-large {
+    @apply py-16 md:py-24;
+  }
+
+  .section-space-medium {
+    @apply py-12 md:py-16;
+  }
+
+  .section-space-small {
+    @apply py-8 md:py-12;
+  }
+
+  /* Component Spacing */
+  .stack-large {
+    @apply space-y-8;
+  }
+
+  .stack-medium {
+    @apply space-y-6;
+  }
+
+  .stack-small {
+    @apply space-y-4;
+  }
+
+  /* Grid Systems */
+  .grid-auto-fit {
+    @apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+  }
+
+  .grid-auto-fill {
+    @apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+  }
+
+  /* Button Styles */
+  .btn-primary {
+    @apply font-primary font-semibold
+      transition-colors duration-200
+      flex items-center justify-center
+      text-base
+      px-[24px] py-[12px]
+      min-h-[45px]
+      min-w-[120px];
+  }
+
+  .btn-secondary {
+    @apply font-primary font-semibold
+      transition-colors duration-200
+      flex items-center justify-center
+      text-base
+      px-[24px] py-[12px]
+      min-h-[45px]
+      min-w-[120px];
+  }
+
+  /* Focus States */
+  .focus-visible {
+    @apply focus:outline-none focus:ring-2 focus:ring-tertiary focus:ring-offset-2;
+  }
+
+  /* Spinner Styles */
+  .spinner {
+    @apply inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite]
+    text-secondary dark:text-secondary;
+  }
+
+  /* Button Loading State */
+  .btn-primary.loading .spinner {
+    @apply text-secondary dark:text-secondary;
+  }
+
+  .btn-secondary.loading .spinner {
+    @apply text-primary dark:text-primary;
+  }
+}
+
+@layer utilities {
+  /* Font utilities */
+  .font-primary {
+    font-family: var(--font-family-primary);
+  }
+
+  .font-secondary {
+    font-family: var(--font-family-secondary);
+  }
+
+  /* Add color utilities from the working version */
+  .text-primary {
+    color: var(--color-text-primary);
+  }
+  .text-secondary {
+    color: var(--color-text-secondary);
+  }
+  .bg-primary {
+    background-color: var(--color-bg-primary);
+  }
+  /* Animation utilities */
+  .party-button {
+    background: linear-gradient(45deg, #22c55e, #f97316, #a855f7, #22c55e);
+    background-size: 400% 400%;
+    animation: party-gradient 3s ease infinite;
+  }
+
+  @keyframes party-gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  /* Container utilities */
+  .container-large {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Section spacing */
+  .section-space-large {
+    @apply py-16 md:py-24;
+  }
+
+  /* Preserve v3 border color defaults */
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-border-light);
+  }
+
+  /* Dark Mode Overrides */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      /* Add any specific dark mode CSS variables here */
+    }
+  }
+
+  /* Print Styles */
+  @media print {
+    .no-print {
+      display: none;
+    }
+  }
+
+  .beams-container {
+    transition: opacity 5s ease-out;
+  }
+
+  #party-mode.fade-out {
+    opacity: 0;
+  }
+
+  @keyframes strobe {
+    0%,
+    20%,
+    40% {
+      opacity: 1;
+    }
+    10%,
+    30%,
+    50% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes color-shift {
+    0% {
+      background: #22c55e;
+    }
+    33% {
+      background: #f97316;
+    }
+    66% {
+      background: #a855f7;
+    }
+    100% {
+      background: #22c55e;
+    }
+  }
+
+  @keyframes distance-beams {
+    0% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100vh) scale(0.5);
+      opacity: 0;
+    }
+  }
+
+  .animate-strobe {
+    animation: strobe 2s infinite;
+  }
+
+  .animate-color-shift {
+    animation: color-shift 3s infinite;
+  }
+
+  .animate-distance-beams {
+    animation: distance-beams 7s linear infinite;
+  }
+}
