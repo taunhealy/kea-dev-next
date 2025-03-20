@@ -4,7 +4,7 @@ const DEFAULT_PAGES = [
   {
     _type: 'page',
     title: 'Home',
-    slug: { _type: 'slug', current: 'home' },
+    slug: {_type: 'slug', current: 'home'},
     sections: [
       {
         _type: 'section',
@@ -14,7 +14,7 @@ const DEFAULT_PAGES = [
         sectionContent: {
           _type: 'workSection',
           // Default work section content
-        }
+        },
       },
       {
         _type: 'section',
@@ -24,36 +24,34 @@ const DEFAULT_PAGES = [
         sectionContent: {
           _type: 'testimonialSection',
           // Default testimonial section content
-        }
+        },
       },
       // ... other sections
-    ]
+    ],
   },
   {
     _type: 'page',
     title: 'About',
-    slug: { _type: 'slug', current: 'about' },
+    slug: {_type: 'slug', current: 'about'},
     sections: [
       // ... predefined sections for About page
-    ]
-  }
+    ],
+  },
 ]
 
 export async function seedDefaultPages() {
   try {
     for (const page of DEFAULT_PAGES) {
       // Check if page already exists
-      const existingPage = await client.fetch(
-        `*[_type == "page" && slug.current == $slug][0]`,
-        { slug: page.slug.current }
-      )
+      const existingPage = await client.fetch(`*[_type == "page" && slug.current == $slug][0]`, {
+        slug: page.slug.current,
+      })
 
       if (!existingPage) {
         await client.create(page)
-        console.log(`Created page: ${page.title}`)
       }
     }
   } catch (error) {
     console.error('Error seeding pages:', error)
   }
-} 
+}

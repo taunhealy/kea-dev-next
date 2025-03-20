@@ -1,6 +1,5 @@
 import {defineField, defineType} from 'sanity'
 import {orderRankField, orderRankOrdering} from '@sanity/orderable-document-list'
-import {defineArrayMember} from 'sanity'
 
 export default defineType({
   name: 'page',

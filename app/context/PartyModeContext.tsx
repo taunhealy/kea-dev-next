@@ -15,7 +15,6 @@ export function PartyModeProvider({ children }: { children: React.ReactNode }) {
   const [isPartyMode, setIsPartyModeState] = useState(false);
 
   const setPartyMode = (isParty: boolean) => {
-    console.log("Setting party mode:", isParty); // Debug log
     setIsPartyModeState(isParty);
 
     // Handle party mode button styling

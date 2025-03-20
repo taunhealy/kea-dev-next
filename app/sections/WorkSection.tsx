@@ -26,12 +26,6 @@ export default function WorkSection({
   const [error, setError] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Add console log to debug
-  useEffect(() => {
-    console.log("Categories:", categories);
-    console.log("Works:", works);
-  }, [categories, works]);
-
   // ANIMATION EFFECT
   useEffect(() => {
     if (!containerRef.current) return;
