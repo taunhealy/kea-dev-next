@@ -7,7 +7,6 @@ import ModeButtons from "@/app/components/ModeButtons";
 import HeroBeams from "@/app/components/HeroBeams";
 import { PartyModeProvider } from "@/app/context/PartyModeContext";
 import PartyMode from "@/app/components/PartyMode";
-import PartyButton from "@/app/components/PartyButton";
 
 export const metadata: Metadata = {
   title: "Kea Logic",
@@ -30,7 +29,6 @@ export default function RootLayout({
             <Header />
             <main className="flex-1">{children}</main>
             <Footer />
-            <PartyButton />
             <PartyMode />
           </PartyModeProvider>
         </ThemeProvider>

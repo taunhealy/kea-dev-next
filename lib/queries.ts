@@ -196,6 +196,46 @@ export const workDetailQuery = groq`*[_type == "work" && slug.current == $slug][
       },
       link
     }
+  },
+  mediaContent[] {
+    title,
+    description,
+    media {
+      asset-> {
+        _id,
+        url,
+        originalFilename,
+        mimeType
+      }
+    },
+    link
+  }
+}`;
+
+export const workPageQuery = groq`{
+  "works": *[_type == "work"] | order(orderRank) {
+    ...,
+    categories[]->{ title, slug { current } },
+    webDevelopment {
+      features[] {
+        _key,
+        title,
+        description,
+        link,
+        media {
+          asset-> {
+            _id,
+            url,
+            originalFilename,
+            mimeType
+          }
+        }
+      }
+    }
+  },
+  "categories": *[_type == "workCategory"] | order(order asc) { 
+    title, 
+    slug { current } 
   }
 }`;
 

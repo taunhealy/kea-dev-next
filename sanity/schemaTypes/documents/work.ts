@@ -209,6 +209,28 @@ export default defineType({
         }),
       ],
     }),
+    defineField({
+      name: 'mediaContent',
+      title: 'Media Content',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          title: 'Media Item',
+          fields: [
+            defineField({name: 'title', type: 'string'}),
+            defineField({name: 'description', type: 'text'}),
+            defineField({
+              name: 'media',
+              type: 'file',
+              title: 'Image/Video',
+              options: {accept: 'image/*,video/*'},
+            }),
+            defineField({name: 'link', type: 'url'}),
+          ],
+        },
+      ],
+    }),
   ],
   preview: {
     select: {

@@ -118,18 +118,18 @@
 
   h3,
   .h3 {
-    @apply font-secondary font-bold tracking-[-0.015em] leading-snug;
-    font-size: var(--font-size-xl);
+    @apply font-secondary font-medium tracking-[-0.015em] leading-snug;
+    font-size: var(--font-size-lg);
   }
 
   h4,
   .h4 {
-    @apply font-secondary font-bold tracking-[-0.01em] leading-snug;
+    @apply font-secondary font-medium tracking-[0.0em] leading-snug text-white/70;
     font-size: var(--font-size-base);
   }
 
   p {
-    @apply font-primary leading-relaxed;
+    @apply font-primary leading-relaxed text-white/60;
   }
 
   /* Add base styles for buttons to preserve cursor behavior */

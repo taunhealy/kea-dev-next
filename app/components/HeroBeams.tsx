@@ -2,7 +2,10 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
-import { CATEGORY_COLORS } from "@/app/constants/colors";
+import {
+  CATEGORY_COLORS,
+  CATEGORY_TAILWIND_CLASSES,
+} from "@/app/constants/colors";
 
 export default function HeroBeams() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -11,10 +14,6 @@ export default function HeroBeams() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       if (!containerRef.current) return;
-
-      const fastWord = document.querySelector(".word-fast");
-      const minimalWord = document.querySelector(".word-minimal");
-      const contentWord = document.querySelector(".word-content");
 
       // Make container visible
       containerRef.current.classList.remove("invisible");
@@ -26,24 +25,20 @@ export default function HeroBeams() {
         ease: "power2.inOut",
       });
 
-      // Set initial word colors
-      gsap.set([fastWord, minimalWord, contentWord], {
-        color: "white",
-      });
-
       // Beam animations
       beamsRef.current.forEach((beam, index) => {
         if (!beam) return;
 
-        const isLeftBeam = index < 10; // First 10 beams go left-to-right
+        const isLeftBeam = index < 5;
         const baseDelay = index * 0.2;
 
         beam.style.opacity = "0";
         beam.classList.remove("invisible");
 
+        // Regular animation for all beams (removed special case for pink beams)
         gsap.to(beam, {
           opacity: 1,
-          duration: 0.3,
+          duration: 0.5,
           delay: baseDelay,
         });
 
@@ -60,42 +55,6 @@ export default function HeroBeams() {
             repeat: -1,
             delay: baseDelay,
             yoyo: true,
-            onUpdate: function () {
-              const progress = this.progress();
-              if (progress > 0.2 && progress < 0.4) {
-                if (index % 3 === 0)
-                  gsap.to(fastWord, {
-                    color: CATEGORY_COLORS["web-design"],
-                    duration: 0.3,
-                  });
-                if (index % 3 === 1)
-                  gsap.to(minimalWord, {
-                    color: CATEGORY_COLORS["web-development"],
-                    duration: 0.3,
-                  });
-                if (index % 3 === 2)
-                  gsap.to(contentWord, {
-                    color: CATEGORY_COLORS["brand-identity"],
-                    duration: 0.3,
-                  });
-              } else {
-                if (index % 3 === 0)
-                  gsap.to(fastWord, {
-                    color: "white",
-                    duration: 0.5,
-                  });
-                if (index % 3 === 1)
-                  gsap.to(minimalWord, {
-                    color: "white",
-                    duration: 0.5,
-                  });
-                if (index % 3 === 2)
-                  gsap.to(contentWord, {
-                    color: "white",
-                    duration: 0.5,
-                  });
-              }
-            },
           }
         );
       });
@@ -104,28 +63,38 @@ export default function HeroBeams() {
     return () => ctx.revert();
   }, []);
 
+  // Get array of category keys
+  const categories = Object.keys(CATEGORY_COLORS) as Array<
+    keyof typeof CATEGORY_COLORS
+  >;
+
   return (
     <div
       ref={containerRef}
       className="beams-container absolute inset-0 -z-10 invisible opacity-0"
     >
-      {Array.from({ length: 20 }).map((_, i) => (
-        <div
-          key={i}
-          ref={(el) => {
-            beamsRef.current[i] = el;
-          }}
-          className={`beam absolute h-[16px] w-[120px] rounded-lg mix-blend-screen blur-[1px] shadow-lg invisible
-            ${
-              i % 3 === 0
-                ? "bg-tertiary/90 shadow-tertiary/50"
-                : i % 3 === 1
-                  ? "bg-quaternary/90 shadow-quaternary/50"
-                  : "bg-secondary/90 shadow-secondary/50"
-            }`}
-          aria-hidden="true"
-        />
-      ))}
+      {/* Render each category beam multiple times to increase beam count */}
+      {Array(5)
+        .fill(0)
+        .map((_, multiplier) =>
+          categories.map((category, i) => {
+            const beamStyle = CATEGORY_TAILWIND_CLASSES[category];
+            // Create a unique key by combining multiplier and category index
+            const uniqueKey = `beam-${multiplier}-${i}`;
+            const beamIndex = multiplier * categories.length + i;
+
+            return (
+              <div
+                key={uniqueKey}
+                ref={(el) => {
+                  beamsRef.current[beamIndex] = el;
+                }}
+                className={`beam absolute h-[16px] w-[120px] rounded-lg mix-blend-screen blur-[1px] shadow-lg invisible ${beamStyle.bg} ${beamStyle.shadow}`}
+                aria-hidden="true"
+              />
+            );
+          })
+        )}
     </div>
   );
 }

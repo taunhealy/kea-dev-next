@@ -140,7 +140,7 @@ export default function WorkSection({
   return (
     <section className="flex flex-col min-h-[630px] w-full relative overflow-hidden pt-8 gap-8 bg-black">
       <div className="px-8">
-        <h4 className="text-color-primary font-primary">Our Work</h4>
+        <h3 className="text-color-primary">Portfolio Items</h3>
       </div>
 
       {/* CATEGORY FILTERS */}
@@ -158,27 +158,36 @@ export default function WorkSection({
           All
         </button>
 
-        {/* Sort categories to ensure Brand Identity appears first */}
+        {/* Sort categories based on the order in CATEGORY_COLORS */}
         {categories
           .sort((a, b) => {
-            // Brand Identity should be first
-            if (a.slug.current === "brand-identity") return -1;
-            if (b.slug.current === "brand-identity") return 1;
-            // Then alphabetical order for the rest
+            // Get the keys of CATEGORY_COLORS to determine order
+            const colorKeys = Object.keys(CATEGORY_COLORS);
+            const indexA = colorKeys.indexOf(a.slug.current);
+            const indexB = colorKeys.indexOf(b.slug.current);
+
+            // If both categories are in CATEGORY_COLORS, sort by their order
+            if (indexA !== -1 && indexB !== -1) {
+              return indexA - indexB;
+            }
+            // If only one is in CATEGORY_COLORS, prioritize it
+            if (indexA !== -1) return -1;
+            if (indexB !== -1) return 1;
+            // Otherwise, fall back to alphabetical sorting
             return a.title.localeCompare(b.title);
           })
           .map((category) => (
             <button
               key={category.slug.current}
               onClick={() => setSelectedCategory(category.slug.current)}
-              className={`px-4 py-2 rounded-full text-white text-base font-primary border border-white/20 transition-all flex items-center gap-2
+              className={`px-4 py-2 rounded-full text-white text-base font-primary border border-white/20 transition-all flex items-center gap-2 group
                 ${selectedCategory === category.slug.current ? "opacity-100" : "opacity-60 hover:opacity-80"}`}
             >
               <div
                 className={`w-3 h-3 rounded-full transition-all duration-300 ${
                   selectedCategory === category.slug.current
                     ? "opacity-100 scale-100"
-                    : "opacity-0 scale-0"
+                    : "opacity-0 scale-0 group-hover:opacity-70 group-hover:scale-100"
                 }`}
                 style={{
                   backgroundColor: getCategoryColor(category.slug.current),
@@ -226,7 +235,7 @@ export default function WorkSection({
                 {work.categories.map((category) => (
                   <div
                     key={category.slug.current}
-                    className="w-2 h-2 rounded-full border border-white"
+                    className="w-3 h-3 rounded-full opacity-40 group-hover:opacity-100 transition-opacity duration-300"
                     style={{
                       backgroundColor: getCategoryColor(category.slug.current),
                     }}
@@ -236,9 +245,7 @@ export default function WorkSection({
             </div>
 
             {/* Card Content */}
-            <h3 className="text-xl font-secondary font-bold tracking-[-0.015em] leading-snug text-white">
-              {work.title}
-            </h3>
+            <h3 className=" text-white">{work.title}</h3>
             <p className="text-white/60 mt-1 line-clamp-2 font-primary">
               {work.description}
             </p>

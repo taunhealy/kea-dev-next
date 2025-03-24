@@ -6,6 +6,7 @@ import HeroBeams from "@/app/components/HeroBeams";
 import Image from "next/image";
 import { urlForImage } from "@/lib/urlForImage";
 import gsap from "gsap";
+import { Button } from "@/app/components/ui/button";
 
 interface SectionData {
   heroTitle: string;
@@ -61,7 +62,7 @@ export default function HeroSection({ data }: { data?: SectionData }) {
   console.log("HeroSection received data:", data);
 
   useEffect(() => {
-    // GSAP animation for beams
+    // GSAP animation for beams container
     const beamsTimeline = gsap.timeline({
       repeat: -1,
       defaults: { duration: 3, ease: "power3.inOut" },
@@ -95,52 +96,76 @@ export default function HeroSection({ data }: { data?: SectionData }) {
               <div className="absolute inset-0 -m-4 blur-sm bg-black/20 rounded-xl backdrop-opacity-10" />
               <h4 className="text-white font-primary relative">Kea Logic</h4>
               <h1 className="text-white font-primary relative">
-                <span className="word-fast">Custom</span>{" "}
-                <span className="word-minimal">websites</span> that solve
-                business
-                <span className="word-content"> challenges</span>.
+                <span>Custom</span> <span>websites</span> that solve business
+                <span> challenges</span>.
               </h1>
             </div>
             <HeroBeams />
           </div>
 
-          <div className="tech-stack-container flex flex-wrap gap-4 p-2 justify-left mb-8">
-            {sectionData?.heroLogos?.length ? (
-              sectionData.heroLogos.map((logo) => {
-                if (!logo?.asset) {
-                  console.warn("Invalid logo:", logo);
-                  return null;
-                }
+          <div className="tech-stack-container flex flex-wrap gap-4 p-2 justify-center mb-0 w-full">
+            <div className="w-full max-w-[600px]">
+              <div className="h-px bg-white/20 w-full mb-6"></div>
 
-                const imageUrl = urlForImage(logo).width(100).height(100).url();
-
-                return (
-                  <Image
-                    key={logo._key}
-                    src={imageUrl || "/fallback-logo.png"}
-                    width={100}
-                    height={100}
-                    alt={logo.alt || "Technology stack logo"}
-                    className="h-12 w-auto object-contain"
-                    priority
-                    onError={(e) => {
-                      console.error(
-                        `%c🖼️ Failed to load logo: ${logo._key}`,
-                        "background: #FFEBEE; color: #B71C1C"
-                      );
-                      e.currentTarget.src = "/fallback-logo.png";
-                      e.currentTarget.alt = "Fallback technology logo";
-                    }}
-                  />
-                );
-              })
-            ) : (
-              <div className="w-full min-h-[200px] border-2 border-dashed border-gray-600 rounded-lg flex items-center justify-center">
-                <span className="text-gray-400 font-primary">
-                  Tech stack logos not available
-                </span>
+              <div className="flex flex-wrap gap-3 justify-center">
+                {[
+                  {
+                    name: "React",
+                    description:
+                      "A JavaScript library for building user interfaces",
+                    url: "https://reactjs.org/",
+                  },
+                  {
+                    name: "Next.js",
+                    description:
+                      "React framework for production with server-side rendering",
+                    url: "https://nextjs.org/",
+                  },
+                  {
+                    name: "TypeScript",
+                    description:
+                      "Strongly typed programming language that builds on JavaScript",
+                    url: "https://www.typescriptlang.org/",
+                  },
+                  {
+                    name: "Tailwind CSS",
+                    description:
+                      "Utility-first CSS framework for rapid UI development",
+                    url: "https://tailwindcss.com/",
+                  },
+                  {
+                    name: "Sanity",
+                    description: "Headless CMS platform for structured content",
+                    url: "https://www.sanity.io/",
+                  },
+                  {
+                    name: "Figma",
+                    description: "Collaborative interface design tool",
+                    url: "https://www.figma.com/",
+                  },
+                ].map((tech) => (
+                  <div key={tech.name} className="relative group">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="font-primary"
+                      onClick={() =>
+                        window.open(tech.url, "_blank", "noopener,noreferrer")
+                      }
+                    >
+                      {tech.name}
+                    </Button>
+                    <div className="absolute bottom-full left-0 mb-2 w-48 p-2 bg-black border border-white/20 rounded-lg text-white font-primary text-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+                      {tech.description}
+                      <div className="mt-1 text-xs text-white/70">
+                        Click to visit website
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            )}
+              <div className="h-px bg-white/20 w-full mt-6"></div>
+            </div>
           </div>
         </div>
       </section>

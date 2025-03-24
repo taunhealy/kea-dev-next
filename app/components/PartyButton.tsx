@@ -1,5 +1,12 @@
 "use client";
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/app/components/ui/tooltip";
+
 import { usePartyMode } from "../context/PartyModeContext";
 import { Button } from "@/app/components/ui/button";
 
@@ -11,15 +18,24 @@ export default function PartyButton() {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 z-[10000]">
-      <Button
-        id="party-toggle"
-        onClick={handleClick}
-        data-party-mode
-        variant="outline"
-      >
-        🎉 Celebrate
-      </Button>
-    </div>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            id="party-toggle"
+            onClick={handleClick}
+            data-party-mode
+            variant="outline"
+            size="sm"
+            className="font-primary text-sm"
+          >
+            🎉
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent className="font-primary">
+          Cheers to epic adventures 🍻
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
