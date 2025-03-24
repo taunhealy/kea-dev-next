@@ -1,6 +1,7 @@
 "use client";
 
 import { usePartyMode } from "../context/PartyModeContext";
+import { Button } from "@/app/components/ui/button";
 
 export default function PartyButton() {
   const { isPartyMode, setPartyMode } = usePartyMode();
@@ -10,15 +11,15 @@ export default function PartyButton() {
   };
 
   return (
-    <button
-      id="party-toggle"
-      onClick={handleClick}
-      data-party-mode
-      className={`${
-        isPartyMode ? "bg-[#00FF88]" : "bg-white"
-      } hover:bg-[#00FF88] text-black px-4 py-2 rounded-full shadow-lg transition-colors duration-300`}
-    >
-      🎉 Party Mode
-    </button>
+    <div className="fixed bottom-4 right-4 z-[10000]">
+      <Button
+        id="party-toggle"
+        onClick={handleClick}
+        data-party-mode
+        variant="outline"
+      >
+        🎉 Celebrate
+      </Button>
+    </div>
   );
 }

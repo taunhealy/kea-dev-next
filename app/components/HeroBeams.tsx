@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { CATEGORY_COLORS } from "@/app/constants/colors";
 
 export default function HeroBeams() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -27,7 +28,7 @@ export default function HeroBeams() {
 
       // Set initial word colors
       gsap.set([fastWord, minimalWord, contentWord], {
-        color: "#ffffff",
+        color: "white",
       });
 
       // Beam animations
@@ -63,18 +64,36 @@ export default function HeroBeams() {
               const progress = this.progress();
               if (progress > 0.2 && progress < 0.4) {
                 if (index % 3 === 0)
-                  gsap.to(fastWord, { color: "#a855f7", duration: 0.3 });
+                  gsap.to(fastWord, {
+                    color: CATEGORY_COLORS["web-design"],
+                    duration: 0.3,
+                  });
                 if (index % 3 === 1)
-                  gsap.to(minimalWord, { color: "#22c55e", duration: 0.3 });
+                  gsap.to(minimalWord, {
+                    color: CATEGORY_COLORS["web-development"],
+                    duration: 0.3,
+                  });
                 if (index % 3 === 2)
-                  gsap.to(contentWord, { color: "#f97316", duration: 0.3 });
+                  gsap.to(contentWord, {
+                    color: CATEGORY_COLORS["brand-identity"],
+                    duration: 0.3,
+                  });
               } else {
                 if (index % 3 === 0)
-                  gsap.to(fastWord, { color: "#ffffff", duration: 0.5 });
+                  gsap.to(fastWord, {
+                    color: "white",
+                    duration: 0.5,
+                  });
                 if (index % 3 === 1)
-                  gsap.to(minimalWord, { color: "#ffffff", duration: 0.5 });
+                  gsap.to(minimalWord, {
+                    color: "white",
+                    duration: 0.5,
+                  });
                 if (index % 3 === 2)
-                  gsap.to(contentWord, { color: "#ffffff", duration: 0.5 });
+                  gsap.to(contentWord, {
+                    color: "white",
+                    duration: 0.5,
+                  });
               }
             },
           }
@@ -99,10 +118,10 @@ export default function HeroBeams() {
           className={`beam absolute h-[16px] w-[120px] rounded-lg mix-blend-screen blur-[1px] shadow-lg invisible
             ${
               i % 3 === 0
-                ? "bg-purple-500/90 shadow-purple-500/50"
+                ? "bg-tertiary/90 shadow-tertiary/50"
                 : i % 3 === 1
-                  ? "bg-green-500/90 shadow-green-500/50"
-                  : "bg-orange-500/90 shadow-orange-500/50"
+                  ? "bg-quaternary/90 shadow-quaternary/50"
+                  : "bg-secondary/90 shadow-secondary/50"
             }`}
           aria-hidden="true"
         />

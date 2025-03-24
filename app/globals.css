@@ -6,82 +6,130 @@
 @tailwind components;
 @tailwind utilities;
 
-@theme {
+:root {
+  /* Brand Colors */
+  --color-primary: #22c55e; /* Green */
+  --color-secondary: #f97316; /* Orange */
+  --color-tertiary: #a855f7; /* Purple */
+  --color-quaternary: #f43f5e; /* Pink */
+
+  /* Base Colors */
+  --color-black: #000000;
+  --color-white: #ffffff;
+
+  /* Text Colors */
+  --color-text-primary: var(--color-black);
+  --color-text-secondary: #4b5563;
+  --color-text-tertiary: #9ca3af;
+  --color-text-muted: rgba(255, 255, 255, 0.6);
+
+  /* Background Colors */
+  --color-background-primary: var(--color-white);
+  --color-background-secondary: #f3f4f6;
+  --color-background-tertiary: #e5e7eb;
+  --color-background-dark: var(--color-black);
+  --color-background-card: rgba(0, 0, 0, 0.05);
+
+  /* Border Colors */
+  --color-border-light: #e5e7eb;
+  --color-border-medium: #d1d5db;
+  --color-border-dark: #9ca3af;
+  --color-border-subtle: rgba(255, 255, 255, 0.1);
+
   /* Font Families */
   --font-family-primary: "Inter", sans-serif;
   --font-family-secondary: "Inria Sans", sans-serif;
 
-  /* Color Variables */
-  --color-primary: #22c55e;
-  --color-secondary: #f97316;
-  --color-tertiary: #a855f7;
+  /* Font Sizes */
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-base: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem; /* 20px */
+  --font-size-2xl: 1.5rem; /* 24px */
+  --font-size-3xl: 1.875rem; /* 30px */
+  --font-size-4xl: 2.25rem; /* 36px */
+  --font-size-5xl: 3rem; /* 48px */
+  --font-size-display: 4.5rem; /* 72px */
+
+  /* Spacing System */
+  --space-1: 0.25rem; /* 4px */
+  --space-2: 0.5rem; /* 8px */
+  --space-3: 0.75rem; /* 12px */
+  --space-4: 1rem; /* 16px */
+  --space-6: 1.5rem; /* 24px */
+  --space-8: 2rem; /* 32px */
+  --space-12: 3rem; /* 48px */
+  --space-16: 4rem; /* 64px */
+  --space-24: 6rem; /* 96px */
+
+  /* Border Radius */
+  --radius-sm: 0.125rem; /* 2px */
+  --radius-md: 0.375rem; /* 6px */
+  --radius-lg: 0.5rem; /* 8px */
+  --radius-xl: 0.75rem; /* 12px */
+  --radius-2xl: 1rem; /* 16px */
+  --radius-full: 9999px; /* Full rounded */
+
+  /* Transitions */
+  --transition-fast: 200ms;
+  --transition-normal: 300ms;
+  --transition-slow: 500ms;
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] {
+  --color-text-primary: var(--color-white);
+  --color-text-secondary: #e5e7eb;
+  --color-text-tertiary: #9ca3af;
+
+  --color-background-primary: var(--color-black);
+  --color-background-secondary: #1f2937;
+  --color-background-tertiary: #374151;
+
+  --color-border-light: #374151;
+  --color-border-medium: #4b5563;
+  --color-border-dark: #6b7280;
 }
 
 @layer base {
-  /* Set base styles for HTML elements directly */
-  h1 {
-    @apply font-primary font-normal tracking-[-0.02em] leading-tight
-      text-primary dark:text-secondary;
-    font-size: 32px;
+  html {
+    font-family: var(--font-family-primary);
+    color: var(--color-text-primary);
+    background-color: var(--color-background-primary);
   }
 
-  h2 {
-    @apply font-primary font-normal tracking-[-0.02em] leading-tight
-      text-primary dark:text-secondary;
-    font-size: 21px;
+  body {
+    @apply antialiased;
   }
 
-  h3 {
-    @apply font-secondary font-bold tracking-[-0.015em] leading-snug
-      text-primary dark:text-secondary;
-    font-size: 21px;
+  /* Typography Hierarchy */
+  h1,
+  .h1 {
+    @apply font-primary font-normal tracking-[-0.02em] leading-tight;
+    font-size: var(--font-size-3xl);
   }
 
-  h4 {
-    @apply font-secondary font-bold tracking-[-0.01em] leading-snug
-      text-primary dark:text-secondary;
-    font-size: 16px;
+  h2,
+  .h2 {
+    @apply font-primary font-normal tracking-[-0.02em] leading-tight;
+    font-size: var(--font-size-2xl);
   }
 
-  :root {
-    /* Brand Colors */
-    --color-primary: #22c55e; /* Green */
-    --color-secondary: #f97316; /* Orange */
-    --color-tertiary: #a855f7; /* Purple */
-
-    /* Base Colors */
-    --color-black: #000000;
-    --color-white: #ffffff;
-
-    /* Text Colors */
-    --color-text-primary: var(--color-black);
-    --color-text-secondary: #4b5563;
-    --color-text-tertiary: #9ca3af;
-
-    /* Background Colors */
-    --color-background-primary: var(--color-white);
-    --color-bg-secondary: #f3f4f6;
-    --color-bg-tertiary: #e5e7eb;
-
-    /* Border Colors */
-    --color-border-light: #e5e7eb;
-    --color-border-medium: #d1d5db;
-    --color-border-dark: #9ca3af;
+  h3,
+  .h3 {
+    @apply font-secondary font-bold tracking-[-0.015em] leading-snug;
+    font-size: var(--font-size-xl);
   }
 
-  /* Dark mode overrides */
-  [data-theme="dark"] {
-    --color-text-primary: var(--color-white);
-    --color-text-secondary: #e5e7eb;
-    --color-text-tertiary: #9ca3af;
+  h4,
+  .h4 {
+    @apply font-secondary font-bold tracking-[-0.01em] leading-snug;
+    font-size: var(--font-size-base);
+  }
 
-    --color-bg-primary: var(--color-black);
-    --color-bg-secondary: #1f2937;
-    --color-bg-tertiary: #374151;
-
-    --color-border-light: #374151;
-    --color-border-medium: #4b5563;
-    --color-border-dark: #6b7280;
+  p {
+    @apply font-primary leading-relaxed;
   }
 
   /* Add base styles for buttons to preserve cursor behavior */
@@ -89,39 +137,65 @@
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
+
+  /* Preserve v3 border color defaults */
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-border-light);
+  }
 }
 
 @layer components {
   /* Display & Heading Styles */
   .display {
-    @apply font-primary font-semibold tracking-[-0.02em] leading-tight
-    text-primary dark:text-secondary;
-    font-size: 72px;
+    @apply font-primary font-semibold tracking-[-0.02em] leading-tight;
+    font-size: var(--font-size-display);
+  }
+
+  .section-title {
+    @apply text-2xl font-primary font-medium mb-8 flex items-center;
+  }
+
+  .section-indicator {
+    @apply inline-block w-3 h-3 rounded-full mr-3;
   }
 
   /* Text Styles */
-  .text-extra-small {
-    @apply font-primary leading-relaxed
-    text-primary dark:text-secondary;
-    font-size: 12px;
+  .text-xs {
+    @apply font-primary leading-relaxed;
+    font-size: var(--font-size-xs);
   }
 
-  .text-small {
-    @apply font-primary leading-relaxed
-    text-primary dark:text-secondary;
-    font-size: 14px;
+  .text-sm {
+    @apply font-primary leading-relaxed;
+    font-size: var(--font-size-sm);
   }
 
-  .text-main {
-    @apply font-primary leading-relaxed
-    text-primary dark:text-secondary;
-    font-size: 16px;
+  .text-base {
+    @apply font-primary leading-relaxed;
+    font-size: var(--font-size-base);
   }
 
-  .text-large {
-    @apply font-primary leading-relaxed
-    text-primary dark:text-secondary;
-    font-size: 24px;
+  .text-lg {
+    @apply font-primary leading-relaxed;
+    font-size: var(--font-size-lg);
+  }
+
+  .text-xl {
+    @apply font-primary leading-relaxed;
+    font-size: var(--font-size-xl);
+  }
+
+  .text-2xl {
+    @apply font-primary leading-relaxed;
+    font-size: var(--font-size-2xl);
+  }
+
+  .text-muted {
+    @apply text-white/60;
   }
 
   /* Layout Spacing System */
@@ -193,24 +267,78 @@
       min-w-[120px];
   }
 
+  .btn-outlined {
+    @apply font-primary text-sm rounded-full transition-all py-2 px-4 border-2 bg-black;
+  }
+
+  /* Card Styles */
+  .card {
+    @apply p-6 rounded-xl border border-white/10 bg-black;
+  }
+
+  .brand-card {
+    @apply border border-white/10 rounded-xl p-6 bg-black transition-all hover:border-white/30;
+  }
+
+  .brand-card-highlighted {
+    @apply border-2 bg-black/10 rounded-xl p-6;
+  }
+
+  /* Tech Stack and Tag Items */
+  .tech-stack-item {
+    @apply px-3 py-1.5 rounded-full bg-black text-sm border border-current transition-colors;
+  }
+
   /* Focus States */
   .focus-visible {
     @apply focus:outline-none focus:ring-2 focus:ring-tertiary focus:ring-offset-2;
   }
 
-  /* Spinner Styles */
-  .spinner {
-    @apply inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent motion-reduce:animate-[spin_1.5s_linear_infinite]
-    text-secondary dark:text-secondary;
+  /* Media Components */
+  .media-container {
+    @apply relative max-w-3xl mx-auto rounded-xl overflow-hidden border border-white/10;
   }
 
-  /* Button Loading State */
-  .btn-primary.loading .spinner {
-    @apply text-secondary dark:text-secondary;
+  .media-hover-effect {
+    @apply transition-transform duration-500 group-hover:scale-105;
   }
 
-  .btn-secondary.loading .spinner {
-    @apply text-primary dark:text-primary;
+  .media-overlay {
+    @apply absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center;
+  }
+
+  /* Tabs Navigation */
+  .tabs-container {
+    @apply sticky top-0 z-50 bg-black/90 backdrop-blur-sm py-4 border-b border-white/10;
+  }
+
+  .tabs-nav {
+    @apply grid grid-cols-4 gap-2 bg-black/80 border border-white/20 p-1 rounded-full max-w-2xl mx-auto;
+  }
+
+  .tab-button {
+    @apply font-primary text-sm rounded-full transition-all py-2 px-4 border-2;
+  }
+
+  .tab-button-active {
+    @apply text-white;
+  }
+
+  .tab-button-inactive {
+    @apply text-white/60 hover:bg-white/10 border-transparent;
+  }
+
+  .tab-button-disabled {
+    @apply text-white/30 cursor-not-allowed border-transparent;
+  }
+
+  /* Dividers */
+  .divider {
+    @apply border-b border-white/10;
+  }
+
+  .divider-subtle {
+    @apply border-t border-white/5;
   }
 }
 
@@ -224,16 +352,31 @@
     font-family: var(--font-family-secondary);
   }
 
-  /* Add color utilities from the working version */
+  /* Color utilities */
   .text-primary {
     color: var(--color-text-primary);
   }
+
   .text-secondary {
     color: var(--color-text-secondary);
   }
-  .bg-background-primary {
+
+  .text-tertiary {
+    color: var(--color-text-tertiary);
+  }
+
+  .bg-primary {
     background-color: var(--color-background-primary);
   }
+
+  .bg-secondary {
+    background-color: var(--color-background-secondary);
+  }
+
+  .bg-tertiary {
+    background-color: var(--color-background-tertiary);
+  }
+
   /* Animation utilities */
   .party-button {
     background: linear-gradient(45deg, #22c55e, #f97316, #a855f7, #22c55e);
@@ -253,23 +396,13 @@
     }
   }
 
-  /* Container utilities */
-  .container-large {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  /* Hover effects */
+  .hover-scale {
+    @apply transition-transform duration-300 hover:scale-105;
   }
 
-  /* Section spacing */
-  .section-space-large {
-    @apply py-16 md:py-24;
-  }
-
-  /* Preserve v3 border color defaults */
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-border-light);
+  .hover-opacity {
+    @apply transition-opacity duration-300 hover:opacity-80;
   }
 
   /* Dark Mode Overrides */
@@ -286,6 +419,7 @@
     }
   }
 
+  /* Animation keyframes */
   .beams-container {
     transition: opacity 5s ease-out;
   }
@@ -312,16 +446,16 @@
 
   @keyframes color-shift {
     0% {
-      background: #22c55e;
+      background: var(--color-primary);
     }
     33% {
-      background: #f97316;
+      background: var(--color-secondary);
     }
     66% {
-      background: #a855f7;
+      background: var(--color-tertiary);
     }
     100% {
-      background: #22c55e;
+      background: var(--color-primary);
     }
   }
 

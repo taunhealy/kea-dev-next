@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Button from "@/app/components/Button";
+import { Button } from "@/app/components/ui/button";
 
 export default function Header() {
   const [theme, setTheme] = useState<"light" | "dark">("dark");
@@ -28,14 +28,14 @@ export default function Header() {
       className="fixed w-full backdrop-blur-md z-50 transition-[background-color,color] duration-700"
       data-theme={theme}
     >
-      <nav className="px-[32px]">
+      <nav className="container-large">
         <div className="flex items-center justify-between h-[90px]">
           <div className="hidden md:flex items-center space-x-8">
             {pages.map((page) => (
               <Link
                 key={page.slug}
                 href={page.slug === "home" ? "/" : `/${page.slug}`}
-                className={`transition-colors duration-300 ${
+                className={`font-primary transition-colors duration-300 ${
                   theme === "dark" ? "text-white" : "text-black"
                 }`}
               >
@@ -43,7 +43,9 @@ export default function Header() {
               </Link>
             ))}
           </div>
-          <Button variant="primary">Contact</Button>
+          <Button variant="outline" data-party-mode>
+            Contact
+          </Button>
         </div>
       </nav>
     </header>

@@ -1,5 +1,6 @@
 import { createClient } from "@sanity/client";
 import imageUrlBuilder from "@sanity/image-url";
+import type { QueryParams } from "@sanity/client";
 
 // Core client configuration
 export const client = createClient({
@@ -26,14 +27,20 @@ export const urlForImage = (source: any) => builder.image(source);
 export async function sanityFetch<QueryResponse>({
   query,
   params = {},
-  tags,
+  stega = false,
+  perspective = "published",
 }: {
   query: string;
-  params?: Record<string, unknown>;
-  tags?: string[];
+  params?: QueryParams;
+  stega?: boolean;
+  perspective?: "published" | "previewDrafts";
 }) {
   return client.fetch<QueryResponse>(query, params, {
-    next: { revalidate: 15, tags },
+    stega,
+    perspective,
+    // Add these options to every query by default
+    filterResponse: true,
+    resultSourceMap: stega ? "withKeyArraySelector" : false,
   });
 }
 

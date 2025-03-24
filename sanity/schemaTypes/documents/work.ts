@@ -128,16 +128,13 @@ export default defineType({
           ],
         }),
         defineField({
-          name: 'archetypes',
+          name: 'associations',
           type: 'array',
-          title: 'Brand Archetypes',
+          title: 'Associations',
           of: [
             {
               type: 'object',
-              fields: [
-                defineField({name: 'title', type: 'string'}),
-                defineField({name: 'description', type: 'text'}),
-              ],
+              fields: [defineField({name: 'title', type: 'string'})],
             },
           ],
         }),
@@ -160,12 +157,11 @@ export default defineType({
     defineField({
       name: 'webDesign',
       title: 'Web Design',
-      type: 'object',
-      fields: [
-        defineField({
-          name: 'designSystem',
+      type: 'array',
+      of: [
+        {
           type: 'object',
-          title: 'Brand Design System',
+          title: 'Design Page',
           fields: [
             defineField({name: 'title', type: 'string'}),
             defineField({name: 'description', type: 'text'}),
@@ -177,7 +173,7 @@ export default defineType({
             }),
             defineField({name: 'link', type: 'url'}),
           ],
-        }),
+        },
       ],
     }),
     defineField({
@@ -197,9 +193,14 @@ export default defineType({
                 defineField({name: 'description', type: 'text'}),
                 defineField({
                   name: 'media',
-                  type: 'file',
-                  title: 'Image/Video',
-                  options: {accept: 'image/*,video/*'},
+                  type: 'array',
+                  title: 'Images/Videos',
+                  of: [
+                    {
+                      type: 'file',
+                      options: {accept: 'image/*,video/*'},
+                    },
+                  ],
                 }),
                 defineField({name: 'link', type: 'url'}),
               ],

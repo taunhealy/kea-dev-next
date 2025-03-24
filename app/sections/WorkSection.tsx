@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import type { Work } from "../types/workType";
 import gsap from "gsap";
 import { urlForImage } from "@/lib/sanity";
+import { CATEGORY_COLORS } from "@/app/constants/colors";
 
 const BORDER_WIDTHS = ["3px", "5px", "7px"];
 
@@ -25,6 +26,17 @@ export default function WorkSection({
   const [loading, setLoading] = useState(!works || !categories);
   const [error, setError] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Helper function to get color based on category slug
+  const getCategoryColor = (slug: string): string => {
+    return CATEGORY_COLORS[slug as keyof typeof CATEGORY_COLORS] || "white";
+  };
+
+  // Helper function to get color based on index (for All view)
+  const getColorByIndex = (index: number): string => {
+    const colors = Object.values(CATEGORY_COLORS);
+    return colors[index % colors.length];
+  };
 
   // ANIMATION EFFECT
   useEffect(() => {
@@ -139,40 +151,42 @@ export default function WorkSection({
             ${!selectedCategory ? "opacity-100" : "opacity-70"}`}
         >
           <div
-            className={`w-4 h-2 rounded-full bg-white transition-all duration-200
+            className={`w-4 h-2 rounded-full transition-all duration-200
             ${!selectedCategory ? "opacity-100 scale-100" : "opacity-0 scale-0"}`}
+            style={{ backgroundColor: "white" }}
           />
           All
         </button>
-        {categories.map((category, index) => (
-          <button
-            key={category.slug.current}
-            onClick={() => setSelectedCategory(category.slug.current)}
-            className={`px-4 py-2 rounded-full text-white text-base font-primary border border-white/20 transition-all flex items-center gap-2
-              ${selectedCategory === category.slug.current ? "opacity-100" : "opacity-60 hover:opacity-80"}`}
-          >
-            <div
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                selectedCategory === category.slug.current
-                  ? "opacity-100 scale-100"
-                  : "opacity-0 scale-0"
-              }`}
-              style={{
-                backgroundColor:
-                  index % 5 === 0
-                    ? "var(--color-primary)"
-                    : index % 5 === 1
-                      ? "var(--color-secondary)"
-                      : index % 5 === 2
-                        ? "var(--color-tertiary)"
-                        : index % 5 === 3
-                          ? "var(--brand-highlight)"
-                          : "var(--brand-cta)",
-              }}
-            />
-            {category.title}
-          </button>
-        ))}
+
+        {/* Sort categories to ensure Brand Identity appears first */}
+        {categories
+          .sort((a, b) => {
+            // Brand Identity should be first
+            if (a.slug.current === "brand-identity") return -1;
+            if (b.slug.current === "brand-identity") return 1;
+            // Then alphabetical order for the rest
+            return a.title.localeCompare(b.title);
+          })
+          .map((category) => (
+            <button
+              key={category.slug.current}
+              onClick={() => setSelectedCategory(category.slug.current)}
+              className={`px-4 py-2 rounded-full text-white text-base font-primary border border-white/20 transition-all flex items-center gap-2
+                ${selectedCategory === category.slug.current ? "opacity-100" : "opacity-60 hover:opacity-80"}`}
+            >
+              <div
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  selectedCategory === category.slug.current
+                    ? "opacity-100 scale-100"
+                    : "opacity-0 scale-0"
+                }`}
+                style={{
+                  backgroundColor: getCategoryColor(category.slug.current),
+                }}
+              />
+              {category.title}
+            </button>
+          ))}
       </div>
 
       {/* WORK CARDS GRID */}
@@ -191,46 +205,30 @@ export default function WorkSection({
               <div
                 className="absolute inset-0 border-4 rounded-lg transition-all duration-300 group-hover:border-0 work-card-border"
                 style={{
-                  borderColor:
-                    index % 5 === 0
-                      ? "var(--color-primary)"
-                      : index % 5 === 1
-                        ? "var(--color-secondary)"
-                        : index % 5 === 2
-                          ? "var(--color-tertiary)"
-                          : index % 5 === 3
-                            ? "var(--brand-highlight)"
-                            : "var(--brand-cta)",
+                  borderColor: selectedCategory
+                    ? getCategoryColor(selectedCategory)
+                    : getColorByIndex(index),
                   borderWidth: "2px",
                 }}
               />
 
-              {/* Image with hover effect - UPDATED */}
+              {/* Image with hover effect */}
               {work.coverImage && work.coverImage.asset && (
                 <img
                   src={urlForImage(work.coverImage).url()}
                   alt={work.title}
-                  className="w-full h-full object-cover transition-all duration-300 scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-[85%]"
+                  className="w-full h-full object-cover scale-95 opacity-0 group-hover:scale-100 group-hover:opacity-[85%] transition-all duration-300"
                 />
               )}
 
               {/* Category indicators */}
               <div className="absolute top-4 left-4 flex gap-1.5">
-                {work.categories.map((category, catIndex) => (
+                {work.categories.map((category) => (
                   <div
                     key={category.slug.current}
                     className="w-2 h-2 rounded-full border border-white"
                     style={{
-                      backgroundColor:
-                        catIndex % 5 === 0
-                          ? "var(--color-primary)"
-                          : catIndex % 5 === 1
-                            ? "var(--color-secondary)"
-                            : catIndex % 5 === 2
-                              ? "var(--color-tertiary)"
-                              : catIndex % 5 === 3
-                                ? "var(--brand-highlight)"
-                                : "var(--brand-cta)",
+                      backgroundColor: getCategoryColor(category.slug.current),
                     }}
                   />
                 ))}
@@ -238,7 +236,7 @@ export default function WorkSection({
             </div>
 
             {/* Card Content */}
-            <h3 className="text-xl font-medium text-white font-primary">
+            <h3 className="text-xl font-secondary font-bold tracking-[-0.015em] leading-snug text-white">
               {work.title}
             </h3>
             <p className="text-white/60 mt-1 line-clamp-2 font-primary">

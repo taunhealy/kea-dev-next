@@ -1,7 +1,8 @@
 import { groq } from "next-sanity";
 import { client } from "./sanity";
+import { defineQuery } from "groq";
 
-export const homePageQuery = `{
+export const homePageQuery = defineQuery(`{
   "hero": *[_type == "page" && slug.current == "home"][0].sections[_type == "heroSection"][0]{
     _type,
     _key,
@@ -16,7 +17,23 @@ export const homePageQuery = `{
   },
   "works": *[_type == "work"] | order(orderRank) {
     ...,
-    categories[]->{ title, slug { current } }
+    categories[]->{ title, slug { current } },
+    webDevelopment {
+      features[] {
+        _key,
+        title,
+        description,
+        link,
+        media {
+          asset-> {
+            _id,
+            url,
+            originalFilename,
+            mimeType
+          }
+        }
+      }
+    }
   },
   "categories": *[_type == "workCategory"] | order(order asc) { 
     title, 
@@ -36,7 +53,7 @@ export const homePageQuery = `{
       "dataset": select(defined(^._dataset) => ^._dataset, "unknown")
     }
   }
-}`;
+}`);
 
 export const pageQuery = `*[_type == "page" && slug.current == $slug][0]{
   _id,
@@ -96,6 +113,90 @@ export const workSectionQuery = groq`{
     categories[]->{ title, slug { current } }
   },
   "categories": *[_type == "category"] | order(title asc) { title, slug { current } }
+}`;
+
+export const workDetailQuery = groq`*[_type == "work" && slug.current == $slug][0] {
+  _id,
+  title,
+  slug,
+  description,
+  completionDate,
+  technologies,
+  coverImage {
+    _type,
+    asset-> {
+      _id,
+      url,
+      metadata,
+      originalFilename,
+      mimeType
+    }
+  },
+  orderRank,
+  categories[]-> {
+    _id,
+    title,
+    slug {
+      current,
+      _type
+    }
+  },
+  client->,
+  core {
+    projectTitle,
+    clientName,
+    projectCategory,
+    projectChallenge,
+    producerName,
+    projectTechStack
+  },
+  brandDevelopment {
+    purpose {
+      title,
+      description
+    },
+    audience {
+      title,
+      description
+    },
+    archetypes[] {
+      title,
+      description
+    },
+    mood[] {
+      title,
+      description
+    }
+  },
+  webDesign[] {
+    title,
+    description,
+    media {
+      asset-> {
+        _id,
+        url,
+        originalFilename,
+        mimeType
+      }
+    },
+    link
+  },
+  webDevelopment {
+    features[] {
+      _key,
+      title,
+      description,
+      media[] {
+        asset-> {
+          _id,
+          url,
+          originalFilename,
+          mimeType
+        }
+      },
+      link
+    }
+  }
 }`;
 
 // Debug utility
