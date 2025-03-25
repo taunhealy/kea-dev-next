@@ -15,5 +15,11 @@ export default defineType({
       title: 'Description',
       type: 'text',
     }),
+    defineField({
+      name: 'images',
+      title: 'Images',
+      type: 'array',
+      of: [{type: 'image'}],
+    }),
   ],
 })

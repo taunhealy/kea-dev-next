@@ -10,7 +10,7 @@ export default function Header() {
   const [pages, setPages] = useState<Array<{ title: string; slug: string }>>([
     { title: "Home", slug: "home" },
     { title: "About", slug: "about" },
-    { title: "Services", slug: "services" },
+    { title: "Work", slug: "work" },
     // Add any default pages you want to show
   ]);
 

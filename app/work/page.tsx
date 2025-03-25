@@ -68,7 +68,7 @@ export default async function WorkPage() {
             {/* Process Steps */}
             <div className="card">
               <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-full bg-[var(--color-primary)] flex items-center justify-center text-black font-primary font-medium">
+                <div className="w-10 h-10 rounded-full bg-[var(--color-primary)] flex items-center justify-center text-black font-primary font-medium">
                   1
                 </div>
                 <div>
@@ -85,7 +85,7 @@ export default async function WorkPage() {
 
             <div className="card">
               <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-full bg-[var(--color-secondary)] flex items-center justify-center text-black font-primary font-medium">
+                <div className="w-10 h-10 rounded-full bg-[var(--color-secondary)] flex items-center justify-center text-black font-primary font-medium">
                   2
                 </div>
                 <div>
@@ -102,7 +102,7 @@ export default async function WorkPage() {
 
             <div className="card">
               <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-full bg-[var(--color-tertiary)] flex items-center justify-center text-black font-primary font-medium">
+                <div className="w-10 h-10 rounded-full bg-[var(--color-tertiary)] flex items-center justify-center text-black font-primary font-medium">
                   3
                 </div>
                 <div>
@@ -120,7 +120,7 @@ export default async function WorkPage() {
 
             <div className="card">
               <div className="flex items-start gap-4">
-                <div className="w-8 h-8 rounded-full bg-[var(--color-quaternary)] flex items-center justify-center text-black font-primary font-medium">
+                <div className="w-10 h-10 rounded-full bg-[var(--color-quaternary)] flex items-center justify-center text-black font-primary font-medium">
                   4
                 </div>
                 <div>
@@ -151,7 +151,7 @@ export default async function WorkPage() {
             expertise in design, development, and digital strategy.
           </p>
           <Button variant="outline" size="lg" asChild>
-            <a href="/contact">Get in Touch</a>
+            <a href="mailto:hello@kea.dev">Get in Touch</a>
           </Button>
         </div>
       </section>

@@ -66,6 +66,8 @@ export const pageQuery = `*[_type == "page" && slug.current == $slug][0]{
     subheading,
     content,
     sectionType,
+    image,
+    description,
     sectionContent {
       ...,
       featuredWork[]->{
@@ -236,6 +238,14 @@ export const workPageQuery = groq`{
   "categories": *[_type == "workCategory"] | order(order asc) { 
     title, 
     slug { current } 
+  }
+}`;
+
+export const aboutQuery = `*[_type == "page" && slug.current == "about"][0]{
+  title,
+  "description": sections[_type == "aboutSection"][0].description,
+  "images": sections[_type == "aboutSection"][0].images[]{
+    "url": asset->url
   }
 }`;
 

@@ -39,7 +39,7 @@ export default function Footer() {
           <div className="animate-in">
             <h3 className="text-color-primary mb-4">Kea Logic</h3>
             <p className="text-white/60 font-primary">
-              Modern web solutions for forward-thinking businesses
+              Modern web solutions for innovative businesses
             </p>
             <p className="text-white/60 mt-4 font-primary">
               &copy; {new Date().getFullYear()} Kea Logic. All rights reserved.
