@@ -1,4 +1,4 @@
-import { verifySanityConnection } from "@/lib/sanity.debug";
+import { verifySanityConnection } from "@/lib/sanity";
 
 export default async function SanityDebugPage() {
   await verifySanityConnection();

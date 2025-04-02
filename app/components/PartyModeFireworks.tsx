@@ -125,7 +125,7 @@ export default function PartyModeFireworks({
     return () => {
       cleanup();
     };
-  }, [isActive]);
+  }, [isActive, createFireworksGroup]);
 
   return (
     <div

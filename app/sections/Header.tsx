@@ -31,7 +31,7 @@ export default function Header() {
     >
       <nav className="container-large">
         <div className="flex justify-center items-center h-[90px] px-8">
-          <div className="flex items-center space-x-8 bg-black/80 border border-white/20 p-2 px-4 rounded-full">
+          <div className="flex items-center space-x-8 bg-black/80 border border-white/20 p-3 px-6 rounded-full">
             {pages.map((page) => (
               <Link
                 key={page.slug}

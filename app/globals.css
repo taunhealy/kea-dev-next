@@ -107,7 +107,6 @@
   h1,
   .h1 {
     @apply font-primary font-normal tracking-[-0.02em] leading-tight;
-    font-size: var(--font-size-3xl);
   }
 
   h2,
@@ -119,7 +118,6 @@
   h3,
   .h3 {
     @apply font-secondary font-medium tracking-[-0.015em] leading-snug;
-    font-size: var(--font-size-lg);
   }
 
   h4,
@@ -480,5 +478,19 @@
 
   .animate-distance-beams {
     animation: distance-beams 7s linear infinite;
+  }
+
+  @keyframes pulse-opacity {
+    0%,
+    100% {
+      opacity: 0.1;
+    }
+    50% {
+      opacity: 0.3;
+    }
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-opacity 5s ease-in-out infinite;
   }
 }

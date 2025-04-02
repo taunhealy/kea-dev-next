@@ -22,11 +22,12 @@ export default function Confetti({ isActive }: ConfettiProps) {
       return Math.random() * (max - min) + min;
     };
 
-    const interval: NodeJS.Timer = setInterval(() => {
+    const interval: NodeJS.Timeout = setInterval(() => {
       const timeLeft = animationEnd - Date.now();
 
       if (timeLeft <= 0) {
-        return clearInterval(interval);
+        clearInterval(interval);
+        return;
       }
 
       const particleCount = 50 * (timeLeft / duration);

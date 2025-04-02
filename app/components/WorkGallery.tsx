@@ -1,18 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import type { Work } from "../types/workType";
 import gsap from "gsap";
-import { sanityClient } from "@/sanity/lib/client";
+import { client as sanityClient } from "@/lib/sanity";
 import { groq } from "next-sanity";
 
 const BORDER_WIDTHS = ["3px", "5px", "7px"];
 
-export type Theme = "dark" | "light";
-
-export const $theme = atom<Theme>("dark");
-
-export function setTheme(theme: Theme) {
-  $theme.set(theme);
-  document.documentElement.setAttribute("data-theme", theme);
+// Add this interface at the top of your file
+interface Props {
+  categories: { title: string; slug: { current: string } }[];
 }
 
 // MAIN COMPONENT

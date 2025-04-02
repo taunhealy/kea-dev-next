@@ -1,8 +1,8 @@
 import { client } from "@/lib/sanity";
 import { homePageQuery, debugPageData } from "@/lib/queries";
-import BlogSection from "./sections/BlogSection";
 import WorkSection from "@/app/sections/WorkSection";
 import HeroSection from "@/app/sections/HeroSection";
+import { AboutSection } from "@/app/sections/AboutSection";
 
 export default async function Home() {
   const data = await client.fetch(
@@ -28,6 +28,7 @@ export default async function Home() {
         works={data.works}
         categories={data.categories}
       />
+      <AboutSection aboutData={data.about} />
     </>
   );
 }

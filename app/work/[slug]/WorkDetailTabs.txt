@@ -1,0 +1,1147 @@
+"use client";
+
+import { useState, useEffect, useRef, useMemo } from "react";
+import Image from "next/image";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/app/components/ui/tooltip";
+import { Button } from "@/app/components/ui/button";
+import {
+  CATEGORY_COLORS,
+  CategoryColor,
+  getColorForCategory,
+} from "@/app/constants/colors";
+import { createPortal } from "react-dom";
+import { ImageSlider } from "@/app/components/ImageSlider";
+
+interface MediaAsset {
+  _id: string;
+  url: string;
+  originalFilename: string;
+  mimeType: string;
+}
+
+interface MediaItem {
+  asset: MediaAsset;
+}
+
+interface WorkProps {
+  core?: {
+    producerName?: string;
+    clientName?: string;
+    projectTitle?: string;
+    projectCategory?: string;
+    projectChallenge?: string;
+    projectTechStack?: string[];
+  };
+  brandDevelopment?: {
+    purpose?: { title: string; description: string };
+    audience?: { title: string; description: string };
+    archetypes?: any[]; // Keep any for now
+    associations?: { title: string }[];
+    mood?: { title: string; description: string }[];
+  };
+  webDesign?: {
+    title: string;
+    description: string;
+    media: MediaItem;
+    link?: string;
+  }[];
+  webDevelopment?: {
+    features?: {
+      title: string;
+      description: string;
+      media?: MediaItem[];
+      link?: string;
+      microFeatures?: {
+        title: string;
+        description: string;
+        media?: MediaItem[];
+        link?: string;
+      }[];
+    }[];
+  };
+  mediaContent?: {
+    title: string;
+    description: string;
+    media: MediaItem;
+    link?: string;
+  }[];
+}
+
+export default function WorkDetailTabs({ work }: { work: WorkProps }) {
+  const [activeTab, setActiveTab] = useState("core");
+  const [clickedTab, setClickedTab] = useState<string | null>(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const sectionRefs = {
+    core: useRef<HTMLDivElement>(null),
+    "brand-identity": useRef<HTMLDivElement>(null),
+    "web-design": useRef<HTMLDivElement>(null),
+    "web-development": useRef<HTMLDivElement>(null),
+    media: useRef<HTMLDivElement>(null),
+  };
+  const navbarRef = useRef<HTMLDivElement>(null);
+
+  // Clear timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Simplified helper functions to check if sections have data
+  const hasCoreSectionData = () => {
+    return Object.values(work?.core || {}).some((value) =>
+      Array.isArray(value) ? value.length > 0 : Boolean(value)
+    );
+  };
+
+  const hasBrandSectionData = () => {
+    const { purpose, audience, archetypes, mood } =
+      work?.brandDevelopment || {};
+    return Boolean(
+      (purpose?.title && purpose?.description) ||
+        (audience?.title && audience?.description) ||
+        archetypes?.length ||
+        mood?.length
+    );
+  };
+
+  const hasDesignSectionData = () => {
+    return Boolean(work?.webDesign && work.webDesign.length > 0);
+  };
+
+  const hasDevelopmentSectionData = () => {
+    return Boolean(work?.webDevelopment?.features?.length);
+  };
+
+  const hasMediaSectionData = () => {
+    return Boolean(work?.mediaContent && work.mediaContent.length > 0);
+  };
+
+  const ALL_TABS = [
+    { id: "core", name: "Core", hasData: hasCoreSectionData() },
+    { id: "brand-identity", name: "Brand", hasData: hasBrandSectionData() },
+    { id: "web-design", name: "Design", hasData: hasDesignSectionData() },
+    {
+      id: "web-development",
+      name: "Development",
+      hasData: hasDevelopmentSectionData(),
+    },
+    { id: "media", name: "Media", hasData: hasMediaSectionData() },
+  ] as const;
+
+  // Get color for tab based on tab ID
+  const getTabColor = (tabId: string): string => {
+    if (tabId === "core") return "white";
+    return CATEGORY_COLORS[tabId as keyof typeof CATEGORY_COLORS] || "white";
+  };
+
+  // Get the appropriate border color based on state
+  const getTabBorderColor = (tabId: string): string => {
+    if (clickedTab === tabId) {
+      return "white"; // Intermediary color when clicked
+    }
+    if (activeTab === tabId) {
+      return getTabColor(tabId); // Active color when section is in view
+    }
+    return "transparent"; // Default transparent border
+  };
+
+  // Scroll to section when tab is clicked
+  const scrollToSection = (tabId: string) => {
+    // Set the clicked tab for visual feedback
+    setClickedTab(tabId);
+
+    // Update active tab
+    setActiveTab(tabId);
+
+    // Scroll to the section
+    const sectionRef = sectionRefs[tabId as keyof typeof sectionRefs];
+    if (sectionRef?.current) {
+      const navbarHeight = navbarRef.current?.offsetHeight || 0;
+      const sectionTop = sectionRef.current.offsetTop - navbarHeight - 20;
+      window.scrollTo({ top: sectionTop, behavior: "smooth" });
+    }
+
+    // Clear any existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    // Clear the clicked state after scrolling is likely complete
+    timeoutRef.current = setTimeout(() => {
+      setClickedTab(null);
+    }, 1000);
+  };
+
+  // Update active tab based on scroll position
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition =
+        window.scrollY + (navbarRef.current?.offsetHeight || 0) + 100;
+
+      // Find the section that is currently in view
+      for (const tab of ALL_TABS) {
+        const sectionRef = sectionRefs[tab.id as keyof typeof sectionRefs];
+        if (sectionRef?.current) {
+          const sectionTop = sectionRef.current.offsetTop;
+          const sectionBottom = sectionTop + sectionRef.current.offsetHeight;
+
+          if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+            setActiveTab(tab.id);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [ALL_TABS, sectionRefs]);
+
+  // Check if the MicroFeatureModal component is defined and properly implemented
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedMicroFeature, setSelectedMicroFeature] = useState(null);
+
+  return (
+    <div className="container-large py-20">
+      {/* Sticky Navbar */}
+      <div
+        ref={navbarRef}
+        className="sticky top-0 z-50 bg-black/90 backdrop-blur-sm py-4 border-b border-white/10"
+      >
+        <div className="grid grid-cols-5 gap-2 bg-black/20 border border-white/20 p-1 rounded-full max-w-3xl mx-auto">
+          {ALL_TABS.map((tab) => (
+            <TooltipProvider key={tab.id}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() => tab.hasData && scrollToSection(tab.id)}
+                    className={`font-primary text-sm rounded-full transition-all py-2 px-4 border-2
+                      ${
+                        tab.hasData
+                          ? activeTab === tab.id
+                            ? "text-white/60 bg-white/10"
+                            : "text-white/60 hover:bg-white/10 border-transparent"
+                          : "text-white/30 cursor-not-allowed border-transparent"
+                      }`}
+                    style={{
+                      borderColor: tab.hasData
+                        ? getTabBorderColor(tab.id)
+                        : "transparent",
+                      boxShadow:
+                        (activeTab === tab.id || clickedTab === tab.id) &&
+                        tab.hasData
+                          ? `0 0 10px rgba(${getTabBorderColor(tab.id).replace(
+                              /[^\d,]/g,
+                              ""
+                            )}, 0.3)`
+                          : "none",
+                    }}
+                  >
+                    {tab.name}
+                  </button>
+                </TooltipTrigger>
+                {!tab.hasData && (
+                  <TooltipContent>
+                    <p className="font-primary text-sm">
+                      No {tab.name.toLowerCase()} information available
+                    </p>
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            </TooltipProvider>
+          ))}
+        </div>
+      </div>
+
+      {/* Content Sections */}
+      <div className="mt-16 space-y-32">
+        {/* Core Section */}
+        {hasCoreSectionData() && (
+          <div
+            ref={sectionRefs.core}
+            id="core-section"
+            className="scroll-mt-24 transition-all duration-300 ease-in-out"
+          >
+            <h2 className="text-2xl font-primary font-medium mb-8 flex items-center">
+              <span
+                className="inline-block w-3 h-3 rounded-full mr-3"
+                style={{ backgroundColor: "white" }}
+              ></span>
+              Core
+            </h2>
+            <div className="grid md:grid-cols-2 gap-8 font-primary ">
+              <div className="p-8 rounded-xl  border border-white/10 space-y-6 bg-white/10">
+                <DetailItem label="Producer" value={work?.core?.producerName} />
+                <DetailItem label="Client" value={work?.core?.clientName} />
+                <DetailItem
+                  label="Project Title"
+                  value={work?.core?.projectTitle}
+                />
+              </div>
+              <div className="p-8 rounded-xl bg-white/10 border border-white/10 space-y-6">
+                <DetailItem
+                  label="Category"
+                  value={work?.core?.projectCategory}
+                />
+                <DetailItem
+                  label="Challenge"
+                  value={work?.core?.projectChallenge}
+                />
+                {work?.core?.projectTechStack &&
+                  work.core.projectTechStack.length > 0 && (
+                    <div>
+                      <h3 className="text-lg font-medium mb-3">Tech Stack</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {work?.core?.projectTechStack.map(
+                          (tech: string, i: number) => (
+                            <span
+                              key={i}
+                              className="tech-stack-item"
+                              style={{
+                                borderColor: "white",
+                              }}
+                            >
+                              {tech}
+                            </span>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  )}
+              </div>
+            </div>
+            <div className="mt-24 border-b border-white/10"></div>
+          </div>
+        )}
+
+        {/* Brand Development Section */}
+        {hasBrandSectionData() && (
+          <div
+            ref={sectionRefs["brand-identity"]}
+            id="brand-section"
+            className="scroll-mt-24 transition-all duration-300 ease-in-out"
+          >
+            <h2 className="text-2xl font-primary font-medium mb-8 flex items-center">
+              <span
+                className="inline-block w-3 h-3 rounded-full mr-3"
+                style={{ backgroundColor: CATEGORY_COLORS["brand-identity"] }}
+              ></span>
+              Brand
+            </h2>
+            <div className="space-y-12">
+              <SectionItem
+                title="Brand Purpose"
+                content={work?.brandDevelopment?.purpose}
+                color={CATEGORY_COLORS["brand-identity"]}
+                style="bg-white/10"
+              />
+              <SectionItem
+                title="Brand Audience"
+                content={work?.brandDevelopment?.audience}
+                color={CATEGORY_COLORS["brand-identity"]}
+                style="bg-white/10"
+              />
+              <ArraySection
+                title="Associations"
+                items={work?.brandDevelopment?.associations || []}
+                color={CATEGORY_COLORS["brand-identity"]}
+              />
+              <ArraySection
+                title="Brand Mood"
+                items={work?.brandDevelopment?.mood || []}
+                color={CATEGORY_COLORS["brand-identity"]}
+              />
+            </div>
+            <div className="mt-24 border-b border-white/10"></div>
+          </div>
+        )}
+
+        {/* Web Design Section */}
+        {hasDesignSectionData() && (
+          <div
+            ref={sectionRefs["web-design"]}
+            id="design-section"
+            className="scroll-mt-24 transition-all duration-300 ease-in-out"
+          >
+            <h2 className="text-2xl font-primary font-medium mb-8 flex items-center">
+              <span
+                className="inline-block w-3 h-3 rounded-full mr-3"
+                style={{ backgroundColor: CATEGORY_COLORS["web-design"] }}
+              ></span>
+              Web Design
+            </h2>
+            <div className="font-primary space-y-12">
+              {work?.webDesign?.map(
+                (
+                  designPage: {
+                    title: string;
+                    description: string;
+                    media: MediaItem;
+                    link?: string;
+                  },
+                  index: number
+                ) => (
+                  <div key={index} className="space-y-8">
+                    {index > 0 && (
+                      <div className="border-t border-white/5 my-8 pt-8"></div>
+                    )}
+
+                    <div className="space-y-4">
+                      <h3 className="text-xl font-medium text-white">
+                        {designPage.title}
+                      </h3>
+                      <p className="text-white/80 max-w-2xl">
+                        {designPage.description}
+                      </p>
+                      {designPage.link && (
+                        <a
+                          href={designPage.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 text-sm hover:text-secondary transition-colors"
+                          style={{
+                            color: CATEGORY_COLORS["web-design"],
+                          }}
+                        >
+                          <span>View More</span>
+                          <ArrowIcon />
+                        </a>
+                      )}
+                    </div>
+
+                    {designPage.media && (
+                      <MediaPreview
+                        media={designPage.media}
+                        link={designPage.link}
+                      />
+                    )}
+                  </div>
+                )
+              )}
+            </div>
+            <div className="mt-24 border-b border-white/10"></div>
+          </div>
+        )}
+
+        {/* Web Development Section */}
+        {hasDevelopmentSectionData() && (
+          <div
+            ref={sectionRefs["web-development"]}
+            id="development-section"
+            className="scroll-mt-24 transition-all duration-300 ease-in-out"
+          >
+            <h2 className="text-2xl font-primary font-medium mb-8 flex items-center">
+              <span
+                className="inline-block w-3 h-3 rounded-full mr-3"
+                style={{ backgroundColor: CATEGORY_COLORS["web-development"] }}
+              ></span>
+              Web Development
+            </h2>
+            <div className="space-y-16">
+              {work?.webDevelopment?.features?.map((feature: {
+                title: string;
+                description: string;
+                media?: MediaItem[];
+                link?: string;
+                microFeatures?: {
+                  title: string;
+                  description: string;
+                  media?: MediaItem[];
+                  link?: string;
+                }[];
+              }, i: number) => (
+                <div key={i} className="feature-container">
+                  {i > 0 && (
+                    <div className="border-t border-white/5 my-12"></div>
+                  )}
+
+                  {/* Main Feature */}
+                  <div className="grid md:grid-cols-2 gap-8 mb-12">
+                    {/* Feature Content */}
+                    <div className="p-6 rounded-xl bg-white/10 border border-white/10">
+                      <div className="space-y-4">
+                        <h3 className="text-xl font-medium">
+                          {feature.title}
+                        </h3>
+                        <p className="text-white/80">{feature.description}</p>
+                        {feature.link && (
+                          <a
+                            href={feature.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 text-sm hover:text-secondary transition-colors"
+                            style={{
+                              color: CATEGORY_COLORS["web-development"],
+                            }}
+                          >
+                            <span>View</span>
+                            <ArrowIcon />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Feature Media Slider */}
+                    <div className="relative">
+                      {feature.media && feature.media.length > 0 ? (
+                        <FeatureMediaSlider
+                          media={feature.media}
+                          color={CATEGORY_COLORS["web-development"]}
+                          link={feature.link}
+                        />
+                      ) : (
+                        <div className="relative aspect-video rounded-xl border border-white/10 bg-black">
+                          <div className="absolute inset-0 flex items-center justify-center text-white/40">
+                            No media available
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Micro Features */}
+                  {feature.microFeatures &&
+                    feature.microFeatures.length > 0 && (
+                      <div className="mt-8 pl-6 border-l-2 border-white/10">
+                        <h4 className="text-lg font-primary font-medium mb-6 text-white/80">
+                          {feature.title} Features
+                        </h4>
+
+                        {/* Grid-based structure for micro features */}
+                        <div className="overflow-hidden rounded-lg border border-white/10">
+                          <div className="grid grid-cols-4 gap-0 bg-white/5 p-3 font-primary text-sm font-medium text-white/80">
+                            <div>Feature</div>
+                            <div>Description</div>
+                            <div className="text-center">Image</div>
+                            <div className="text-center">Link</div>
+                          </div>
+                          <div className="divide-y divide-white/5">
+                            {feature.microFeatures.map(
+                              (microFeature: any, j: number) => (
+                                <div 
+                                  key={j}
+                                  className="grid grid-cols-4 gap-0 p-3 hover:bg-white/5 transition-colors cursor-pointer"
+                                  onClick={() => {
+                                    setSelectedMicroFeature(microFeature);
+                                    setIsModalOpen(true);
+                                  }}
+                                >
+                                  <div className="font-primary font-medium">{microFeature.title}</div>
+                                  <div className="font-primary text-sm text-white/80">{microFeature.description && microFeature.description.length > 100 ? `${microFeature.description.substring(0, 100)}...` : microFeature.description}</div>
+                                  <div className="text-center">
+                                    {microFeature.media && microFeature.media.length > 0 ? (
+                                      <div className="flex justify-center">
+                                        <div
+                                          className="w-8 h-8 rounded flex items-center justify-center bg-white/5 hover:bg-white/10 transition-colors"
+                                          onClick={(e) => e.stopPropagation()}
+                                        >
+                                          <svg
+                                            width="16"
+                                            height="16"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                          >
+                                            <path
+                                              d="M2 6C2 4.89543 2.89543 4 4 4H20C21.1046 4 22 4.89543 22 6V18C22 19.1046 21.1046 20 20 20H4C2.89543 20 2 19.1046 2 18V6Z"
+                                              stroke="white"
+                                              strokeWidth="2"
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                            />
+                                            <path
+                                              d="M8.5 11C9.32843 11 10 10.3284 10 9.5C10 8.67157 9.32843 8 8.5 8C7.67157 8 7 8.67157 7 9.5C7 10.3284 7.67157 11 8.5 11Z"
+                                              stroke="white"
+                                              strokeWidth="2"
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                            />
+                                            <path
+                                              d="M22 14L16 8L4 20"
+                                              stroke="white"
+                                              strokeWidth="2"
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                            />
+                                          </svg>
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      <div className="flex justify-center">
+                                        <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center">
+                                          <span className="text-white/40 text-xs">N/A</span>
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                  <div className="text-center">
+                                    {microFeature.link ? (
+                                      <div className="flex justify-center">
+                                        <a
+                                          href={microFeature.link}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="w-8 h-8 rounded flex items-center justify-center bg-white/5 hover:bg-white/10 transition-colors"
+                                          onClick={(e) => e.stopPropagation()}
+                                          style={{ color: CATEGORY_COLORS["web-development"] }}
+                                        >
+                                          <svg
+                                            width="16"
+                                            height="16"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                          >
+                                            <path
+                                              d="M10 13C10.4295 13.5741 10.9774 14.0492 11.6066 14.3929C12.2357 14.7367 12.9315 14.9411 13.6467 14.9923C14.3618 15.0435 15.0796 14.9404 15.7513 14.6898C16.4231 14.4392 17.0331 14.0471 17.54 13.54L20.54 10.54C21.4508 9.59699 21.9548 8.33397 21.9434 7.02299C21.932 5.71201 21.4061 4.45794 20.4791 3.5309C19.5521 2.60386 18.298 2.07802 16.987 2.06663C15.676 2.05523 14.413 2.55921 13.47 3.47L11.75 5.18"
+                                              stroke="currentColor"
+                                              strokeWidth="2"
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                            />
+                                            <path
+                                              d="M14 11C13.5705 10.4259 13.0226 9.95083 12.3934 9.60706C11.7642 9.26329 11.0684 9.05886 10.3533 9.00768C9.63816 8.95649 8.92037 9.05961 8.24861 9.31017C7.57685 9.56073 6.96684 9.95293 6.45996 10.46L3.45996 13.46C2.54917 14.403 2.04519 15.666 2.05659 16.977C2.06798 18.288 2.59382 19.5421 3.52086 20.4691C4.4479 21.3961 5.70197 21.922 7.01295 21.9334C8.32393 21.9448 9.58694 21.4408 10.53 20.53L12.24 18.82"
+                                              stroke="currentColor"
+                                              strokeWidth="2"
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                            />
+                                          </svg>
+                                        </a>
+                                      </div>
+                                    ) : (
+                                      <div className="flex justify-center">
+                                        <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center">
+                                          <span className="text-white/40 text-xs">N/A</span>
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              )
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Media Section */}
+        {hasMediaSectionData() && (
+          <div
+            ref={sectionRefs["media"]}
+            id="media-section"
+            className="scroll-mt-24 transition-all duration-300 ease-in-out"
+          >
+            <h2 className="text-2xl font-primary font-medium mb-10 flex items-center">
+              <span
+                className="inline-block w-3 h-3 rounded-full mr-3"
+                style={{ backgroundColor: CATEGORY_COLORS["media"] }}
+              ></span>
+              Media
+            </h2>
+            <div className="font-primary space-y-8">
+              {/* Media Content */}
+              <div className="grid md:grid-cols-2 gap-8">
+                {/* Media Info */}
+                <div className="p-6 rounded-xl bg-white/10 border border-white/10">
+                  <div className="space-y-4">
+                    <h3 className="text-xl font-medium">
+                      {work?.mediaContent?.[currentSlide]?.title}
+                    </h3>
+                    <p className="text-white/80">
+                      {work?.mediaContent?.[currentSlide]?.description}
+                    </p>
+                    {work?.mediaContent?.[currentSlide]?.link && (
+                      <a
+                        href={work.mediaContent[currentSlide].link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-sm hover:text-secondary transition-colors"
+                        style={{
+                          color: CATEGORY_COLORS["media"],
+                        }}
+                      >
+                        <span>View More</span>
+                        <ArrowIcon />
+                      </a>
+                    )}
+                  </div>
+                </div>
+
+                {/* Media Slider */}
+                <div className="relative">
+                  <FeatureMediaSlider
+                    media={
+                      work?.mediaContent
+                        ?.map(
+                          (item: {
+                            title: string;
+                            description: string;
+                            media: MediaItem;
+                            link?: string;
+                          }) => item.media
+                        )
+                        .flat() || []
+                    }
+                    color={CATEGORY_COLORS["media"]}
+                    link={work?.mediaContent?.[currentSlide]?.link}
+                    onSlideChange={setCurrentSlide}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Modal outside the mapping function */}
+      {isModalOpen && selectedMicroFeature && createPortal(
+        <MicroFeatureModal
+          microFeature={selectedMicroFeature}
+          color={CATEGORY_COLORS["web-development"]}
+          onClose={() => setIsModalOpen(false)}
+        />,
+        document.body
+      )}
+    </div>
+  );
+}
+
+// Helper Components
+const DetailItem = ({ label, value }: { label: string; value?: string }) => {
+  if (!value) return null;
+  return (
+    <div>
+      <h3 className="mb-2">{label}</h3>
+      <h4>{value}</h4>
+    </div>
+  );
+};
+
+const SectionItem = ({
+  title,
+  content,
+  color,
+  style,
+}: {
+  title: string;
+  content: any;
+  color: string;
+  style?: string;
+}) => {
+  if (!content) return null;
+
+  const { title: contentTitle, description } = content;
+
+  return (
+    <div
+      className={`p-8 rounded-xl border border-white/10 ${style || "bg-black"}`}
+    >
+      <h3 className="mb-5 text-white">{title}</h3>
+      <h4 className="text-xl font-medium mb-4 text-white">{contentTitle}</h4>
+      <p className="text-white/80 leading-relaxed">{description}</p>
+    </div>
+  );
+};
+
+const ArraySection = ({
+  title,
+  items,
+  color,
+}: {
+  title: string;
+  items: Array<{ title: string; description?: string }>;
+  color: string;
+}) => {
+  if (!items || items.length === 0) return null;
+
+  return (
+    <div>
+      <h3 className="mb-6 text-white">{title}</h3>
+      <div
+        className={
+          title === "Associations"
+            ? "flex flex-wrap gap-3"
+            : "grid md:grid-cols-2 gap-6"
+        }
+      >
+        {items.map((item, i) => (
+          <div
+            key={i}
+            className={
+              title === "Associations"
+                ? "tech-stack-item inline-block"
+                : "p-6 rounded-xl bg-black border border-white/10"
+            }
+            style={{
+              borderColor:
+                title === "Associations" ? color : "rgba(255,255,255,0.1)",
+            }}
+          >
+            {title === "Associations" ? (
+              item.title
+            ) : (
+              <>
+                <h4 className="font-primary font-medium text-lg mb-3 text-white">
+                  {item.title}
+                </h4>
+                <p className="font-primary text-white/80 leading-relaxed">
+                  {item.description}
+                </p>
+              </>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const MediaPreview = ({
+  media,
+  link,
+}: {
+  media: any; // Using any to accommodate different Sanity file structures
+  link?: string;
+}) => {
+  if (!media || !media.asset?.url) return null;
+
+  return (
+    <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10 max-w-3xl mx-auto">
+      <Image
+        src={media.asset.url}
+        alt="Design preview"
+        fill
+        className="object-contain"
+        sizes="(max-width: 768px) 100vw, 50vw"
+      />
+      {link && (
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+        >
+          <span className="font-primary text-white flex items-center gap-2">
+            View Design <ArrowIcon />
+          </span>
+        </a>
+      )}
+    </div>
+  );
+};
+
+const ArrowIcon = ({ className = "" }: { className?: string }) => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    <path
+      d="M8 1L15 8L8 15"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M15 8H1"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const FeatureMediaSlider = ({
+  media,
+  color,
+  link,
+  isSmaller = false,
+  onSlideChange,
+}: {
+  media: MediaItem[];
+  color: string;
+  link?: string;
+  isSmaller?: boolean;
+  onSlideChange?: (index: number) => void;
+}) => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  if (!media || media.length === 0) {
+    return (
+      <div
+        className={`relative aspect-video ${isSmaller ? "rounded-lg border border-white/5" : "rounded-xl border border-white/10"} overflow-hidden`}
+      >
+        <div className="absolute inset-0 flex items-center justify-center text-white/40">
+          Image not available
+        </div>
+      </div>
+    );
+  }
+
+  const handlePrevSlide = () => {
+    const newIndex = currentSlide === 0 ? media.length - 1 : currentSlide - 1;
+    setCurrentSlide(newIndex);
+    onSlideChange?.(newIndex);
+  };
+
+  const handleNextSlide = () => {
+    const newIndex = currentSlide === media.length - 1 ? 0 : currentSlide + 1;
+    setCurrentSlide(newIndex);
+    onSlideChange?.(newIndex);
+  };
+
+  const ImageComponent = (
+    <div className="relative h-full transition-opacity duration-500 group">
+      {media[currentSlide]?.asset?.url ? (
+        <>
+          <Image
+            src={media[currentSlide].asset.url}
+            alt={media[currentSlide].asset.originalFilename || "Feature image"}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            priority
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+          {link && (
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+              <span className="font-primary text-white flex items-center gap-2">
+                View Feature <ArrowIcon />
+              </span>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center text-white/40">
+          Image not available
+        </div>
+      )}
+    </div>
+  );
+
+  return (
+    <div
+      className={`relative aspect-video ${isSmaller ? "rounded-lg border border-white/5" : "rounded-xl border border-white/10"} overflow-hidden`}
+    >
+      {/* Current Slide */}
+      {link ? (
+        <a
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block h-full"
+          onClick={(e) => e.stopPropagation()} // Prevent navigation when clicking arrows
+        >
+          {ImageComponent}
+        </a>
+      ) : (
+        ImageComponent
+      )}
+
+      {/* Navigation Arrows - only show if there's more than one image */}
+      {media.length > 1 && (
+        <>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              handlePrevSlide();
+            }}
+            className={`absolute left-4 top-1/2 -translate-y-1/2 ${isSmaller ? "p-1.5" : "p-2"} rounded-full bg-black/50 hover:bg-black/70 transition-colors z-10`}
+            style={{ border: `1px solid ${color}` }}
+          >
+            <ArrowIcon className={`${isSmaller ? "w-3 h-3" : ""} rotate-180`} />
+          </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              handleNextSlide();
+            }}
+            className={`absolute right-4 top-1/2 -translate-y-1/2 ${isSmaller ? "p-1.5" : "p-2"} rounded-full bg-black/50 hover:bg-black/70 transition-colors z-10`}
+            style={{ border: `1px solid ${color}` }}
+          >
+            <ArrowIcon className={isSmaller ? "w-3 h-3" : ""} />
+          </button>
+
+          {/* Dots Indicator */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+            {media.map((_: MediaItem, index: number) => (
+              <div
+                key={index}
+                className="w-2 h-2 rounded-full bg-white/20 cursor-pointer"
+                style={{
+                  backgroundColor:
+                    index === currentSlide
+                      ? color
+                      : "rgba(255,255,255,0.2)",
+                }}
+                onClick={() => setCurrentSlide(index)}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
+// MicroFeatureModal component
+const MicroFeatureModal = ({
+  microFeature,
+  color,
+  onClose,
+}: {
+  microFeature: any;
+  color: string;
+  onClose: () => void;
+}) => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const { title, description, media, link } = microFeature;
+
+  const handlePrevSlide = () => {
+    if (!media || media.length <= 1) return;
+    setCurrentSlide((prev) => (prev === 0 ? media.length - 1 : prev - 1));
+  };
+
+  const handleNextSlide = () => {
+    if (!media || media.length <= 1) return;
+    setCurrentSlide((prev) => (prev === media.length - 1 ? 0 : prev + 1));
+  };
+
+  // Use useEffect to prevent scrolling when modal is open
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="relative max-w-4xl w-full max-h-[90vh] bg-black/90 rounded-xl overflow-hidden border border-white/10"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Modal header */}
+        <div className="flex justify-between items-center p-4 border-b border-white/10">
+          <h3 className="font-primary font-medium text-lg">{title}</h3>
+          <button
+            onClick={onClose}
+            className="p-1 rounded-full hover:bg-white/10"
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M18 6L6 18M6 6L18 18"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
+        </div>
+
+        {/* Modal content */}
+        <div className="p-6 space-y-6">
+          {/* Description */}
+          <div className="font-primary text-white/80">
+            <p>{description}</p>
+          </div>
+
+          {/* Media */}
+          {media && media.length > 0 && (
+            <div className="relative aspect-video rounded-lg overflow-hidden border border-white/10">
+              <Image
+                src={media[currentSlide].asset.url}
+                alt={title}
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 100vw, 80vw"
+              />
+
+              {/* Navigation arrows - only show if there's more than one image */}
+              {media.length > 1 && (
+                <>
+                  <button
+                    onClick={handlePrevSlide}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors z-10"
+                    style={{ border: `1px solid ${color}` }}
+                  >
+                    <ArrowIcon className="rotate-180" />
+                  </button>
+                  <button
+                    onClick={handleNextSlide}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-black/50 hover:bg-black/70 transition-colors z-10"
+                    style={{ border: `1px solid ${color}` }}
+                  >
+                    <ArrowIcon />
+                  </button>
+
+                  {/* Dots indicator */}
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                    {media.map((_: MediaItem, index: number) => (
+                      <div
+                        key={index}
+                        className="w-2 h-2 rounded-full bg-white/20 cursor-pointer"
+                        style={{
+                          backgroundColor:
+                            index === currentSlide
+                              ? color
+                              : "rgba(255,255,255,0.2)",
+                        }}
+                        onClick={() => setCurrentSlide(index)}
+                      />
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+
+          {/* Link button */}
+          {link && (
+            <div className="flex justify-end">
+              <a
+                href={link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border transition-colors hover:bg-white/10"
+                style={{ borderColor: color, color }}
+              >
+                <span className="font-primary">Visit Website</span>
+                <ArrowIcon />
+              </a>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};

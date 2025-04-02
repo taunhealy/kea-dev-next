@@ -13,10 +13,44 @@ export const homePageQuery = defineQuery(`{
       _type,
       _key,
       asset
-    }
+    },
+    "inDevelopment": coalesce(
+      // First try to use the referenced work from the heroSection
+      inDevelopment->{
+        _id,
+        title,
+        description,
+        coverImage,
+        mainImage,
+        core {
+          projectTitle,
+          clientName,
+          projectCategory,
+          projectDescription
+        },
+        "workItemId": _id
+      },
+      // If no reference exists, find the first work marked as inDevelopment
+      *[_type == "work" && inDevelopment == true][0]{
+        _id,
+        title,
+        description,
+        coverImage,
+        mainImage,
+        core {
+          projectTitle,
+          clientName,
+          projectCategory,
+          projectDescription
+        },
+        "workItemId": _id
+      }
+    )
   },
-  "works": *[_type == "work"] | order(orderRank) {
+  "works": *[_type == "work" && (!defined(inDevelopment) || inDevelopment == false)] | order(orderRank) {
     ...,
+    "client": client->{title, _id},
+    "workType": workType->{title, slug},
     categories[]->{ title, slug { current } },
     webDevelopment {
       features[] {
@@ -38,6 +72,23 @@ export const homePageQuery = defineQuery(`{
   "categories": *[_type == "workCategory"] | order(order asc) { 
     title, 
     slug { current } 
+  },
+  "about": *[_type == "page" && slug.current == "about"][0].sections[_type == "aboutSection"][0]{
+    heading,
+    description,
+    images[]{
+      "url": asset->url
+    },
+    teamHeading,
+    teamDescription,
+    teamMembers[]{
+      name,
+      role,
+      image{
+        "url": asset->url,
+        "alt": asset->altText
+      }
+    }
   },
   "blog": *[_type == "page" && slug.current == "blog"][0].sections[_type == "blogSection"][0],
   "posts": *[_type == "post"] | order(publishedAt desc)[0...3] {
@@ -110,7 +161,7 @@ export const postQuery = `*[_type == "post" && slug.current == $slug][0]{
   }`;
 
 export const workSectionQuery = groq`{
-  "works": *[_type == "work"] | order(orderRank) {
+  "works": *[_type == "work" && (!defined(inDevelopment) || inDevelopment == false)] | order(orderRank) {
     ...,
     categories[]->{ title, slug { current } }
   },
@@ -134,6 +185,15 @@ export const workDetailQuery = groq`*[_type == "work" && slug.current == $slug][
       mimeType
     }
   },
+  gallery[] {
+    asset-> {
+      _id,
+      url,
+      metadata
+    }
+  },
+  projectUrl,
+  testimonial,
   orderRank,
   categories[]-> {
     _id,
@@ -143,7 +203,7 @@ export const workDetailQuery = groq`*[_type == "work" && slug.current == $slug][
       _type
     }
   },
-  client->,
+  "client": client->{title, _id},
   core {
     projectTitle,
     clientName,
@@ -161,9 +221,8 @@ export const workDetailQuery = groq`*[_type == "work" && slug.current == $slug][
       title,
       description
     },
-    archetypes[] {
-      title,
-      description
+    associations[] {
+      title
     },
     mood[] {
       title,
@@ -188,6 +247,7 @@ export const workDetailQuery = groq`*[_type == "work" && slug.current == $slug][
       _key,
       title,
       description,
+      link,
       media[] {
         asset-> {
           _id,
@@ -196,7 +256,20 @@ export const workDetailQuery = groq`*[_type == "work" && slug.current == $slug][
           mimeType
         }
       },
-      link
+      microFeatures[] {
+        _key,
+        title,
+        description,
+        link,
+        media[] {
+          asset-> {
+            _id,
+            url,
+            originalFilename,
+            mimeType
+          }
+        }
+      }
     }
   },
   mediaContent[] {
@@ -215,21 +288,76 @@ export const workDetailQuery = groq`*[_type == "work" && slug.current == $slug][
 }`;
 
 export const workPageQuery = groq`{
-  "works": *[_type == "work"] | order(orderRank) {
-    ...,
-    categories[]->{ title, slug { current } },
+  "works": *[_type == "work" && (!defined(inDevelopment) || inDevelopment == false)] | order(orderRank) {
+    _id,
+    title,
+    slug,
+    description,
+    completionDate,
+    technologies,
+    coverImage {
+      asset-> {
+        _id,
+        url
+      }
+    },
+    projectUrl,
+    categories[]->{ 
+      title, 
+      slug { current } 
+    },
+    "client": client->{title, _id},
+    core {
+      projectTitle,
+      clientName,
+      projectCategory,
+      projectChallenge,
+      producerName,
+      projectTechStack
+    },
+    brandDevelopment {
+      purpose {
+        title,
+        description
+      },
+      audience {
+        title,
+        description
+      },
+      associations[] {
+        title
+      },
+      mood[] {
+        title,
+        description
+      }
+    },
     webDevelopment {
       features[] {
         _key,
         title,
         description,
         link,
-        media {
+        media[] {
           asset-> {
             _id,
             url,
             originalFilename,
             mimeType
+          }
+        },
+        microFeatures[] {
+          _key,
+          title,
+          description,
+          link,
+          media[] {
+            asset-> {
+              _id,
+              url,
+              originalFilename,
+              mimeType
+            }
           }
         }
       }
@@ -246,6 +374,16 @@ export const aboutQuery = `*[_type == "page" && slug.current == "about"][0]{
   "description": sections[_type == "aboutSection"][0].description,
   "images": sections[_type == "aboutSection"][0].images[]{
     "url": asset->url
+  },
+  "teamHeading": sections[_type == "aboutSection"][0].teamHeading,
+  "teamDescription": sections[_type == "aboutSection"][0].teamDescription,
+  "teamMembers": sections[_type == "aboutSection"][0].teamMembers[]{
+    name,
+    role,
+    image{
+      "url": asset->url,
+      "alt": asset->altText
+    }
   }
 }`;
 

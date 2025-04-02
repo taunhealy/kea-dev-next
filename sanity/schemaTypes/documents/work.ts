@@ -92,8 +92,6 @@ export default defineType({
       fields: [
         defineField({name: 'producerName', type: 'string', title: 'Producer Name'}),
         defineField({name: 'clientName', type: 'string', title: 'Client Name'}),
-        defineField({name: 'projectTitle', type: 'string', title: 'Project Title'}),
-        defineField({name: 'projectCategory', type: 'string', title: 'Project Category'}),
         defineField({name: 'projectChallenge', type: 'text', title: 'Project Challenge'}),
         defineField({
           name: 'projectTechStack',
@@ -203,6 +201,32 @@ export default defineType({
                   ],
                 }),
                 defineField({name: 'link', type: 'url'}),
+                defineField({
+                  name: 'microFeatures',
+                  title: 'Micro Features',
+                  type: 'array',
+                  of: [
+                    {
+                      type: 'object',
+                      fields: [
+                        defineField({name: 'title', type: 'string'}),
+                        defineField({name: 'description', type: 'text'}),
+                        defineField({
+                          name: 'media',
+                          type: 'array',
+                          title: 'Images/Videos',
+                          of: [
+                            {
+                              type: 'file',
+                              options: {accept: 'image/*,video/*'},
+                            },
+                          ],
+                        }),
+                        defineField({name: 'link', type: 'url'}),
+                      ],
+                    },
+                  ],
+                }),
               ],
             },
           ],
@@ -231,17 +255,33 @@ export default defineType({
         },
       ],
     }),
+    defineField({
+      name: 'inDevelopment',
+      title: 'In Development',
+      type: 'boolean',
+      description:
+        'Check this if the project is still in development and should not appear in the main work listings',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'workType',
+      title: 'Work Type',
+      type: 'reference',
+      to: [{type: 'workType'}],
+      validation: (Rule) => Rule.required(),
+    }),
   ],
   preview: {
     select: {
       title: 'title',
       client: 'client.title',
+      workType: 'workType.title',
       media: 'coverImage',
     },
-    prepare({title, client, media}) {
+    prepare({title, client, workType, media}) {
       return {
         title,
-        subtitle: client,
+        subtitle: `${client || 'No client'} · ${workType || 'No type'}`,
         media,
       }
     },

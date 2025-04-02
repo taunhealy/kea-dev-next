@@ -7,18 +7,22 @@ import Image from "next/image";
 import { urlForImage } from "@/lib/urlForImage";
 import gsap from "gsap";
 import { Button } from "@/app/components/ui/button";
+import TechStack from "@/app/components/TechStack";
 
 interface SectionData {
+  _type: string;
+  _key: string;
   heroTitle: string;
   heroSubtitle: string;
   heroImage?: {
-    _type: "image";
+    _type: string;
     asset: {
       _ref: string;
       _type: string;
     };
   };
   heroLogos?: Array<{
+    _type: string;
     _key: string;
     asset: {
       _ref: string;
@@ -26,6 +30,31 @@ interface SectionData {
     };
     alt?: string;
   }>;
+  inDevelopment?: {
+    _type: string;
+    _ref: string;
+    title?: string;
+    mainImage?: {
+      _type: string;
+      asset: {
+        _ref: string;
+        _type: string;
+      };
+    };
+    description?: string;
+    workItemId?: string;
+    workType?: string;
+    coverImage?: {
+      _type: string;
+      asset: {
+        _ref: string;
+        _type: string;
+      };
+    };
+    core?: {
+      projectDescription?: string;
+    };
+  };
 }
 
 export default function HeroSection({ data }: { data?: SectionData }) {
@@ -92,80 +121,132 @@ export default function HeroSection({ data }: { data?: SectionData }) {
       <section className="beams-text-section flex flex-col h-[100vh] relative z-0 bg-black">
         <div className="flex flex-col justify-between h-full py-0 px-8">
           <div className="flex flex-col items-start gap-[90px] pt-[120px]">
-            <div className="titles-container flex flex-col gap-[16px] max-w-[540px] relative">
-              <div className="absolute inset-0 -m-4 blur-sm bg-black/20 rounded-xl backdrop-opacity-10" />
-              <h4 className="text-white font-primary relative">Kea Logic</h4>
-              <h1 className="text-white font-primary relative">
-                <span>Custom</span> <span>websites</span> that solve business
-                <span> challenges</span>.
-              </h1>
-            </div>
-            <HeroBeams />
-          </div>
+            <div className="flex justify-between w-full">
+              {/* Left column with title and Custom Solutions */}
+              <div className="flex flex-col gap-8 max-w-[420px]">
+                <div className="titles-container flex flex-col gap-[16px] relative">
+                  <div className="absolute inset-0 -m-4 blur-sm bg-black/20 rounded-xl backdrop-opacity-10" />
+                  <h4 className="text-white font-primary relative">
+                    Kea Logic
+                  </h4>
+                  <h1 className="text-xl md:text-3xl font-primary font-normal tracking-tight text-white mb-6">
+                    <span>Custom</span> <span>websites</span> that solve
+                    business
+                    <span> challenges</span>.
+                  </h1>
+                </div>
 
-          <div className="tech-stack-container flex flex-wrap gap-4 p-2 justify-center mb-0 w-full">
-            <div className="w-full max-w-[600px]">
-              <div className="h-px bg-white/20 w-full mb-6"></div>
-
-              <div className="flex flex-wrap gap-3 justify-center">
-                {[
-                  {
-                    name: "React",
-                    description:
-                      "A JavaScript library for building user interfaces",
-                    url: "https://reactjs.org/",
-                  },
-                  {
-                    name: "Next.js",
-                    description:
-                      "React framework for production with server-side rendering",
-                    url: "https://nextjs.org/",
-                  },
-                  {
-                    name: "TypeScript",
-                    description:
-                      "Strongly typed programming language that builds on JavaScript",
-                    url: "https://www.typescriptlang.org/",
-                  },
-                  {
-                    name: "Tailwind CSS",
-                    description:
-                      "Utility-first CSS framework for rapid UI development",
-                    url: "https://tailwindcss.com/",
-                  },
-                  {
-                    name: "Sanity",
-                    description: "Headless CMS platform for structured content",
-                    url: "https://www.sanity.io/",
-                  },
-                  {
-                    name: "Figma",
-                    description: "Collaborative interface design tool",
-                    url: "https://www.figma.com/",
-                  },
-                ].map((tech) => (
-                  <div key={tech.name} className="relative group">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="font-primary"
-                      onClick={() =>
-                        window.open(tech.url, "_blank", "noopener,noreferrer")
-                      }
-                    >
-                      {tech.name}
-                    </Button>
-                    <div className="absolute bottom-full left-0 mb-2 w-48 p-2 bg-black border border-white/20 rounded-lg text-white font-primary text-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
-                      {tech.description}
-                      <div className="mt-1 text-xs text-white/70">
-                        Click to visit website
-                      </div>
-                    </div>
+                {/* Custom Solutions directly below title */}
+                <div className="border border-white/20 rounded-lg p-4 bg-black/40 backdrop-blur-sm overflow-hidden relative w-full">
+                  {/* Subtle gradient glow effect */}
+                  <div className="absolute inset-0 -z-10 animate-pulse">
+                    <div className="absolute inset-0 bg-gradient-to-r from-tertiary via-secondary to-quaternary opacity-10 blur-lg"></div>
                   </div>
-                ))}
+
+                  <h3 className="text-white font-primary text-lg mb-4 border-b border-white/20 pb-2">
+                    Custom Solutions
+                  </h3>
+                  <ul className="text-white/80 font-primary space-y-2">
+                    {[
+                      {
+                        text: "Custom Checkout Systems",
+                        color: "var(--color-primary)",
+                      },
+                      {
+                        text: "Booking & Reservation Platforms",
+                        color: "var(--color-secondary)",
+                      },
+                      {
+                        text: "E-commerce Solutions",
+                        color: "var(--color-tertiary)",
+                      },
+                      {
+                        text: "Content Management Systems",
+                        color: "var(--color-quaternary)",
+                      },
+                      {
+                        text: "Interactive Dashboards",
+                        color: "gray-200",
+                      },
+                    ].map((solution, index) => (
+                      <li key={index} className="flex items-center">
+                        <span
+                          className="inline-block w-1.5 h-1.5 rounded-full mr-2"
+                          style={{ backgroundColor: solution.color }}
+                        ></span>
+                        {solution.text}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-              <div className="h-px bg-white/20 w-full mt-6"></div>
+
+              {/* Right sidebar */}
+              <div className="w-[350px] mr-8 flex flex-col gap-6">
+                {/* In Development Section */}
+                <div className="in-development-container relative border border-white/20 rounded-lg p-4 bg-black/40 backdrop-blur-sm overflow-hidden">
+                  {/* Animated border glow effect */}
+                  <div className="absolute inset-0 -z-10 animate-pulse">
+                    <div className="absolute inset-0 bg-black blur-sm"></div>
+                  </div>
+
+                  <h3 className="text-white font-primary text-lg mb-3 border-b border-white/20 pb-2">
+                    In Development
+                  </h3>
+
+                  <div className="project-card mb-3">
+                    <h4 className="text-white font-primary text-base mb-2">
+                      {data?.inDevelopment?.title || "Project Horizon"}
+                    </h4>
+                    {data?.inDevelopment?.mainImage ||
+                    data?.inDevelopment?.coverImage ? (
+                      <div className="relative h-28 w-full rounded-md overflow-hidden mb-2">
+                        <Image
+                          src={urlForImage(
+                            data.inDevelopment.mainImage ||
+                              data.inDevelopment.coverImage
+                          ).url()}
+                          alt={data.inDevelopment.title || "Current project"}
+                          fill
+                          className="object-cover"
+                          onError={() => setHasImageError(true)}
+                        />
+                      </div>
+                    ) : (
+                      data?.heroImage && (
+                        <div className="relative h-28 w-full rounded-md overflow-hidden mb-2">
+                          <Image
+                            src={urlForImage(data.heroImage).url()}
+                            alt="Current project"
+                            fill
+                            className="object-cover"
+                            onError={() => setHasImageError(true)}
+                          />
+                        </div>
+                      )
+                    )}
+                    <p className="text-white/70 font-primary text-sm">
+                      {data?.inDevelopment?.description ||
+                        data?.inDevelopment?.core?.projectDescription ||
+                        "Custom e-commerce platform with integrated analytics dashboard"}
+                    </p>
+                  </div>
+
+                  <div className="sanity-reference mt-3 pt-3 border-t border-white/20">
+                    <p className="text-white/50 font-primary text-xs flex items-center">
+                      <span className="inline-block w-2 h-2 bg-primary rounded-full mr-2 animate-pulse"></span>
+                      Work Type:{" "}
+                      {data?.inDevelopment?.workType || "Web Development"}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Tech Stack */}
+                <TechStack />
+              </div>
             </div>
+
+            <HeroBeams />
           </div>
         </div>
       </section>

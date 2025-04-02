@@ -35,6 +35,13 @@ export default defineType({
       type: 'array',
       of: [{type: 'image'}],
     },
+    {
+      name: 'inDevelopment',
+      title: 'In Development Project',
+      type: 'reference',
+      to: [{type: 'work'}],
+      description: 'Select a work item to display in the "In Development" section',
+    },
   ],
   preview: {
     select: {

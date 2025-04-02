@@ -61,14 +61,14 @@ export function AboutContent({ aboutData }: AboutContentProps) {
                 <div className="titles-container flex flex-col gap-8 relative md:w-1/2">
                   <div className="space-y-6">
                     <p className="text-white/60 text-base md:text-lg font-primary leading-relaxed">
-                      We're a small team focused on building effective digital
-                      solutions for businesses and organizations.
+                      We&apos;re a small team focused on building effective
+                      digital solutions for businesses and organizations.
                     </p>
                     <p className="text-white/60 text-base md:text-lg font-primary leading-relaxed">
-                      Named after the Kea, New Zealand's alpine parrot known for
-                      its intelligence and problem-solving abilities. Like our
-                      namesake, we approach challenges with creativity and
-                      adaptability, finding innovative solutions in complex
+                      Named after the Kea, New Zealand&apos;s alpine parrot
+                      known for its intelligence and problem-solving abilities.
+                      Like our namesake, we approach challenges with creativity
+                      and adaptability, finding innovative solutions in complex
                       environments.
                     </p>
                   </div>
@@ -248,7 +248,7 @@ export function AboutContent({ aboutData }: AboutContentProps) {
           </h2>
           <p className="text-white/60 font-primary">
             Our team combines technical expertise with practical business
-            experience to deliver effective digital solutions.
+            experience to deliver effective web solutions.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
