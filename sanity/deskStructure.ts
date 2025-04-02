@@ -1,4 +1,5 @@
 import type {StructureBuilder} from 'sanity/structure'
+// @ts-ignore
 import {orderableDocumentListDeskItem} from '@sanity/orderable-document-list'
 import {schemaTypes} from './schemaTypes'
 
