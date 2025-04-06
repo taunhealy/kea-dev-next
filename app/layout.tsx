@@ -7,6 +7,9 @@ import ModeButtons from "@/app/components/ModeButtons";
 import HeroBeams from "@/app/components/HeroBeams";
 import { PartyModeProvider } from "@/app/context/PartyModeContext";
 import PartyMode from "@/app/components/PartyMode";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 export const metadata: Metadata = {
   title: "Kea Logic",
@@ -22,17 +25,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className="flex min-h-screen flex-col bg-background font-primary">
-        <ThemeProvider>
-          <PartyModeProvider>
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-            <PartyMode />
-          </PartyModeProvider>
-        </ThemeProvider>
-      </body>
-    </html>
+    <QueryClientProvider client={queryClient}>
+      <html lang="en" suppressHydrationWarning>
+        <body className="flex min-h-screen flex-col bg-background font-primary">
+          <ThemeProvider>
+            <PartyModeProvider>
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+              <PartyMode />
+            </PartyModeProvider>
+          </ThemeProvider>
+        </body>
+      </html>
+    </QueryClientProvider>
   );
 }

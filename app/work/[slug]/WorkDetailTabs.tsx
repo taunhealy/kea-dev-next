@@ -9,8 +9,17 @@ import BrandSection from "@/app/work/[slug]/sections/BrandSection";
 import DesignSection from "@/app/work/[slug]/sections/DesignSection";
 import DevelopmentSection from "@/app/work/[slug]/sections/DevelopmentSection";
 import MediaSection from "@/app/work/[slug]/sections/MediaSection";
+import RelatedWork from "@/app/work/[slug]/RelatedWork";
 
-export default function WorkDetailTabs({ work }: { work: WorkProps }) {
+export default function WorkDetailTabs({
+  work,
+  nextWork,
+  prevWork,
+}: {
+  work: WorkProps;
+  nextWork?: WorkProps | null;
+  prevWork?: WorkProps | null;
+}) {
   const [activeTab, setActiveTab] = useState("core");
   const [clickedTab, setClickedTab] = useState<string | null>(null);
   const sectionRefs = {
@@ -164,6 +173,15 @@ export default function WorkDetailTabs({ work }: { work: WorkProps }) {
             ref={sectionRefs.media}
             work={work}
             color={CATEGORY_COLORS.media}
+          />
+        )}
+
+        {/* Add Related Work Navigation */}
+        {(nextWork || prevWork) && (
+          <RelatedWork
+            currentWork={work}
+            nextWork={nextWork || undefined}
+            prevWork={prevWork || undefined}
           />
         )}
       </div>

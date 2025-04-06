@@ -387,6 +387,32 @@ export const aboutQuery = `*[_type == "page" && slug.current == "about"][0]{
   }
 }`;
 
+export const getRelatedWorksQuery = groq`
+{
+  "currentWork": *[_type == "work" && slug.current == $slug][0] {
+    _id,
+    categories[]->{ _id }
+  },
+  "allWorks": *[_type == "work" && (!defined(inDevelopment) || inDevelopment == false)] | order(orderRank) {
+    _id,
+    title,
+    slug,
+    description,
+    coverImage {
+      asset-> {
+        _id,
+        url
+      }
+    },
+    categories[]->{ 
+      _id,
+      title, 
+      slug { current } 
+    },
+    orderRank
+  }
+}`;
+
 // Debug utility
 export async function debugPageData() {
   console.group("🔍 Page Data Debug");

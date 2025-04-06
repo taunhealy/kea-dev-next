@@ -51,6 +51,13 @@ export interface WorkProps {
     media: MediaItem;
     link?: string;
   }[];
+  slug: string;
+  title: string;
+  description: string;
+  categories: { slug: string }[];
+  coverImage: {
+    url: string;
+  };
 }
 
 export interface SectionProps {
