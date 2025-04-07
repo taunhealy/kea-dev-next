@@ -51,13 +51,23 @@ export interface WorkProps {
     media: MediaItem;
     link?: string;
   }[];
-  slug: string;
+  slug: string | { current: string };
   title: string;
   description: string;
   categories: { slug: string }[];
   coverImage: {
-    url: string;
+    url?: string;
+    asset?: {
+      url: string;
+    };
   };
+}
+
+export interface RelatedWorkProps {
+  currentWork?: WorkProps;
+  nextWork?: WorkProps | null;
+  prevWork?: WorkProps | null;
+  primaryCategory?: string;
 }
 
 export interface SectionProps {

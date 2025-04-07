@@ -11,15 +11,19 @@ import DevelopmentSection from "@/app/work/[slug]/sections/DevelopmentSection";
 import MediaSection from "@/app/work/[slug]/sections/MediaSection";
 import RelatedWork from "@/app/work/[slug]/RelatedWork";
 
+interface WorkDetailTabsProps {
+  work: WorkProps;
+  nextWork: WorkProps | null;
+  prevWork: WorkProps | null;
+  primaryCategory?: string;
+}
+
 export default function WorkDetailTabs({
   work,
   nextWork,
   prevWork,
-}: {
-  work: WorkProps;
-  nextWork?: WorkProps | null;
-  prevWork?: WorkProps | null;
-}) {
+  primaryCategory,
+}: WorkDetailTabsProps) {
   const [activeTab, setActiveTab] = useState("core");
   const [clickedTab, setClickedTab] = useState<string | null>(null);
   const sectionRefs = {
@@ -134,55 +138,67 @@ export default function WorkDetailTabs({
       />
 
       {/* Content Sections */}
-      <div className="mt-16 space-y-32">
+      <div className="mt-16">
         {/* Core Section */}
         {hasCoreSectionData() && (
-          <CoreSection ref={sectionRefs.core} work={work} />
+          <div ref={sectionRefs.core} className="py-16">
+            <CoreSection work={work} />
+          </div>
         )}
 
         {/* Brand Development Section */}
         {hasBrandSectionData() && (
-          <BrandSection
+          <div
             ref={sectionRefs["brand-identity"]}
-            work={work}
-            color={CATEGORY_COLORS["brand-identity"]}
-          />
+            className="border-t border-white py-16"
+          >
+            <BrandSection
+              work={work}
+              color={CATEGORY_COLORS["brand-identity"]}
+            />
+          </div>
         )}
 
         {/* Web Design Section */}
         {hasDesignSectionData() && (
-          <DesignSection
+          <div
             ref={sectionRefs["web-design"]}
-            work={work}
-            color={CATEGORY_COLORS["web-design"]}
-          />
+            className="border-t border-white py-16"
+          >
+            <DesignSection work={work} color={CATEGORY_COLORS["web-design"]} />
+          </div>
         )}
 
         {/* Web Development Section */}
         {hasDevelopmentSectionData() && (
-          <DevelopmentSection
+          <div
             ref={sectionRefs["web-development"]}
-            work={work}
-            color={CATEGORY_COLORS["web-development"]}
-          />
+            className="border-t border-white py-16"
+          >
+            <DevelopmentSection
+              work={work}
+              color={CATEGORY_COLORS["web-development"]}
+            />
+          </div>
         )}
 
         {/* Media Section */}
         {hasMediaSectionData() && (
-          <MediaSection
-            ref={sectionRefs.media}
-            work={work}
-            color={CATEGORY_COLORS.media}
-          />
+          <div ref={sectionRefs.media} className="border-t border-white py-16">
+            <MediaSection work={work} color={CATEGORY_COLORS.media} />
+          </div>
         )}
 
         {/* Add Related Work Navigation */}
         {(nextWork || prevWork) && (
-          <RelatedWork
-            currentWork={work}
-            nextWork={nextWork || undefined}
-            prevWork={prevWork || undefined}
-          />
+          <div className="border-t border-white">
+            <RelatedWork
+              currentWork={work}
+              nextWork={nextWork}
+              prevWork={prevWork}
+              primaryCategory={primaryCategory}
+            />
+          </div>
         )}
       </div>
     </div>

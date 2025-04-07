@@ -1,166 +1,99 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
-import { getColorForCategory } from "@/app/constants/colors";
-import { client } from "@/lib/sanity";
-import { getRelatedWorksQuery } from "@/lib/queries";
+import { WorkProps, RelatedWorkProps } from "./types";
 
-async function fetchRelatedWorks(slug: string) {
-  const relatedData = await client.fetch(getRelatedWorksQuery, { slug });
-
-  // Process the data
-  let nextWork = null;
-  let prevWork = null;
-  let primaryCategory = null;
-
-  if (relatedData.currentWork && relatedData.allWorks) {
-    const primaryCategoryId = relatedData.currentWork.categories?.[0]?._id;
-    const worksInSameCategory = relatedData.allWorks.filter((w) =>
-      w.categories.some((c: { _id: string }) => c._id === primaryCategoryId)
-    );
-
-    const currentIndex = worksInSameCategory.findIndex(
-      (w: { _id: string }) => w._id === relatedData.currentWork._id
-    );
-
-    if (currentIndex !== -1) {
-      if (currentIndex < worksInSameCategory.length - 1) {
-        const nextWorkData = worksInSameCategory[currentIndex + 1];
-        nextWork = {
-          title: nextWorkData.title,
-          slug: nextWorkData.slug,
-          description: nextWorkData.description,
-          categories: nextWorkData.categories.map((c: any) => ({
-            slug: c.slug.current,
-          })),
-          coverImage: {
-            url: nextWorkData.coverImage?.asset?.url,
-          },
-        };
-      }
-
-      if (currentIndex > 0) {
-        const prevWorkData = worksInSameCategory[currentIndex - 1];
-        prevWork = {
-          title: prevWorkData.title,
-          slug: prevWorkData.slug,
-          description: prevWorkData.description,
-          categories: prevWorkData.categories.map((c: any) => ({
-            slug: c.slug.current,
-          })),
-          coverImage: {
-            url: prevWorkData.coverImage?.asset?.url,
-          },
-        };
-      }
-    }
-
-    primaryCategory = relatedData.currentWork.categories?.[0]?.slug?.current;
-  }
-
-  return { nextWork, prevWork, primaryCategory };
-}
-
-export default function RelatedWork({ slug }: { slug: string }) {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["relatedWorks", slug],
-    queryFn: () => fetchRelatedWorks(slug),
-  });
-
-  if (isLoading) return <div className="animate-pulse">Loading...</div>;
-  if (error) return null;
-  if (!data?.nextWork && !data?.prevWork) return null;
-
-  const categoryColor = data.primaryCategory
-    ? getColorForCategory(
-        data.primaryCategory as
-          | "brand-identity"
-          | "web-design"
-          | "web-development"
-          | "media"
-      )
-    : "white";
-
+export default function RelatedWork({
+  currentWork,
+  nextWork,
+  prevWork,
+  primaryCategory,
+}: RelatedWorkProps) {
   return (
-    <div className="container-large py-20 border-t border-gray-200">
-      <h2 className="text-3xl font-primary font-semibold mb-12">
+    <div className="container-large py-20 border-t border-white">
+      <h2 className="text-[30px] leading-[36px] font-primary font-normal tracking-[-0.75px] text-white mb-12">
         Related Work
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {data.prevWork && (
-          <RelatedWorkCard
-            work={data.prevWork}
-            direction="Previous"
-            categoryColor={categoryColor}
-          />
-        )}
-
-        {data.nextWork && (
-          <RelatedWorkCard
-            work={data.nextWork}
-            direction="Next"
-            categoryColor={categoryColor}
-          />
-        )}
+        <RelatedWorkCard
+          work={
+            prevWork || {
+              title: "No previous work",
+              slug: "",
+              description: "No data present",
+              coverImage: { url: "/placeholder-image.jpg" },
+              categories: [{ slug: "" }],
+            }
+          }
+          direction="Previous"
+        />
+        <RelatedWorkCard
+          work={
+            nextWork || {
+              title: "No next work",
+              slug: "",
+              description: "No data present",
+              coverImage: { url: "/placeholder-image.jpg" },
+              categories: [{ slug: "" }],
+            }
+          }
+          direction="Next"
+        />
       </div>
     </div>
   );
 }
 
-interface RelatedWorkCardProps {
-  work: WorkProps;
-  direction: "Next" | "Previous";
-  categoryColor: string;
-}
-
 function RelatedWorkCard({
   work,
   direction,
-  categoryColor,
-}: RelatedWorkCardProps) {
-  // Ensure slug is a string
-  const slug = typeof work.slug === "string" ? work.slug : "";
+}: {
+  work: WorkProps;
+  direction: "Next" | "Previous";
+}) {
+  // Get the slug value regardless of format
+  const slugValue =
+    typeof work.slug === "object" && "current" in work.slug
+      ? work.slug.current
+      : work.slug;
+
+  // Get the image URL regardless of format
+  const imageUrl = work.coverImage.url || work.coverImage.asset?.url || "";
 
   return (
-    <Link href={`/work/${slug}`} className="group">
-      <div className="relative overflow-hidden rounded-lg transition-all duration-300 hover:shadow-lg">
-        <div className="aspect-w-16 aspect-h-9 relative">
-          {work.coverImage?.url && (
-            <Image
-              src={work.coverImage.url}
-              alt={work.title}
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
-          )}
-          <div
-            className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"
-            style={{ opacity: 0.8 }}
-          />
-        </div>
-
-        <div className="absolute bottom-0 left-0 p-6 w-full">
-          <div className="flex items-center mb-2">
-            <div
-              className="h-1 w-8 mr-3 rounded-full"
-              style={{ backgroundColor: categoryColor }}
-            />
-            <span className="text-sm text-white/80 font-primary">
-              {direction} Project
-            </span>
-          </div>
-          <h3 className="text-xl md:text-2xl font-primary font-semibold text-white">
-            {work.title}
-          </h3>
-          <p className="text-white/80 mt-1 font-primary text-sm line-clamp-2">
-            {work.description}
+    <div className="relative overflow-hidden rounded-lg border border-gray-200 h-64 group">
+      {!slugValue ? (
+        // Placeholder state
+        <div className="h-full w-full bg-gray-50 flex items-center justify-center p-6">
+          <p className="text-gray-500 font-primary text-center">
+            No {direction.toLowerCase()} work available
           </p>
         </div>
-      </div>
-    </Link>
+      ) : (
+        // Content state
+        <Link href={`/work/${slugValue}`} className="block h-full">
+          <div className="relative h-full">
+            <Image
+              src={imageUrl}
+              alt={work.title}
+              fill
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-90"></div>
+            <div className="absolute bottom-0 left-0 p-6 w-full">
+              <h3 className="text-white font-primary font-medium text-lg">
+                {work.title}
+              </h3>
+              <p className="text-white/80 font-primary text-sm mt-1 line-clamp-2">
+                {work.description}
+              </p>
+            </div>
+          </div>
+        </Link>
+      )}
+    </div>
   );
 }

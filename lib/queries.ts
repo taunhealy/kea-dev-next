@@ -168,87 +168,72 @@ export const workSectionQuery = groq`{
   "categories": *[_type == "category"] | order(title asc) { title, slug { current } }
 }`;
 
-export const workDetailQuery = groq`*[_type == "work" && slug.current == $slug][0] {
-  _id,
-  title,
-  slug,
-  description,
-  completionDate,
-  technologies,
-  coverImage {
-    _type,
-    asset-> {
-      _id,
-      url,
-      metadata,
-      originalFilename,
-      mimeType
-    }
-  },
-  gallery[] {
-    asset-> {
-      _id,
-      url,
-      metadata
-    }
-  },
-  projectUrl,
-  testimonial,
-  orderRank,
-  categories[]-> {
+export const workDetailQuery = groq`{
+  "work": *[_type == "work" && slug.current == $slug][0] {
     _id,
     title,
-    slug {
-      current,
-      _type
-    }
-  },
-  "client": client->{title, _id},
-  core {
-    projectTitle,
-    clientName,
-    projectCategory,
-    projectChallenge,
-    producerName,
-    projectTechStack
-  },
-  brandDevelopment {
-    purpose {
-      title,
-      description
-    },
-    audience {
-      title,
-      description
-    },
-    associations[] {
-      title
-    },
-    mood[] {
-      title,
-      description
-    }
-  },
-  webDesign[] {
-    title,
+    slug,
     description,
-    media {
+    completionDate,
+    technologies,
+    coverImage {
+      _type,
       asset-> {
         _id,
         url,
+        metadata,
         originalFilename,
         mimeType
       }
     },
-    link
-  },
-  webDevelopment {
-    features[] {
-      _key,
+    gallery[] {
+      asset-> {
+        _id,
+        url,
+        metadata
+      }
+    },
+    projectUrl,
+    testimonial,
+    orderRank,
+    categories[]-> {
+      _id,
+      title,
+      slug {
+        current,
+        _type
+      }
+    },
+    "client": client->{title, _id},
+    core {
+      projectTitle,
+      clientName,
+      projectCategory,
+      projectChallenge,
+      producerName,
+      projectTechStack
+    },
+    brandDevelopment {
+      purpose {
+        title,
+        description
+      },
+      audience {
+        title,
+        description
+      },
+      associations[] {
+        title
+      },
+      mood[] {
+        title,
+        description
+      }
+    },
+    webDesign[] {
       title,
       description,
-      link,
-      media[] {
+      media {
         asset-> {
           _id,
           url,
@@ -256,7 +241,10 @@ export const workDetailQuery = groq`*[_type == "work" && slug.current == $slug][
           mimeType
         }
       },
-      microFeatures[] {
+      link
+    },
+    webDevelopment {
+      features[] {
         _key,
         title,
         description,
@@ -268,22 +256,49 @@ export const workDetailQuery = groq`*[_type == "work" && slug.current == $slug][
             originalFilename,
             mimeType
           }
+        },
+        microFeatures[] {
+          _key,
+          title,
+          description,
+          link,
+          media[] {
+            asset-> {
+              _id,
+              url,
+              originalFilename,
+              mimeType
+            }
+          }
         }
       }
+    },
+    mediaContent[] {
+      title,
+      description,
+      media {
+        asset-> {
+          _id,
+          url,
+          originalFilename,
+          mimeType
+        }
+      },
+      link
     }
   },
-  mediaContent[] {
+  "allWorks": *[_type == "work" && (!defined(inDevelopment) || inDevelopment == false)] | order(orderRank) {
+    _id,
     title,
-    description,
-    media {
-      asset-> {
-        _id,
-        url,
-        originalFilename,
-        mimeType
-      }
+    slug {
+      current
     },
-    link
+    description,
+    coverImage {
+      asset-> {
+        url
+      }
+    }
   }
 }`;
 
@@ -391,25 +406,21 @@ export const getRelatedWorksQuery = groq`
 {
   "currentWork": *[_type == "work" && slug.current == $slug][0] {
     _id,
-    categories[]->{ _id }
+    orderRank
   },
   "allWorks": *[_type == "work" && (!defined(inDevelopment) || inDevelopment == false)] | order(orderRank) {
     _id,
     title,
-    slug,
+    slug {
+      current
+    },
     description,
     coverImage {
       asset-> {
         _id,
         url
       }
-    },
-    categories[]->{ 
-      _id,
-      title, 
-      slug { current } 
-    },
-    orderRank
+    }
   }
 }`;
 

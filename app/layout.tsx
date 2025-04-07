@@ -3,13 +3,9 @@ import "./globals.css";
 import Header from "@/app/sections/Header";
 import Footer from "@/app/sections/Footer";
 import { ThemeProvider } from "@/app/components/ThemeProvider";
-import ModeButtons from "@/app/components/ModeButtons";
-import HeroBeams from "@/app/components/HeroBeams";
 import { PartyModeProvider } from "@/app/context/PartyModeContext";
 import PartyMode from "@/app/components/PartyMode";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-const queryClient = new QueryClient();
+import Providers from "@/app/components/Providers";
 
 export const metadata: Metadata = {
   title: "Kea Logic",
@@ -25,9 +21,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <html lang="en" suppressHydrationWarning>
-        <body className="flex min-h-screen flex-col bg-background font-primary">
+    <html lang="en" suppressHydrationWarning>
+      <body className="flex min-h-screen flex-col bg-background font-primary">
+        <Providers>
           <ThemeProvider>
             <PartyModeProvider>
               <Header />
@@ -36,8 +32,8 @@ export default function RootLayout({
               <PartyMode />
             </PartyModeProvider>
           </ThemeProvider>
-        </body>
-      </html>
-    </QueryClientProvider>
+        </Providers>
+      </body>
+    </html>
   );
 }
