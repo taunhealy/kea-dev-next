@@ -98,7 +98,7 @@ const MediaSlider = ({ media, color }: { media: any[]; color: string }) => {
               src={currentItem.asset.url}
               alt={currentItem.title || `Media slide ${currentIndex + 1}`}
               fill
-              className="object-contain"
+              className="object-contain rounded-xl"
               sizes="(max-width: 768px) 100vw, 50vw"
             />
           )}
@@ -107,7 +107,7 @@ const MediaSlider = ({ media, color }: { media: any[]; color: string }) => {
               href={currentItem.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center"
+              className="absolute inset-0 bg-black/40 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center rounded-xl"
             >
               <span className="font-primary text-white flex items-center gap-2">
                 View Media <ArrowIcon />

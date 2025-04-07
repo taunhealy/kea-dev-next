@@ -17,18 +17,23 @@ export default async function WorkDetailPage({
     notFound();
   }
 
-  // Find next and previous works
+  // Find next and previous works with cycling behavior
   let nextWork = null;
   let prevWork = null;
 
   const currentIndex = allWorks.findIndex((w: any) => w.slug.current === slug);
   if (currentIndex !== -1) {
-    if (currentIndex < allWorks.length - 1) {
-      nextWork = allWorks[currentIndex + 1];
-    }
-    if (currentIndex > 0) {
-      prevWork = allWorks[currentIndex - 1];
-    }
+    // For next work: if at the end, cycle to the beginning
+    nextWork =
+      currentIndex < allWorks.length - 1
+        ? allWorks[currentIndex + 1]
+        : allWorks[0];
+
+    // For previous work: if at the beginning, cycle to the end
+    prevWork =
+      currentIndex > 0
+        ? allWorks[currentIndex - 1]
+        : allWorks[allWorks.length - 1];
   }
 
   // Get primary category from the filtered works data
@@ -36,7 +41,12 @@ export default async function WorkDetailPage({
 
   return (
     <main className="min-h-screen bg-black text-white">
-      <WorkDetailTabs work={work} nextWork={nextWork} prevWork={prevWork} />
+      <WorkDetailTabs
+        work={work}
+        nextWork={nextWork}
+        prevWork={prevWork}
+        primaryCategory={primaryCategory}
+      />
     </main>
   );
 }

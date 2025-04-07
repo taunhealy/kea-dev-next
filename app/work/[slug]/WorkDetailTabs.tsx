@@ -190,16 +190,14 @@ export default function WorkDetailTabs({
         )}
 
         {/* Add Related Work Navigation */}
-        {(nextWork || prevWork) && (
-          <div className="border-t border-white">
-            <RelatedWork
-              currentWork={work}
-              nextWork={nextWork}
-              prevWork={prevWork}
-              primaryCategory={primaryCategory}
-            />
-          </div>
-        )}
+        <div className="border-t border-white">
+          <RelatedWork
+            currentWork={work}
+            nextWork={nextWork}
+            prevWork={prevWork}
+            primaryCategory={primaryCategory}
+          />
+        </div>
       </div>
     </div>
   );
