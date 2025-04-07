@@ -37,8 +37,10 @@ export default function WorkDetailTabs({
 
   // Simplified helper functions to check if sections have data
   const hasCoreSectionData = () => {
-    return Object.values(work?.core || {}).some((value) =>
-      Array.isArray(value) ? value.length > 0 : Boolean(value)
+    return (
+      Object.values(work?.core || {}).some((value) =>
+        Array.isArray(value) ? value.length > 0 : Boolean(value)
+      ) || Boolean(work?.projectUrl)
     );
   };
 

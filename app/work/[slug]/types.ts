@@ -61,6 +61,7 @@ export interface WorkProps {
       url: string;
     };
   };
+  projectUrl?: string;
 }
 
 export interface RelatedWorkProps {

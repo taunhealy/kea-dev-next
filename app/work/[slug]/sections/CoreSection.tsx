@@ -34,6 +34,22 @@ const CoreSection = forwardRef<HTMLDivElement, SectionProps>(
               label="Project Title"
               value={work?.core?.projectTitle}
             />
+            {work?.projectUrl && (
+              <div>
+                <h3 className="mb-2">Live Project</h3>
+                <h4>
+                  <a
+                    href={work.projectUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: "var(--color-primary)" }}
+                    className="hover:underline font-primary"
+                  >
+                    {work.projectUrl}
+                  </a>
+                </h4>
+              </div>
+            )}
           </div>
           <div className="p-8 rounded-xl bg-white/10 border border-white/10 space-y-6">
             <DetailItem label="Category" value={work?.core?.projectCategory} />
