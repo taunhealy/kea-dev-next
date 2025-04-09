@@ -164,10 +164,6 @@ export default function HeroSection({ data }: { data?: SectionData }) {
                         text: "Content Management Systems",
                         color: "var(--color-quaternary)",
                       },
-                      {
-                        text: "Interactive Dashboards",
-                        color: "gray-200",
-                      },
                     ].map((solution, index) => (
                       <li key={index} className="flex items-center">
                         <span

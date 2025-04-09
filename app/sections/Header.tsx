@@ -47,6 +47,9 @@ export default function Header() {
               variant="outline"
               data-party-mode
               className="font-primary text-sm"
+              onClick={() =>
+                (window.location.href = "mailto:taunhealy@kealogic.dev")
+              }
             >
               Contact
             </Button>

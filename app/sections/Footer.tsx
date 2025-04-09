@@ -75,12 +75,12 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/contact"
+                <a
+                  href="mailto:taunhealy@kealogic.dev"
                   className="text-white/60 hover:text-white transition-colors font-primary"
                 >
                   Contact
-                </Link>
+                </a>
               </li>
             </ul>
           </div>

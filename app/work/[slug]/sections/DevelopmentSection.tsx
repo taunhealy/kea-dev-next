@@ -51,7 +51,7 @@ const DevelopmentSection = forwardRef<HTMLDivElement, SectionProps>(
                       {feature.title}
                     </h3>
                     <p
-                      className={`text-white/80 font-primary leading-relaxed ${
+                      className={`text-white/80 font-primary leading-relaxed max-w-prose ${
                         !expandedItems.includes(i) &&
                         feature.description?.length > 200
                           ? "line-clamp-3"
