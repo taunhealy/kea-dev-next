@@ -126,15 +126,6 @@ export default function Footer() {
                 </svg>
               </a>
             </div>
-            <div className="mt-6">
-              <h4 className="text-white mb-2 font-primary">Contact Us</h4>
-              <a
-                href="mailto:hello@kealogic.com"
-                className="text-white/60 hover:text-white transition-colors font-primary"
-              >
-                hello@kealogic.com
-              </a>
-            </div>
           </div>
         </div>
       </div>
