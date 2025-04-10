@@ -63,7 +63,7 @@ export default function HeroBeams() {
       gsap.to(containerRef.current, {
         opacity: 0,
         duration: 1.5,
-        delay: 15,
+        delay: 7,
         ease: "power2.inOut",
       });
     }, containerRef);

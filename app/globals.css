@@ -495,18 +495,27 @@
   }
 
   @keyframes breathing {
-    0%,
-    100% {
-      stroke-opacity: 0.4;
+    0% {
       fill-opacity: 0.1;
+      stroke-opacity: 0.4;
     }
     50% {
-      stroke-opacity: 0.7;
-      fill-opacity: 0.25;
+      fill-opacity: 0.2;
+      stroke-opacity: 0.6;
+    }
+    100% {
+      fill-opacity: 0.1;
+      stroke-opacity: 0.4;
     }
   }
 
   .animate-breathing {
-    animation: breathing 4s ease-in-out infinite;
+    animation: breathing 3s infinite ease-in-out;
+  }
+
+  /* Add this to hide maze paths initially */
+  .maze-path {
+    opacity: 0;
+    visibility: hidden;
   }
 }

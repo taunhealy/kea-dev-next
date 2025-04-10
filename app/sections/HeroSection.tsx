@@ -95,10 +95,68 @@ export default function HeroSection({ data }: { data?: SectionData }) {
   const [hasImageError, setHasImageError] = useState(false);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const mazeRef = useRef(null);
 
   // Add GSAP version check here
   useEffect(() => {
     console.log("GSAP version:", gsap.version);
+  }, []);
+
+  // Add maze animation
+  useEffect(() => {
+    const mazeLayers = document.querySelectorAll(".maze-path");
+
+    if (mazeLayers.length) {
+      // Set initial state - all layers invisible
+      gsap.set(mazeLayers, { opacity: 0, visibility: "hidden" });
+
+      // Create staggered animation
+      gsap
+        .timeline()
+        .to(".maze-layer-1", {
+          opacity: 0.8,
+          visibility: "visible",
+          duration: 0.8,
+          ease: "power2.out",
+          delay: 0.5,
+        })
+        .to(
+          ".maze-layer-2",
+          {
+            opacity: 0.7,
+            visibility: "visible",
+            duration: 0.8,
+            ease: "power2.out",
+          },
+          "-=0.4"
+        )
+        .to(
+          ".maze-layer-3",
+          {
+            opacity: 0.6,
+            visibility: "visible",
+            duration: 0.8,
+            ease: "power2.out",
+          },
+          "-=0.4"
+        )
+        .to(
+          ".maze-layer-4",
+          {
+            opacity: 0.4,
+            visibility: "visible",
+            duration: 0.8,
+            ease: "power2.out",
+            onComplete: () => {
+              // Add the breathing animation class after fade-in
+              document
+                .querySelector(".maze-layer-4")
+                ?.classList.add("animate-breathing");
+            },
+          },
+          "-=0.4"
+        );
+    }
   }, []);
 
   // Character limit for project description
@@ -217,7 +275,10 @@ export default function HeroSection({ data }: { data?: SectionData }) {
           <div className="relative rounded-xl backdrop-blur-md bg-black/30 border border-white/10 p-6 shadow-lg">
             <div className="relative inline-flex items-center justify-center">
               {/* Square maze with stroke but no fill */}
-              <div className="absolute w-[140px] h-[140px] maze-container">
+              <div
+                className="absolute w-[140px] h-[140px] maze-container"
+                ref={mazeRef}
+              >
                 <svg
                   width="140"
                   height="140"
