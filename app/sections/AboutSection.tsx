@@ -248,7 +248,7 @@ export function AboutSection({ aboutData }: AboutContentProps) {
             we can help.
           </p>
           <Button variant="outline" size="lg" asChild>
-            <a href="mailto:hello@kea.dev">Get in Touch</a>
+            <a href="taunhealy@kealogic.dev">Get in Touch</a>
           </Button>
         </div>
       </section>

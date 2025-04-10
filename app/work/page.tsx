@@ -151,7 +151,7 @@ export default async function WorkPage() {
             expertise in design, development, and digital strategy.
           </p>
           <Button variant="outline" size="lg" asChild>
-            <a href="mailto:hello@kea.dev">Get in Touch</a>
+            <a href="taunhealy@kealogic.dev">Get in Touch</a>
           </Button>
         </div>
       </section>
