@@ -35,7 +35,7 @@ export default function HeroBeams() {
         beam.style.opacity = "0";
         beam.classList.remove("invisible");
 
-        // Regular animation for all beams (removed special case for pink beams)
+        // Regular animation for all beams
         gsap.to(beam, {
           opacity: 1,
           duration: 0.5,
@@ -57,6 +57,14 @@ export default function HeroBeams() {
             yoyo: true,
           }
         );
+      });
+
+      // Fade out the entire container after 15 seconds
+      gsap.to(containerRef.current, {
+        opacity: 0,
+        duration: 1.5,
+        delay: 15,
+        ease: "power2.inOut",
       });
     }, containerRef);
 

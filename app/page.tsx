@@ -14,12 +14,6 @@ export default async function Home() {
     }
   );
 
-  console.log("Dataset Metadata:", {
-    queryDataset: data.meta.dataset,
-    envDataset: process.env.SANITY_DATASET,
-    projectId: process.env.SANITY_PROJECT_ID,
-  });
-
   return (
     <>
       <HeroSection data={data.hero} />

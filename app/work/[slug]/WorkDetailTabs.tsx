@@ -140,7 +140,7 @@ export default function WorkDetailTabs({
       />
 
       {/* Content Sections */}
-      <div className="mt-16">
+      <div className="mt-8">
         {/* Core Section */}
         {hasCoreSectionData() && (
           <div ref={sectionRefs.core} className="py-16">
@@ -152,7 +152,7 @@ export default function WorkDetailTabs({
         {hasBrandSectionData() && (
           <div
             ref={sectionRefs["brand-identity"]}
-            className="border-t border-white py-16"
+            className="border-t border-white/20 py-16"
           >
             <BrandSection
               work={work}
@@ -165,7 +165,7 @@ export default function WorkDetailTabs({
         {hasDesignSectionData() && (
           <div
             ref={sectionRefs["web-design"]}
-            className="border-t border-white py-16"
+            className="border-t border-white/20 py-16"
           >
             <DesignSection work={work} color={CATEGORY_COLORS["web-design"]} />
           </div>
@@ -175,7 +175,7 @@ export default function WorkDetailTabs({
         {hasDevelopmentSectionData() && (
           <div
             ref={sectionRefs["web-development"]}
-            className="border-t border-white py-16"
+            className="border-t border-white/20 py-16"
           >
             <DevelopmentSection
               work={work}
@@ -186,13 +186,16 @@ export default function WorkDetailTabs({
 
         {/* Media Section */}
         {hasMediaSectionData() && (
-          <div ref={sectionRefs.media} className="border-t border-white py-16">
+          <div
+            ref={sectionRefs.media}
+            className="border-t border-white/20 py-16"
+          >
             <MediaSection work={work} color={CATEGORY_COLORS.media} />
           </div>
         )}
 
         {/* Add Related Work Navigation */}
-        <div className="border-t border-white">
+        <div>
           <RelatedWork
             currentWork={work}
             nextWork={nextWork}

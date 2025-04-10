@@ -11,7 +11,7 @@ export default function RelatedWork({
   primaryCategory,
 }: RelatedWorkProps) {
   return (
-    <div className="container-large py-20 border-t border-white">
+    <div className="container-large py-20 border-t border-gray">
       <h2 className="text-[30px] leading-[36px] font-primary font-normal tracking-[-0.75px] text-white mb-12">
         Related Work
       </h2>

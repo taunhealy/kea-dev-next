@@ -103,46 +103,54 @@ const DevelopmentSection = forwardRef<HTMLDivElement, SectionProps>(
 
               {/* Micro Features */}
               {feature.microFeatures && feature.microFeatures.length > 0 && (
-                <div className="mt-8 pl-6 border-l-2 border-white/10">
-                  <h4 className="text-lg font-primary font-medium mb-6 text-white/90">
+                <div className="mt-8 pl-2 md:pl-6 border-l-2 border-white/10">
+                  <h4 className="text-lg font-primary font-medium mb-4 md:mb-6 text-white/90">
                     {feature.title} Features
                   </h4>
 
                   {/* Grid-based structure for micro features */}
                   <div className="overflow-hidden rounded-lg border border-white/10 shadow-lg">
-                    <div className="grid grid-cols-4 gap-4 bg-white/8 p-4 font-primary text-sm font-medium text-white/90">
+                    {/* Table header - hidden on mobile */}
+                    <div className="hidden md:grid grid-cols-4 gap-4 bg-white/8 p-4 font-primary text-sm font-medium text-white/90">
                       <div>Feature</div>
                       <div>Description</div>
                       <div className="text-center">Image</div>
                       <div className="text-center">Link</div>
                     </div>
+
+                    {/* Mobile-friendly list view */}
                     <div className="divide-y divide-white/5">
                       {feature.microFeatures.map(
                         (microFeature: any, j: number) => (
                           <div
                             key={j}
-                            className="grid grid-cols-4 gap-4 p-4 hover:bg-white/8 transition-colors cursor-pointer"
+                            className="p-4 hover:bg-white/8 transition-colors cursor-pointer"
                             onClick={() => openMicroFeatureModal(microFeature)}
                           >
-                            <div className="font-primary font-medium pr-2">
-                              {microFeature.title}
-                            </div>
-                            <div className="font-primary text-sm text-white/80 pr-2">
-                              {microFeature.description &&
-                              microFeature.description.length > 100
-                                ? `${microFeature.description.substring(0, 100)}...`
-                                : microFeature.description}
-                            </div>
-                            <div className="text-center">
-                              {microFeature.media &&
-                                microFeature.media.length > 0 && (
+                            {/* Mobile view - only title and description */}
+                            <div className="md:grid md:grid-cols-4 gap-4">
+                              <div className="font-primary font-medium pr-2 mb-2 md:mb-0">
+                                {microFeature.title}
+                              </div>
+                              <div className="font-primary text-sm text-white/80 pr-2 md:mb-0">
+                                {microFeature.description &&
+                                microFeature.description.length > 100
+                                  ? `${microFeature.description.substring(0, 100)}...`
+                                  : microFeature.description}
+                              </div>
+
+                              {/* Image and Link indicators - only visible on desktop */}
+                              <div className="hidden md:block md:text-center">
+                                {microFeature.media &&
+                                  microFeature.media.length > 0 && (
+                                    <span className="inline-block w-2 h-2 rounded-full bg-white/60"></span>
+                                  )}
+                              </div>
+                              <div className="hidden md:block md:text-center">
+                                {microFeature.link && (
                                   <span className="inline-block w-2 h-2 rounded-full bg-white/60"></span>
                                 )}
-                            </div>
-                            <div className="text-center">
-                              {microFeature.link && (
-                                <span className="inline-block w-2 h-2 rounded-full bg-white/60"></span>
-                              )}
+                              </div>
                             </div>
                           </div>
                         )
@@ -154,7 +162,6 @@ const DevelopmentSection = forwardRef<HTMLDivElement, SectionProps>(
             </div>
           ))}
         </div>
-        <div className="mt-24 border-b border-white/10"></div>
 
         {/* Modal for micro features */}
         {isModalOpen &&

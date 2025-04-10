@@ -53,7 +53,6 @@ const DesignSection = forwardRef<HTMLDivElement, SectionProps>(
             </div>
           ))}
         </div>
-        <div className="mt-24 border-b border-white/10"></div>
       </div>
     );
   }

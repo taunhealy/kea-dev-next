@@ -95,7 +95,7 @@ export function AboutSection({ aboutData }: AboutContentProps) {
       <section className="container-large py-24 border-t border-white/10">
         <div className="grid md:grid-cols-2 gap-12 md:gap-16">
           <div>
-            <h2 className="text-2xl md:text-3xl font-primary font-normal tracking-tight mb-6">
+            <h2 className="text-[20px] md:text-3xl font-primary font-normal tracking-tight mb-6">
               Our <span className="text-color-primary">Story</span>
             </h2>
             <p className="text-white/60 text-base font-primary leading-relaxed mb-8">
@@ -171,7 +171,7 @@ export function AboutSection({ aboutData }: AboutContentProps) {
       {/* Team Section */}
       <section className="container-large py-24 border-t border-white/10">
         <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="text-2xl md:text-3xl font-primary font-normal tracking-tight mb-6">
+          <h2 className="text-[20px] md:text-3xl font-primary font-normal tracking-tight mb-6">
             {aboutData?.teamHeading || "Meet Our"}{" "}
             <span className="text-color-primary">Team</span>
           </h2>
@@ -180,7 +180,7 @@ export function AboutSection({ aboutData }: AboutContentProps) {
               "Our team combines technical expertise with practical business experience to deliver effective digital solutions."}
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {aboutData?.teamMembers && aboutData.teamMembers.length > 0 ? (
             aboutData.teamMembers.map((member, index) => (
               <div className="card" key={index}>
@@ -239,7 +239,7 @@ export function AboutSection({ aboutData }: AboutContentProps) {
       {/* CTA Section */}
       <section className="container-large py-24 border-t border-white/10">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl font-primary font-normal tracking-tight mb-6">
+          <h2 className="text-[20px] md:text-3xl font-primary font-normal tracking-tight mb-6">
             Ready to start your{" "}
             <span className="text-color-primary">project</span>?
           </h2>

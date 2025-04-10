@@ -30,20 +30,20 @@ const TabNavigation = forwardRef<HTMLDivElement, TabNavigationProps>(
         ref={ref}
         className="sticky top-0 z-50 bg-black/90 backdrop-blur-sm py-4 border-b border-white/10"
       >
-        <div className="grid grid-cols-5 gap-2 bg-black/80 border border-white/20 p-1 rounded-full max-w-3xl mx-auto">
+        <div className="grid grid-cols-3 md:flex md:flex-wrap justify-center gap-2 bg-black/80 border border-white/20 p-2 rounded-xl md:rounded-full max-w-3xl mx-auto md:scale-100 transform-origin-center">
           {tabs.map((tab) => (
             <TooltipProvider key={tab.id}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <button
                     onClick={() => tab.hasData && scrollToSection(tab.id)}
-                    className={`font-primary text-sm rounded-full transition-all py-2 px-4 border-2
+                    className={`font-primary text-xs md:text-sm rounded-full transition-all py-1.5 md:py-2 px-3 md:px-4 border-2
                       ${
                         tab.hasData
                           ? activeTab === tab.id
-                            ? "text-white"
-                            : "text-white/60 hover:bg-white/10 border-transparent"
-                          : "text-white/30 cursor-not-allowed border-transparent"
+                            ? "text-white bg-transparent"
+                            : "text-white/60 hover:bg-white/10 active:bg-white/5 border-transparent bg-transparent"
+                          : "text-white/30 cursor-not-allowed border-transparent bg-transparent"
                       }`}
                     style={{
                       borderColor:
@@ -57,6 +57,7 @@ const TabNavigation = forwardRef<HTMLDivElement, TabNavigationProps>(
                               ""
                             )}, 0.3)`
                           : "none",
+                      backgroundColor: "transparent",
                     }}
                   >
                     {tab.name}

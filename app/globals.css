@@ -493,4 +493,20 @@
   .animate-pulse-slow {
     animation: pulse-opacity 5s ease-in-out infinite;
   }
+
+  @keyframes breathing {
+    0%,
+    100% {
+      stroke-opacity: 0.4;
+      fill-opacity: 0.1;
+    }
+    50% {
+      stroke-opacity: 0.7;
+      fill-opacity: 0.25;
+    }
+  }
+
+  .animate-breathing {
+    animation: breathing 4s ease-in-out infinite;
+  }
 }

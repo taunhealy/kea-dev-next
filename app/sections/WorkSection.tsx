@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, TouchEvent } from "react";
 import type { Work } from "../types/workType";
 import gsap from "gsap";
 import { urlForImage } from "@/lib/sanity";
@@ -39,6 +39,8 @@ export default function WorkSection({
   const [showScrollIndicator, setShowScrollIndicator] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   // Check if we need to show scroll indicators
   useEffect(() => {
@@ -54,6 +56,36 @@ export default function WorkSection({
 
   const handleNext = () => {
     setCurrentSlide((prev) => Math.min(filteredWorks.length - 3, prev + 1));
+  };
+
+  // Handle touch events for mobile swiping
+  const handleTouchStart = (e: TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+    setTouchEnd(null);
+  };
+
+  const handleTouchMove = (e: TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe && currentSlide < filteredWorks.length - 1) {
+      handleNext();
+    }
+
+    if (isRightSwipe && currentSlide > 0) {
+      handlePrev();
+    }
+
+    // Reset values
+    setTouchStart(null);
+    setTouchEnd(null);
   };
 
   // ANIMATION EFFECT
@@ -97,8 +129,12 @@ export default function WorkSection({
   useEffect(() => {
     if (!containerRef.current) return;
 
+    // Use a responsive approach with Tailwind breakpoints in mind
+    const cardWidth = window.innerWidth >= 768 ? 400 : 280;
+    const cardGap = window.innerWidth >= 768 ? 54 : 30;
+
     gsap.to(containerRef.current, {
-      x: -currentSlide * (400 + 54), // Card width + gap
+      x: -currentSlide * (cardWidth + cardGap),
       duration: 0.5,
       ease: "power2.out",
     });
@@ -171,32 +207,80 @@ export default function WorkSection({
   // Visible works based on current slide
   const visibleWorks = filteredWorks;
 
+  useEffect(() => {
+    // Check if we're in a browser environment
+    if (typeof window === "undefined") return;
+
+    // Make sure refs are available
+    if (!containerRef.current) {
+      console.warn("WorkSection: Container ref is null");
+      return;
+    }
+
+    // Use a timeout to ensure DOM is ready
+    const timer = setTimeout(() => {
+      try {
+        // Add null check here
+        if (!containerRef.current) return;
+
+        // Select elements using the containerRef as context
+        const elements = containerRef.current.querySelectorAll(".work-item");
+
+        if (elements.length === 0) {
+          console.warn("WorkSection: No work items found");
+          return;
+        }
+
+        gsap.set(elements, {
+          opacity: 0,
+          y: 50,
+        });
+
+        gsap.to(elements, {
+          opacity: 1,
+          y: 0,
+          stagger: 0.2,
+          duration: 0.8,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 80%",
+          },
+        });
+      } catch (error) {
+        console.error("WorkSection animation error:", error);
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <section className="flex flex-col min-h-[630px] w-full relative overflow-hidden pt-8 gap-8 bg-black border-b border-white/10">
-      <div className="px-8">
-        <h1 className="text-xl md:text-3xl font-primary font-normal tracking-tight text-white mb-6">
+    <section className="flex flex-col min-h-screen md:min-h-[630px] w-full relative overflow-hidden pt-6 md:pt-8 gap-6 md:gap-8 bg-black border-b border-white/10">
+      <div className="px-4 md:px-8">
+        <h1 className="text-xl md:text-3xl font-primary font-normal tracking-tight text-white mb-4 md:mb-6">
           Portfolio Items
         </h1>
       </div>
 
       {/* FILTER CONTROLS - ONLY CATEGORIES */}
-      <div className="flex flex-col md:flex-row gap-4 px-8">
+      <div className="flex flex-col md:flex-row gap-4 px-4 md:px-8">
         {/* CATEGORY FILTERS */}
-        <div className="work-filter-buttons flex flex-wrap gap-4">
+        <div className="work-filter-buttons flex flex-wrap md:flex-nowrap overflow-x-auto md:flex-wrap gap-2 md:gap-4 pb-2 md:pb-0">
           <button
             onClick={() => setSelectedCategory(null)}
-            className={`px-4 py-2 rounded-full text-white text-base font-primary border border-white/20 transition-all flex items-center gap-2
+            className={`px-3 md:px-4 py-1.5 md:py-2 rounded-full text-white text-sm md:text-base font-primary border border-white/20 transition-all flex items-center gap-2 whitespace-nowrap
               ${!selectedCategory ? "opacity-100" : "opacity-70"}`}
           >
             <div
-              className={`w-4 h-2 rounded-full transition-all duration-200
+              className={`w-3 md:w-4 h-2 rounded-full transition-all duration-200
               ${!selectedCategory ? "opacity-100 scale-100" : "opacity-0 scale-0"}`}
               style={{ backgroundColor: "white" }}
             />
             All Categories
           </button>
 
-          {/* Sort categories based on the order in CATEGORY_COLORS */}
+          {/* Categories buttons - existing code with responsive classes */}
           {categories
             .sort((a, b) => {
               // Get the keys of CATEGORY_COLORS to determine order
@@ -218,11 +302,11 @@ export default function WorkSection({
               <button
                 key={category.slug.current}
                 onClick={() => setSelectedCategory(category.slug.current)}
-                className={`px-4 py-2 rounded-full text-white text-base font-primary border border-white/20 transition-all flex items-center gap-2 group
+                className={`px-3 md:px-4 py-1.5 md:py-2 rounded-full text-white text-sm md:text-base font-primary border border-white/20 transition-all flex items-center gap-2 group whitespace-nowrap
                   ${selectedCategory === category.slug.current ? "opacity-100" : "opacity-60 hover:opacity-80"}`}
               >
                 <div
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                  className={`w-2.5 md:w-3 h-2.5 md:h-3 rounded-full transition-all duration-300 ${
                     selectedCategory === category.slug.current
                       ? "opacity-100 scale-100"
                       : "opacity-0 scale-0 group-hover:opacity-70 group-hover:scale-100"
@@ -238,11 +322,13 @@ export default function WorkSection({
       </div>
 
       {/* WORK CARDS GRID */}
-      <div className="relative w-full overflow-hidden">
+      <div className="relative w-full overflow-hidden mb-8 md:mb-0">
         <div
           ref={containerRef}
-          className="work-items-container min-h-[586px] flex-1 flex flex-row gap-[54px] px-8 transition-transform duration-500"
-          style={{ transform: `translateX(0px)` }}
+          className="work-items-container min-h-[350px] md:min-h-[586px] flex flex-row flex-wrap justify-center md:justify-start gap-[30px] md:gap-[54px] px-4 md:px-8 transition-transform duration-500"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
           {filteredWorks.map((work, index) => {
             const isTideRaider =
@@ -258,9 +344,9 @@ export default function WorkSection({
               <a
                 key={work.slug.current}
                 href={`/work/${work.slug.current}`}
-                className="min-w-[280px] w-full md:min-w-[400px] md:max-w-[400px] group cursor-pointer md:flex-shrink-0 work-card"
+                className="min-w-[280px] w-[280px] md:min-w-[400px] md:w-[400px] group cursor-pointer work-card work-item"
               >
-                <div className="relative aspect-[4/3] mb-4 w-full h-[200px] md:h-[300px] overflow-hidden rounded-lg work-card-image">
+                <div className="relative aspect-[4/3] mb-3 md:mb-4 w-full h-[180px] md:h-[300px] overflow-hidden rounded-lg work-card-image">
                   {/* Pulsing animation border for Tide Raider */}
                   {isTideRaider && (
                     <div
@@ -274,24 +360,23 @@ export default function WorkSection({
 
                   {/* Top Feature Badge for Tide Raider */}
                   {isTideRaider && (
-                    <div className="absolute top-4 right-4 text-white font-primary text-xs px-3 py-1 rounded-full z-10 shadow-lg border border-white">
+                    <div className="absolute top-2 md:top-4 right-2 md:right-4 text-white font-primary text-xs px-2 md:px-3 py-0.5 md:py-1 rounded-full z-10 shadow-lg border border-white">
                       Feature-Rich
                     </div>
                   )}
 
                   {/* Work Type Badge - bottom right of image */}
                   {work.workType && (
-                    <div className="absolute bottom-4 right-4 text-white font-primary text-xs px-3 py-1 rounded-full z-10 shadow-lg bg-black/50 border border-white/20">
+                    <div className="absolute bottom-2 md:bottom-4 right-2 md:right-4 text-white font-primary text-xs px-2 md:px-3 py-0.5 md:py-1 rounded-full z-10 shadow-lg bg-black/50 border border-white/20">
                       {work.workType.title}
                     </div>
                   )}
 
                   {/* Square Border Container */}
                   <div
-                    className="absolute inset-0 border-4 rounded-lg transition-all duration-300 group-hover:border-0 work-card-border"
+                    className="absolute inset-0 border-2 md:border-4 rounded-lg transition-all duration-300 group-hover:border-0 work-card-border"
                     style={{
                       borderColor: borderColor,
-                      borderWidth: "2px",
                     }}
                   />
 
@@ -305,11 +390,11 @@ export default function WorkSection({
                   )}
 
                   {/* Category indicators */}
-                  <div className="absolute top-4 left-4 flex gap-1.5">
+                  <div className="absolute top-2 md:top-4 left-2 md:left-4 flex gap-1 md:gap-1.5">
                     {work.categories.map((category) => (
                       <div
                         key={category.slug.current}
-                        className="w-3 h-3 rounded-full opacity-40 group-hover:opacity-100 transition-opacity duration-300"
+                        className="w-2 md:w-3 h-2 md:h-3 rounded-full opacity-40 group-hover:opacity-100 transition-opacity duration-300"
                         style={{
                           backgroundColor: getCategoryColor(
                             category.slug.current
@@ -322,13 +407,11 @@ export default function WorkSection({
 
                 {/* Card Content */}
                 <div className="work-card-content relative">
-                  <h3 className="text-white text-base md:text-lg font-primary">
+                  <h3 className="text-white text-sm md:text-lg font-primary">
                     {work.title}
                   </h3>
 
-                  {/* Client and Description */}
-
-                  <p className="text-white/60 mt-1 line-clamp-2 text-sm md:text-base font-primary">
+                  <p className="text-white/60 mt-0.5 md:mt-1 line-clamp-2 text-xs md:text-base font-primary">
                     {work.description}
                   </p>
                 </div>
@@ -337,26 +420,28 @@ export default function WorkSection({
           })}
         </div>
 
-        {/* Scroll indicators */}
+        {/* Mobile pagination dots - removed since we're not using a slider on mobile */}
+        {/* Navigation arrows - visible only on desktop */}
         {showScrollIndicator && (
           <>
             <button
               onClick={handlePrev}
               disabled={currentSlide === 0}
-              className={`hidden md:flex absolute left-10 top-[25%] -translate-y-1/2 z-10 h-[300px] items-center justify-center px-4 ${
+              className={`hidden md:flex absolute left-2 md:left-4 lg:left-10 top-1/2 -translate-y-1/2 z-10 items-center justify-center ${
                 currentSlide === 0
                   ? "opacity-30 cursor-not-allowed"
                   : "opacity-100 cursor-pointer"
               }`}
+              aria-label="Previous slide"
             >
-              <div className="scroll-arrow-indicator flex items-center justify-center bg-black/30 rounded-full p-2">
+              <div className="scroll-arrow-indicator flex items-center justify-center bg-black/50 backdrop-blur-sm rounded-full p-2 md:p-3">
                 <svg
-                  width="32"
-                  height="32"
+                  width="24"
+                  height="24"
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  className="animate-pulse-slow rotate-180"
+                  className="rotate-180 w-5 h-5 md:w-6 md:h-6 text-white"
                 >
                   <path
                     d="M9 5L16 12L9 19"
@@ -372,20 +457,21 @@ export default function WorkSection({
             <button
               onClick={handleNext}
               disabled={currentSlide >= filteredWorks.length - 3}
-              className={`hidden md:flex absolute right-10 top-[25%] -translate-y-1/2 z-10 h-[300px] items-center justify-center px-4 ${
+              className={`hidden md:flex absolute right-2 md:right-4 lg:right-10 top-1/2 -translate-y-1/2 z-10 items-center justify-center ${
                 currentSlide >= filteredWorks.length - 3
                   ? "opacity-30 cursor-not-allowed"
                   : "opacity-100 cursor-pointer"
               }`}
+              aria-label="Next slide"
             >
-              <div className="scroll-arrow-indicator flex items-center justify-center bg-black/30 rounded-full p-2">
+              <div className="scroll-arrow-indicator flex items-center justify-center bg-black/50 backdrop-blur-sm rounded-full p-2 md:p-3">
                 <svg
-                  width="32"
-                  height="32"
+                  width="24"
+                  height="24"
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  className="animate-pulse-slow"
+                  className="w-5 h-5 md:w-6 md:h-6 text-white"
                 >
                   <path
                     d="M9 5L16 12L9 19"
