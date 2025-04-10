@@ -330,9 +330,9 @@ export default function HeroSection({ data }: { data?: SectionData }) {
                       height="30"
                       stroke="var(--color-quaternary)"
                       strokeWidth="2.5"
-                      strokeOpacity="0.4"
+                      strokeOpacity="1"
                       fill="var(--color-quaternary)"
-                      fillOpacity="0.1"
+                      fillOpacity="0.3"
                       className="maze-path maze-layer-4 cursor-pointer animate-breathing"
                     />
                   </Link>
