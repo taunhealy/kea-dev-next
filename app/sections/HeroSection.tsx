@@ -287,7 +287,7 @@ export default function HeroSection({ data }: { data?: SectionData }) {
                   xmlns="http://www.w3.org/2000/svg"
                   id="pyramid-svg"
                 >
-                  {/* Outer square - using perfect fifth ratio for spacing */}
+                  {/* Outer square - using major third ratio for spacing */}
                   <rect
                     x="5"
                     y="5"
@@ -299,22 +299,22 @@ export default function HeroSection({ data }: { data?: SectionData }) {
                     className="pyramid-path pyramid-layer-1"
                   />
 
-                  {/* Inner pyramid elements - each using perfect fifth ratio (3:2) for spacing */}
+                  {/* Inner pyramid elements - each using major third ratio (5:4) for spacing */}
                   <rect
-                    x="27"
-                    y="27"
-                    width="86"
-                    height="86"
+                    x="31"
+                    y="31"
+                    width="78"
+                    height="78"
                     stroke="var(--color-secondary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.7"
                     className="pyramid-path pyramid-layer-2"
                   />
                   <rect
-                    x="49"
-                    y="49"
-                    width="42"
-                    height="42"
+                    x="50"
+                    y="50"
+                    width="40"
+                    height="40"
                     stroke="var(--color-tertiary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.6"
@@ -324,10 +324,10 @@ export default function HeroSection({ data }: { data?: SectionData }) {
                   {/* Innermost square (quaternary/pink) - interactive with hover effect */}
                   <Link href="/about" passHref>
                     <rect
-                      x="60"
-                      y="60"
-                      width="20"
-                      height="20"
+                      x="62"
+                      y="62"
+                      width="16"
+                      height="16"
                       stroke="var(--color-quaternary)"
                       strokeWidth="2.5"
                       strokeOpacity="1"
@@ -337,12 +337,12 @@ export default function HeroSection({ data }: { data?: SectionData }) {
                     />
                   </Link>
 
-                  {/* Connecting lines - adjusted for perfect fifth ratio */}
+                  {/* Connecting lines - adjusted for major third ratio */}
                   <line
                     x1="70"
                     y1="5"
                     x2="70"
-                    y2="27"
+                    y2="31"
                     stroke="var(--color-primary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.8"
@@ -350,7 +350,7 @@ export default function HeroSection({ data }: { data?: SectionData }) {
                   />
                   <line
                     x1="70"
-                    y1="113"
+                    y1="109"
                     x2="70"
                     y2="135"
                     stroke="var(--color-primary)"
@@ -361,7 +361,7 @@ export default function HeroSection({ data }: { data?: SectionData }) {
                   <line
                     x1="5"
                     y1="70"
-                    x2="27"
+                    x2="31"
                     y2="70"
                     stroke="var(--color-primary)"
                     strokeWidth="1.5"
@@ -369,7 +369,7 @@ export default function HeroSection({ data }: { data?: SectionData }) {
                     className="pyramid-path pyramid-layer-1"
                   />
                   <line
-                    x1="113"
+                    x1="109"
                     y1="70"
                     x2="135"
                     y2="70"
@@ -379,72 +379,72 @@ export default function HeroSection({ data }: { data?: SectionData }) {
                     className="pyramid-path pyramid-layer-1"
                   />
 
-                  {/* Diagonal connectors - adjusted for perfect fifth ratio */}
+                  {/* Diagonal connectors - adjusted for major third ratio */}
                   <line
-                    x1="49"
-                    y1="49"
-                    x2="27"
-                    y2="27"
+                    x1="50"
+                    y1="50"
+                    x2="31"
+                    y2="31"
                     stroke="var(--color-secondary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.7"
                     className="pyramid-path pyramid-layer-2"
                   />
                   <line
-                    x1="91"
-                    y1="49"
-                    x2="113"
-                    y2="27"
+                    x1="90"
+                    y1="50"
+                    x2="109"
+                    y2="31"
                     stroke="var(--color-secondary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.7"
                     className="pyramid-path pyramid-layer-2"
                   />
                   <line
-                    x1="49"
-                    y1="91"
-                    x2="27"
-                    y2="113"
+                    x1="50"
+                    y1="90"
+                    x2="31"
+                    y2="109"
                     stroke="var(--color-secondary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.7"
                     className="pyramid-path pyramid-layer-2"
                   />
                   <line
-                    x1="91"
-                    y1="91"
-                    x2="113"
-                    y2="113"
+                    x1="90"
+                    y1="90"
+                    x2="109"
+                    y2="109"
                     stroke="var(--color-secondary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.7"
                     className="pyramid-path pyramid-layer-2"
                   />
 
-                  {/* Additional pyramid paths - adjusted for perfect fifth ratio */}
+                  {/* Additional pyramid paths - adjusted for major third ratio */}
                   <path
-                    d="M60 70H49"
+                    d="M62 70H50"
                     stroke="var(--color-tertiary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.6"
                     className="pyramid-path pyramid-layer-3"
                   />
                   <path
-                    d="M91 70H80"
+                    d="M90 70H78"
                     stroke="var(--color-tertiary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.6"
                     className="pyramid-path pyramid-layer-3"
                   />
                   <path
-                    d="M70 60V49"
+                    d="M70 62V50"
                     stroke="var(--color-tertiary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.6"
                     className="pyramid-path pyramid-layer-3"
                   />
                   <path
-                    d="M70 91V80"
+                    d="M70 90V78"
                     stroke="var(--color-tertiary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.6"
