@@ -102,18 +102,18 @@ export default function HeroSection({ data }: { data?: SectionData }) {
     console.log("GSAP version:", gsap.version);
   }, []);
 
-  // Add maze animation
+  // Add pyramid animation
   useEffect(() => {
-    const mazeLayers = document.querySelectorAll(".maze-path");
+    const pyramidLayers = document.querySelectorAll(".pyramid-path");
 
-    if (mazeLayers.length) {
+    if (pyramidLayers.length) {
       // Set initial state - all layers invisible
-      gsap.set(mazeLayers, { opacity: 0, visibility: "hidden" });
+      gsap.set(pyramidLayers, { opacity: 0, visibility: "hidden" });
 
       // Create staggered animation
       gsap
         .timeline()
-        .to(".maze-layer-1", {
+        .to(".pyramid-layer-1", {
           opacity: 0.8,
           visibility: "visible",
           duration: 0.8,
@@ -121,7 +121,7 @@ export default function HeroSection({ data }: { data?: SectionData }) {
           delay: 0.5,
         })
         .to(
-          ".maze-layer-2",
+          ".pyramid-layer-2",
           {
             opacity: 0.7,
             visibility: "visible",
@@ -131,7 +131,7 @@ export default function HeroSection({ data }: { data?: SectionData }) {
           "-=0.4"
         )
         .to(
-          ".maze-layer-3",
+          ".pyramid-layer-3",
           {
             opacity: 0.6,
             visibility: "visible",
@@ -141,7 +141,7 @@ export default function HeroSection({ data }: { data?: SectionData }) {
           "-=0.4"
         )
         .to(
-          ".maze-layer-4",
+          ".pyramid-layer-4",
           {
             opacity: 0.4,
             visibility: "visible",
@@ -150,7 +150,7 @@ export default function HeroSection({ data }: { data?: SectionData }) {
             onComplete: () => {
               // Add the breathing animation class after fade-in
               document
-                .querySelector(".maze-layer-4")
+                .querySelector(".pyramid-layer-4")
                 ?.classList.add("animate-breathing");
             },
           },
@@ -274,9 +274,9 @@ export default function HeroSection({ data }: { data?: SectionData }) {
           {/* Glass effect container */}
           <div className="relative rounded-xl backdrop-blur-md bg-black/30 border border-white/10 p-6 shadow-lg">
             <div className="relative inline-flex items-center justify-center">
-              {/* Square maze with stroke but no fill */}
+              {/* Square pyramid with stroke but no fill */}
               <div
-                className="absolute w-[140px] h-[140px] maze-container"
+                className="absolute w-[140px] h-[140px] pyramid-container"
                 ref={mazeRef}
               >
                 <svg
@@ -285,170 +285,170 @@ export default function HeroSection({ data }: { data?: SectionData }) {
                   viewBox="0 0 140 140"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  id="maze-svg"
+                  id="pyramid-svg"
                 >
-                  {/* Outer square */}
+                  {/* Outer square - using perfect fifth ratio for spacing */}
                   <rect
-                    x="10"
-                    y="10"
-                    width="120"
-                    height="120"
+                    x="5"
+                    y="5"
+                    width="130"
+                    height="130"
                     stroke="var(--color-primary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.8"
-                    className="maze-path maze-layer-1"
+                    className="pyramid-path pyramid-layer-1"
                   />
 
-                  {/* Inner maze elements */}
+                  {/* Inner pyramid elements - each using perfect fifth ratio (3:2) for spacing */}
                   <rect
-                    x="25"
-                    y="25"
-                    width="90"
-                    height="90"
+                    x="27"
+                    y="27"
+                    width="86"
+                    height="86"
                     stroke="var(--color-secondary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.7"
-                    className="maze-path maze-layer-2"
+                    className="pyramid-path pyramid-layer-2"
                   />
                   <rect
-                    x="40"
-                    y="40"
-                    width="60"
-                    height="60"
+                    x="49"
+                    y="49"
+                    width="42"
+                    height="42"
                     stroke="var(--color-tertiary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.6"
-                    className="maze-path maze-layer-3"
+                    className="pyramid-path pyramid-layer-3"
                   />
 
                   {/* Innermost square (quaternary/pink) - interactive with hover effect */}
                   <Link href="/about" passHref>
                     <rect
-                      x="55"
-                      y="55"
-                      width="30"
-                      height="30"
+                      x="60"
+                      y="60"
+                      width="20"
+                      height="20"
                       stroke="var(--color-quaternary)"
                       strokeWidth="2.5"
                       strokeOpacity="1"
                       fill="var(--color-quaternary)"
-                      fillOpacity="0.3"
-                      className="maze-path maze-layer-4 cursor-pointer animate-breathing"
+                      fillOpacity="0.7"
+                      className="pyramid-path pyramid-layer-4 cursor-pointer animate-breathing"
                     />
                   </Link>
 
-                  {/* Connecting lines */}
+                  {/* Connecting lines - adjusted for perfect fifth ratio */}
                   <line
                     x1="70"
-                    y1="10"
+                    y1="5"
                     x2="70"
-                    y2="25"
+                    y2="27"
                     stroke="var(--color-primary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.8"
-                    className="maze-path maze-layer-1"
+                    className="pyramid-path pyramid-layer-1"
                   />
                   <line
                     x1="70"
-                    y1="115"
+                    y1="113"
                     x2="70"
-                    y2="130"
+                    y2="135"
                     stroke="var(--color-primary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.8"
-                    className="maze-path maze-layer-1"
+                    className="pyramid-path pyramid-layer-1"
                   />
                   <line
-                    x1="10"
+                    x1="5"
                     y1="70"
-                    x2="25"
+                    x2="27"
                     y2="70"
                     stroke="var(--color-primary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.8"
-                    className="maze-path maze-layer-1"
+                    className="pyramid-path pyramid-layer-1"
                   />
                   <line
-                    x1="115"
+                    x1="113"
                     y1="70"
-                    x2="130"
+                    x2="135"
                     y2="70"
                     stroke="var(--color-primary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.8"
-                    className="maze-path maze-layer-1"
+                    className="pyramid-path pyramid-layer-1"
                   />
 
-                  {/* Diagonal connectors */}
+                  {/* Diagonal connectors - adjusted for perfect fifth ratio */}
                   <line
-                    x1="40"
-                    y1="40"
-                    x2="25"
-                    y2="25"
+                    x1="49"
+                    y1="49"
+                    x2="27"
+                    y2="27"
                     stroke="var(--color-secondary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.7"
-                    className="maze-path maze-layer-2"
+                    className="pyramid-path pyramid-layer-2"
                   />
                   <line
-                    x1="100"
-                    y1="40"
-                    x2="115"
-                    y2="25"
+                    x1="91"
+                    y1="49"
+                    x2="113"
+                    y2="27"
                     stroke="var(--color-secondary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.7"
-                    className="maze-path maze-layer-2"
+                    className="pyramid-path pyramid-layer-2"
                   />
                   <line
-                    x1="40"
-                    y1="100"
-                    x2="25"
-                    y2="115"
+                    x1="49"
+                    y1="91"
+                    x2="27"
+                    y2="113"
                     stroke="var(--color-secondary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.7"
-                    className="maze-path maze-layer-2"
+                    className="pyramid-path pyramid-layer-2"
                   />
                   <line
-                    x1="100"
-                    y1="100"
-                    x2="115"
-                    y2="115"
+                    x1="91"
+                    y1="91"
+                    x2="113"
+                    y2="113"
                     stroke="var(--color-secondary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.7"
-                    className="maze-path maze-layer-2"
+                    className="pyramid-path pyramid-layer-2"
                   />
 
-                  {/* Additional maze paths */}
+                  {/* Additional pyramid paths - adjusted for perfect fifth ratio */}
                   <path
-                    d="M55 70H40"
+                    d="M60 70H49"
                     stroke="var(--color-tertiary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.6"
-                    className="maze-path maze-layer-3"
+                    className="pyramid-path pyramid-layer-3"
                   />
                   <path
-                    d="M100 70H85"
+                    d="M91 70H80"
                     stroke="var(--color-tertiary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.6"
-                    className="maze-path maze-layer-3"
+                    className="pyramid-path pyramid-layer-3"
                   />
                   <path
-                    d="M70 55V40"
+                    d="M70 60V49"
                     stroke="var(--color-tertiary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.6"
-                    className="maze-path maze-layer-3"
+                    className="pyramid-path pyramid-layer-3"
                   />
                   <path
-                    d="M70 100V85"
+                    d="M70 91V80"
                     stroke="var(--color-tertiary)"
                     strokeWidth="1.5"
                     strokeOpacity="0.6"
-                    className="maze-path maze-layer-3"
+                    className="pyramid-path pyramid-layer-3"
                   />
                 </svg>
               </div>
