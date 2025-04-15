@@ -514,8 +514,8 @@
   }
 
   /* Add this to hide maze paths initially */
-  .maze-path {
-    opacity: 0.3;
+  .pyramid-path {
+    opacity: 0;
     visibility: hidden;
   }
 }
