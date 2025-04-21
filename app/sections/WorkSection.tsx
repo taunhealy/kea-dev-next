@@ -256,15 +256,21 @@ export default function WorkSection({
   }, []);
 
   return (
-    <section className="flex flex-col min-h-screen md:min-h-[630px] w-full relative overflow-hidden pt-6 md:pt-8 gap-6 md:gap-8 bg-black border-b border-white/10">
-      <div className="px-4 md:px-8">
-        <h1 className="text-xl md:text-3xl font-primary font-normal tracking-tight text-white mb-4 md:mb-6">
-          Portfolio Items
+    <section className="flex flex-col min-h-screen md:min-h-[630px] w-full relative overflow-hidden pt-40 md:pt-40 gap-6 md:gap-8 bg-black border-b border-white/10">
+      {/* Title and description */}
+      <div className="px-6 md:px-8">
+        <h1 className="text-xl md:text-3xl font-primary font-normal tracking-tight text-white mb-2 md:mb-3">
+          Our Work
         </h1>
+        <p className="text-white/60 text-base md:text-lg font-primary max-w-2xl">
+          Explore our portfolio of innovative digital solutions. From brand
+          identity and web design to full-stack development and media
+          production, we create experiences that drive results.
+        </p>
       </div>
 
       {/* FILTER CONTROLS - ONLY CATEGORIES */}
-      <div className="flex flex-col md:flex-row gap-4 px-4 md:px-8">
+      <div className="flex flex-col md:flex-row gap-4 px-6 md:px-8">
         {/* CATEGORY FILTERS */}
         <div className="work-filter-buttons flex flex-wrap md:flex-nowrap overflow-x-auto md:flex-wrap gap-2 md:gap-4 pb-2 md:pb-0">
           <button
@@ -325,7 +331,7 @@ export default function WorkSection({
       <div className="relative w-full overflow-hidden mb-8 md:mb-0">
         <div
           ref={containerRef}
-          className="work-items-container min-h-[350px] md:min-h-[586px] flex flex-row flex-wrap justify-center md:justify-start gap-[30px] md:gap-[54px] px-4 md:px-8 transition-transform duration-500"
+          className="work-items-container min-h-[350px] md:min-h-[586px] flex flex-row flex-wrap justify-center md:justify-start gap-y-[32px] gap-x-[20px] md:gap-[54px] px-6 md:px-8 transition-transform duration-500"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -407,11 +413,11 @@ export default function WorkSection({
 
                 {/* Card Content */}
                 <div className="work-card-content relative">
-                  <h3 className="text-white text-sm md:text-lg font-primary">
+                  <h3 className="text-white text-base md:text-lg font-primary">
                     {work.title}
                   </h3>
 
-                  <p className="text-white/60 mt-0.5 md:mt-1 line-clamp-2 text-xs md:text-base font-primary">
+                  <p className="text-white/60 mt-1 md:mt-1 line-clamp-2 text-sm md:text-base font-primary">
                     {work.description}
                   </p>
                 </div>

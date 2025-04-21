@@ -61,9 +61,9 @@ export default function HeroBeams() {
 
       // Fade out the entire container after 15 seconds
       gsap.to(containerRef.current, {
-        opacity: 0,
+        opacity: 0.2,
         duration: 1.5,
-        delay: 7,
+        delay: 15,
         ease: "power2.inOut",
       });
     }, containerRef);

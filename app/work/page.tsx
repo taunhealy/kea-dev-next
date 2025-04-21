@@ -22,27 +22,7 @@ export default async function WorkPage() {
   );
 
   return (
-    <div className="flex flex-col min-h-screen bg-black">
-      {/* Hero Section */}
-      <section className="overflow-hidden">
-        <div className="flex flex-col h-[50vh] min-h-[400px] relative z-0 bg-black">
-          <div className="flex flex-col justify-center h-full py-0 px-8">
-            <div className="flex flex-col items-start gap-6 max-w-[540px]">
-              <div className="titles-container flex flex-col gap-4 relative">
-                <h1 className="text-xl md:text-3xl font-primary font-normal tracking-tight text-white">
-                  Our <span className="text-color-primary">Work</span>
-                </h1>
-                <p className="text-white/60 text-lg md:text-lg font-primary leading-relaxed">
-                  Explore our portfolio of innovative digital solutions. From
-                  brand identity and web design to full-stack development and
-                  media production, we create experiences that drive results.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
+    <div className="flex flex-col min-h-screen bg-black pt-[90px]">
       {/* Work Portfolio Section */}
       <WorkSection
         data={{ sectionTitle: "Our Work" }}
@@ -51,7 +31,7 @@ export default async function WorkPage() {
       />
 
       {/* Process Section */}
-      <section className="container-large py-24 border-t border-white/10">
+      <section className="container-large py-16 md:py-24 px-6 md:px-8 border-t border-white/10">
         <div className="grid md:grid-cols-2 gap-12 md:gap-16">
           <div>
             <h2 className="text-2xl md:text-3xl font-primary font-normal tracking-tight mb-6">
@@ -140,7 +120,7 @@ export default async function WorkPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="container-large py-24 border-t border-white/10">
+      <section className="container-large py-16 md:py-24 px-6 md:px-8 border-t border-white/10">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl md:text-3xl font-primary font-normal tracking-tight mb-6">
             Ready to start your{" "}
