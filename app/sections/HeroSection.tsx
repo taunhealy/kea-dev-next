@@ -18,6 +18,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { useGSAP } from "@gsap/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import InDevelopment from "@/app/components/InDevelopment";
 
 interface SectionData {
   _type: string;
@@ -69,6 +70,37 @@ interface SectionData {
       projectDescription?: string;
     };
   };
+  inDevelopmentItems?: Array<{
+    _type: string;
+    _key: string;
+    _ref: string;
+    title?: string;
+    mainImage?: {
+      _type: string;
+      asset: {
+        _ref: string;
+        _type: string;
+      };
+    };
+    description?: PortableTextBlock[] | string;
+    workItemId?: string;
+    workType?: {
+      _type: string;
+      _key: string;
+      title: string;
+    };
+    coverImage?: {
+      _type: string;
+      asset: {
+        _ref: string;
+        _type: string;
+      };
+    };
+    core?: {
+      projectDescription?: string;
+    };
+    figmaUrl?: string;
+  }>;
 }
 
 // Make sure to register all plugins
@@ -271,187 +303,10 @@ export default function HeroSection({ data }: { data?: SectionData }) {
 
         {/* Centered Text Logo with beam pass-through effect - alternative */}
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-20 hidden md:block">
-          {/* Glass effect container */}
-          <div className="relative rounded-xl backdrop-blur-md bg-black/30 border border-white/10 p-8 shadow-lg">
+          {/* Glass effect container - removed border and changed background */}
+          <div className="relative rounded-xl backdrop-blur-md bg-black/20 p-8">
             <div className="flex flex-col items-center space-y-8">
-              {/* Smaller pyramid */}
-              <div
-                className="relative w-[80px] h-[80px] pyramid-container"
-                ref={mazeRef}
-              >
-                <svg
-                  width="80"
-                  height="80"
-                  viewBox="0 0 140 140"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  id="pyramid-svg"
-                >
-                  {/* Outer square - using major third ratio for spacing */}
-                  <rect
-                    x="5"
-                    y="5"
-                    width="130"
-                    height="130"
-                    stroke="var(--color-primary)"
-                    strokeWidth="1.5"
-                    strokeOpacity="0.8"
-                    className="pyramid-path pyramid-layer-1"
-                  />
-
-                  {/* Inner pyramid elements - each using major third ratio (5:4) for spacing */}
-                  <rect
-                    x="31"
-                    y="31"
-                    width="78"
-                    height="78"
-                    stroke="var(--color-secondary)"
-                    strokeWidth="1.5"
-                    strokeOpacity="0.7"
-                    className="pyramid-path pyramid-layer-2"
-                  />
-                  <rect
-                    x="50"
-                    y="50"
-                    width="40"
-                    height="40"
-                    stroke="var(--color-tertiary)"
-                    strokeWidth="1.5"
-                    strokeOpacity="0.6"
-                    className="pyramid-path pyramid-layer-3"
-                  />
-
-                  {/* Innermost square (quaternary/pink) - interactive with hover effect */}
-                  <Link href="/about" passHref>
-                    <rect
-                      x="62"
-                      y="62"
-                      width="16"
-                      height="16"
-                      stroke="var(--color-quaternary)"
-                      strokeWidth="2.5"
-                      strokeOpacity="1"
-                      fill="var(--color-quaternary)"
-                      fillOpacity="0.7"
-                      className="pyramid-path pyramid-layer-4 cursor-pointer animate-breathing"
-                    />
-                  </Link>
-
-                  {/* Connecting lines - adjusted for major third ratio */}
-                  <line
-                    x1="70"
-                    y1="5"
-                    x2="70"
-                    y2="31"
-                    stroke="var(--color-primary)"
-                    strokeWidth="1.5"
-                    strokeOpacity="0.8"
-                    className="pyramid-path pyramid-layer-1"
-                  />
-                  <line
-                    x1="70"
-                    y1="109"
-                    x2="70"
-                    y2="135"
-                    stroke="var(--color-primary)"
-                    strokeWidth="1.5"
-                    strokeOpacity="0.8"
-                    className="pyramid-path pyramid-layer-1"
-                  />
-                  <line
-                    x1="5"
-                    y1="70"
-                    x2="31"
-                    y2="70"
-                    stroke="var(--color-primary)"
-                    strokeWidth="1.5"
-                    strokeOpacity="0.8"
-                    className="pyramid-path pyramid-layer-1"
-                  />
-                  <line
-                    x1="109"
-                    y1="70"
-                    x2="135"
-                    y2="70"
-                    stroke="var(--color-primary)"
-                    strokeWidth="1.5"
-                    strokeOpacity="0.8"
-                    className="pyramid-path pyramid-layer-1"
-                  />
-
-                  {/* Diagonal connectors - adjusted for major third ratio */}
-                  <line
-                    x1="50"
-                    y1="50"
-                    x2="31"
-                    y2="31"
-                    stroke="var(--color-secondary)"
-                    strokeWidth="1.5"
-                    strokeOpacity="0.7"
-                    className="pyramid-path pyramid-layer-2"
-                  />
-                  <line
-                    x1="90"
-                    y1="50"
-                    x2="109"
-                    y2="31"
-                    stroke="var(--color-secondary)"
-                    strokeWidth="1.5"
-                    strokeOpacity="0.7"
-                    className="pyramid-path pyramid-layer-2"
-                  />
-                  <line
-                    x1="50"
-                    y1="90"
-                    x2="31"
-                    y2="109"
-                    stroke="var(--color-secondary)"
-                    strokeWidth="1.5"
-                    strokeOpacity="0.7"
-                    className="pyramid-path pyramid-layer-2"
-                  />
-                  <line
-                    x1="90"
-                    y1="90"
-                    x2="109"
-                    y2="109"
-                    stroke="var(--color-secondary)"
-                    strokeWidth="1.5"
-                    strokeOpacity="0.7"
-                    className="pyramid-path pyramid-layer-2"
-                  />
-
-                  {/* Additional pyramid paths - adjusted for major third ratio */}
-                  <path
-                    d="M62 70H50"
-                    stroke="var(--color-tertiary)"
-                    strokeWidth="1.5"
-                    strokeOpacity="0.6"
-                    className="pyramid-path pyramid-layer-3"
-                  />
-                  <path
-                    d="M90 70H78"
-                    stroke="var(--color-tertiary)"
-                    strokeWidth="1.5"
-                    strokeOpacity="0.6"
-                    className="pyramid-path pyramid-layer-3"
-                  />
-                  <path
-                    d="M70 62V50"
-                    stroke="var(--color-tertiary)"
-                    strokeWidth="1.5"
-                    strokeOpacity="0.6"
-                    className="pyramid-path pyramid-layer-3"
-                  />
-                  <path
-                    d="M70 90V78"
-                    stroke="var(--color-tertiary)"
-                    strokeWidth="1.5"
-                    strokeOpacity="0.6"
-                    className="pyramid-path pyramid-layer-3"
-                  />
-                </svg>
-              </div>
+              {/* Pyramid removed */}
 
               {/* Brand title and subtitle */}
               <div className="flex flex-col items-center space-y-3">
@@ -525,201 +380,12 @@ export default function HeroSection({ data }: { data?: SectionData }) {
 
               {/* Right sidebar */}
               <div className="w-full lg:w-[350px] flex flex-col gap-6">
-                {/* In Development Section - hidden on mobile */}
-                <div className="hidden md:block in-development-container relative border border-white/20 rounded-lg p-6 bg-black/40 backdrop-blur-sm overflow-hidden">
-                  {/* Animated border glow effect */}
-                  <div className="absolute inset-0 -z-10 animate-pulse">
-                    <div className="absolute inset-0 bg-black blur-sm"></div>
-                  </div>
-
-                  <h3 className="text-white font-primary text-lg mb-5 border-b border-white/20 pb-3">
-                    In Development
-                  </h3>
-
-                  <div className="project-card mb-5">
-                    <h4 className="text-white font-primary text-base mb-5">
-                      {data?.inDevelopment?.title || "Project Horizon"}
-                    </h4>
-
-                    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-                      <DialogTrigger asChild>
-                        {data?.inDevelopment?.mainImage ||
-                        data?.inDevelopment?.coverImage ? (
-                          <div className="relative h-32 w-full rounded-md overflow-hidden mb-5 cursor-pointer hover:opacity-90 transition-opacity">
-                            <Image
-                              src={urlForImage(
-                                data.inDevelopment.mainImage ||
-                                  data.inDevelopment.coverImage
-                              ).url()}
-                              alt={
-                                data.inDevelopment.title || "Current project"
-                              }
-                              fill
-                              priority
-                              className="object-cover"
-                              onError={() => setHasImageError(true)}
-                            />
-                          </div>
-                        ) : (
-                          data?.heroImage && (
-                            <div className="relative h-32 w-full rounded-md overflow-hidden mb-5 cursor-pointer hover:opacity-90 transition-opacity">
-                              <Image
-                                src={urlForImage(data.heroImage).url()}
-                                alt="Current project"
-                                fill
-                                priority
-                                className="object-cover"
-                                onError={() => setHasImageError(true)}
-                              />
-                            </div>
-                          )
-                        )}
-                      </DialogTrigger>
-
-                      <SimpleDialogContent
-                        className="dialog-content"
-                        title={data?.inDevelopment?.title || "Project Details"}
-                      >
-                        <div className="flex flex-col gap-4">
-                          <div className="relative h-60 w-full rounded-md overflow-hidden mb-4">
-                            <Image
-                              src={urlForImage(
-                                data?.inDevelopment?.mainImage ||
-                                  data?.inDevelopment?.coverImage ||
-                                  data?.heroImage
-                              ).url()}
-                              alt={
-                                data?.inDevelopment?.title || "Current project"
-                              }
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-
-                          <div className="space-y-4">
-                            {typeof data?.inDevelopment?.description ===
-                            "object" ? (
-                              <div className="text-white/80 font-primary">
-                                <PortableText
-                                  value={
-                                    data.inDevelopment
-                                      .description as PortableTextBlock[]
-                                  }
-                                  components={{
-                                    block: {
-                                      normal: ({ children }) => {
-                                        return (
-                                          <p className="mb-4 font-primary">
-                                            {children}
-                                          </p>
-                                        );
-                                      },
-                                      h1: ({ children }) => (
-                                        <h1 className="text-xl font-primary mb-4">
-                                          {children}
-                                        </h1>
-                                      ),
-                                      h2: ({ children }) => (
-                                        <h2 className="text-lg font-primary mb-3">
-                                          {children}
-                                        </h2>
-                                      ),
-                                    },
-                                    list: {
-                                      bullet: ({ children }) => (
-                                        <ul className="list-disc pl-5 mb-4 space-y-2">
-                                          {children}
-                                        </ul>
-                                      ),
-                                      number: ({ children }) => (
-                                        <ol className="list-decimal pl-5 mb-4 space-y-2">
-                                          {children}
-                                        </ol>
-                                      ),
-                                    },
-                                    listItem: {
-                                      bullet: ({ children }) => (
-                                        <li className="mb-2 font-primary">
-                                          {children}
-                                        </li>
-                                      ),
-                                      number: ({ children }) => (
-                                        <li className="mb-2 font-primary">
-                                          {children}
-                                        </li>
-                                      ),
-                                    },
-                                    marks: {
-                                      link: ({ value, children }) => {
-                                        const target = (
-                                          value?.href || ""
-                                        ).startsWith("http")
-                                          ? "_blank"
-                                          : undefined;
-                                        return (
-                                          <a
-                                            href={value?.href}
-                                            target={target}
-                                            rel={
-                                              target === "_blank"
-                                                ? "noopener noreferrer"
-                                                : undefined
-                                            }
-                                            className="text-primary hover:underline"
-                                          >
-                                            {children}
-                                          </a>
-                                        );
-                                      },
-                                      strong: ({ children }) => (
-                                        <strong className="font-semibold">
-                                          {children}
-                                        </strong>
-                                      ),
-                                      em: ({ children }) => (
-                                        <em className="italic">{children}</em>
-                                      ),
-                                    },
-                                  }}
-                                />
-                              </div>
-                            ) : (
-                              <p className="text-white/80 font-primary">
-                                {getProjectDescription()}
-                              </p>
-                            )}
-
-                            <p className="text-white/60 font-primary text-sm">
-                              Category:{" "}
-                              <span className="px-2 py-1 bg-black/40 border border-white/20 rounded-md text-white/70 inline-block mt-1">
-                                {data?.inDevelopment?.workType?.title ||
-                                  "Booking System"}
-                              </span>
-                            </p>
-                          </div>
-
-                          <Button
-                            variant="outline"
-                            className="mt-4 self-end"
-                            onClick={() => setDialogOpen(false)}
-                          >
-                            Close
-                          </Button>
-                        </div>
-                      </SimpleDialogContent>
-                    </Dialog>
-                  </div>
-
-                  <div className="sanity-reference mt-5 pt-3 border-t border-white/20">
-                    <p className="text-white/50 font-primary text-xs flex items-center space-x-3">
-                      <span className="inline-block w-2 h-2 bg-primary rounded-full animate-pulse"></span>
-                      <span className="px-3 py-1.5 bg-black/40 border border-white/20 rounded-md text-white/70">
-                        {data?.inDevelopment?.workType?.title ||
-                          "Booking System"}
-                      </span>
-                    </p>
-                  </div>
-                </div>
+                {/* In Development Section - now as a component */}
+                <InDevelopment
+                  inDevelopment={data?.inDevelopment}
+                  inDevelopmentItems={data?.inDevelopmentItems}
+                  fallbackImage={data?.heroImage}
+                />
 
                 {/* Tech Stack */}
                 <TechStack />

@@ -328,13 +328,124 @@ export default function WorkSection({
       </div>
 
       {/* WORK CARDS GRID */}
-      <div className="relative w-full overflow-hidden mb-8 md:mb-0">
+      <div className="relative w-full overflow-hidden mb-8 md:mb-16">
+        {/* Mobile view: Column layout */}
+        <div className="md:hidden flex flex-col gap-10 px-6">
+          {filteredWorks.slice(0, 5).map((work, index) => {
+            const isTideRaider =
+              work.title === "Tide Raider" ||
+              work.slug.current === "tide-raider";
+
+            // Get the border color for this card
+            const borderColor = selectedCategory
+              ? getCategoryColor(selectedCategory)
+              : getColorByIndex(index);
+
+            return (
+              <a
+                key={work.slug.current}
+                href={`/work/${work.slug.current}`}
+                className="w-full group cursor-pointer work-card work-item"
+              >
+                <div className="relative aspect-[4/3] mb-3 w-full h-[180px] overflow-hidden rounded-lg work-card-image">
+                  {/* Pulsing animation border for Tide Raider */}
+                  {isTideRaider && (
+                    <div
+                      className="absolute -inset-1 rounded-lg opacity-75 -z-10 transition-opacity duration-3000 animate-pulse-slow"
+                      style={{
+                        background: `linear-gradient(45deg, ${borderColor}, var(--color-quaternary), var(--color-tertiary))`,
+                        animation: "pulse-opacity 3s ease-in-out infinite",
+                      }}
+                    ></div>
+                  )}
+
+                  {/* Top Feature Badge for Tide Raider */}
+                  {isTideRaider && (
+                    <div className="absolute top-2 right-2 text-white font-primary text-xs px-2 py-0.5 rounded-full z-10 shadow-lg border border-white">
+                      Feature-Rich
+                    </div>
+                  )}
+
+                  {/* Work Type Badge - bottom right of image */}
+                  {work.workType && (
+                    <div className="absolute bottom-2 right-2 text-white font-primary text-xs px-2 py-0.5 rounded-full z-10 shadow-lg bg-black/50 border border-white/20">
+                      {work.workType.title}
+                    </div>
+                  )}
+
+                  {/* Square Border Container */}
+                  <div
+                    className="absolute inset-0 border-2 rounded-lg transition-all duration-300 group-hover:border-0 work-card-border"
+                    style={{
+                      borderColor: borderColor,
+                    }}
+                  />
+
+                  {/* Image - visible on mobile, hover effect on desktop */}
+                  {work.coverImage && work.coverImage.asset && (
+                    <img
+                      src={urlForImage(work.coverImage).url()}
+                      alt={work.title}
+                      className="w-full h-full object-cover md:scale-95 md:opacity-0 md:group-hover:scale-100 md:group-hover:opacity-[85%] scale-100 opacity-[85%] transition-all duration-300"
+                    />
+                  )}
+
+                  {/* Category indicators */}
+                  <div className="absolute top-2 left-2 flex gap-1">
+                    {work.categories.map((category) => (
+                      <div
+                        key={category.slug.current}
+                        className="w-2 h-2 rounded-full opacity-40 group-hover:opacity-100 transition-opacity duration-300"
+                        style={{
+                          backgroundColor: getCategoryColor(
+                            category.slug.current
+                          ),
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* Card Content */}
+                <div className="work-card-content relative">
+                  <h3 className="text-white text-base font-primary">
+                    {work.title}
+                  </h3>
+
+                  <p className="text-white/60 mt-1 line-clamp-2 text-sm font-primary">
+                    {work.description}
+                  </p>
+                </div>
+              </a>
+            );
+          })}
+
+          {/* Show "View More" button if more than 5 items */}
+          {filteredWorks.length > 5 && (
+            <div className="text-center mt-8">
+              <button
+                className="px-4 py-2 border border-white/20 rounded-full text-white text-sm font-primary hover:bg-white/5 transition-colors"
+                onClick={() => {
+                  // Scroll to show all items or navigate to works page
+                  window.location.href = "/work";
+                }}
+              >
+                View All Projects
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Desktop view: Horizontal slider with bottom margin */}
         <div
           ref={containerRef}
-          className="work-items-container min-h-[350px] md:min-h-[586px] flex flex-row flex-wrap justify-center md:justify-start gap-y-[32px] gap-x-[20px] md:gap-[54px] px-6 md:px-8 transition-transform duration-500"
+          className="work-items-container hidden md:flex flex-row flex-nowrap gap-x-[54px] px-8 transition-transform duration-500 mb-12"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
+          style={{
+            transform: `translateX(-${currentSlide * 454}px)`,
+          }}
         >
           {filteredWorks.map((work, index) => {
             const isTideRaider =
@@ -350,9 +461,9 @@ export default function WorkSection({
               <a
                 key={work.slug.current}
                 href={`/work/${work.slug.current}`}
-                className="min-w-[280px] w-[280px] md:min-w-[400px] md:w-[400px] group cursor-pointer work-card work-item"
+                className="min-w-[400px] w-[400px] flex-shrink-0 group cursor-pointer work-card work-item"
               >
-                <div className="relative aspect-[4/3] mb-3 md:mb-4 w-full h-[180px] md:h-[300px] overflow-hidden rounded-lg work-card-image">
+                <div className="relative aspect-[4/3] mb-4 w-full h-[300px] overflow-hidden rounded-lg work-card-image">
                   {/* Pulsing animation border for Tide Raider */}
                   {isTideRaider && (
                     <div
@@ -366,21 +477,21 @@ export default function WorkSection({
 
                   {/* Top Feature Badge for Tide Raider */}
                   {isTideRaider && (
-                    <div className="absolute top-2 md:top-4 right-2 md:right-4 text-white font-primary text-xs px-2 md:px-3 py-0.5 md:py-1 rounded-full z-10 shadow-lg border border-white">
+                    <div className="absolute top-4 right-4 text-white font-primary text-xs px-3 py-1 rounded-full z-10 shadow-lg border border-white">
                       Feature-Rich
                     </div>
                   )}
 
                   {/* Work Type Badge - bottom right of image */}
                   {work.workType && (
-                    <div className="absolute bottom-2 md:bottom-4 right-2 md:right-4 text-white font-primary text-xs px-2 md:px-3 py-0.5 md:py-1 rounded-full z-10 shadow-lg bg-black/50 border border-white/20">
+                    <div className="absolute bottom-4 right-4 text-white font-primary text-xs px-3 py-1 rounded-full z-10 shadow-lg bg-black/50 border border-white/20">
                       {work.workType.title}
                     </div>
                   )}
 
                   {/* Square Border Container */}
                   <div
-                    className="absolute inset-0 border-2 md:border-4 rounded-lg transition-all duration-300 group-hover:border-0 work-card-border"
+                    className="absolute inset-0 border-4 rounded-lg transition-all duration-300 group-hover:border-0 work-card-border"
                     style={{
                       borderColor: borderColor,
                     }}
@@ -396,11 +507,11 @@ export default function WorkSection({
                   )}
 
                   {/* Category indicators */}
-                  <div className="absolute top-2 md:top-4 left-2 md:left-4 flex gap-1 md:gap-1.5">
+                  <div className="absolute top-4 left-4 flex gap-1.5">
                     {work.categories.map((category) => (
                       <div
                         key={category.slug.current}
-                        className="w-2 md:w-3 h-2 md:h-3 rounded-full opacity-40 group-hover:opacity-100 transition-opacity duration-300"
+                        className="w-3 h-3 rounded-full opacity-40 group-hover:opacity-100 transition-opacity duration-300"
                         style={{
                           backgroundColor: getCategoryColor(
                             category.slug.current
@@ -413,11 +524,11 @@ export default function WorkSection({
 
                 {/* Card Content */}
                 <div className="work-card-content relative">
-                  <h3 className="text-white text-base md:text-lg font-primary">
+                  <h3 className="text-white text-lg font-primary">
                     {work.title}
                   </h3>
 
-                  <p className="text-white/60 mt-1 md:mt-1 line-clamp-2 text-sm md:text-base font-primary">
+                  <p className="text-white/60 mt-1 line-clamp-2 text-base font-primary">
                     {work.description}
                   </p>
                 </div>
@@ -426,28 +537,27 @@ export default function WorkSection({
           })}
         </div>
 
-        {/* Mobile pagination dots - removed since we're not using a slider on mobile */}
-        {/* Navigation arrows - visible only on desktop */}
+        {/* Navigation arrows - desktop only */}
         {showScrollIndicator && (
-          <>
+          <div className="hidden md:block">
             <button
               onClick={handlePrev}
               disabled={currentSlide === 0}
-              className={`hidden md:flex absolute left-2 md:left-4 lg:left-10 top-1/2 -translate-y-1/2 z-10 items-center justify-center ${
+              className={`flex absolute left-4 lg:left-10 top-1/2 -translate-y-1/2 z-10 items-center justify-center ${
                 currentSlide === 0
                   ? "opacity-30 cursor-not-allowed"
                   : "opacity-100 cursor-pointer"
               }`}
               aria-label="Previous slide"
             >
-              <div className="scroll-arrow-indicator flex items-center justify-center bg-black/50 backdrop-blur-sm rounded-full p-2 md:p-3">
+              <div className="scroll-arrow-indicator flex items-center justify-center bg-black/50 backdrop-blur-sm rounded-full p-3">
                 <svg
                   width="24"
                   height="24"
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  className="rotate-180 w-5 h-5 md:w-6 md:h-6 text-white"
+                  className="rotate-180 w-6 h-6 text-white"
                 >
                   <path
                     d="M9 5L16 12L9 19"
@@ -463,21 +573,21 @@ export default function WorkSection({
             <button
               onClick={handleNext}
               disabled={currentSlide >= filteredWorks.length - 3}
-              className={`hidden md:flex absolute right-2 md:right-4 lg:right-10 top-1/2 -translate-y-1/2 z-10 items-center justify-center ${
+              className={`flex absolute right-4 lg:right-10 top-1/2 -translate-y-1/2 z-10 items-center justify-center ${
                 currentSlide >= filteredWorks.length - 3
                   ? "opacity-30 cursor-not-allowed"
                   : "opacity-100 cursor-pointer"
               }`}
               aria-label="Next slide"
             >
-              <div className="scroll-arrow-indicator flex items-center justify-center bg-black/50 backdrop-blur-sm rounded-full p-2 md:p-3">
+              <div className="scroll-arrow-indicator flex items-center justify-center bg-black/50 backdrop-blur-sm rounded-full p-3">
                 <svg
                   width="24"
                   height="24"
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5 md:w-6 md:h-6 text-white"
+                  className="w-6 h-6 text-white"
                 >
                   <path
                     d="M9 5L16 12L9 19"
@@ -489,7 +599,7 @@ export default function WorkSection({
                 </svg>
               </div>
             </button>
-          </>
+          </div>
         )}
       </div>
     </section>

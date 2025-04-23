@@ -14,6 +14,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Add transpilePackages for Sanity Studio
+  transpilePackages: ["@sanity"],
 };
 
 export default nextConfig;
