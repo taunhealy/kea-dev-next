@@ -1,8 +1,8 @@
 "use client";
 
 import { NextStudio } from "next-sanity/studio";
-// Import directly from the sanity folder to avoid version conflicts
-import config from "../../../sanity/sanity.config";
+// Fix the import path to use the alias instead of relative path
+import config from "@/sanity/sanity.config";
 // or using absolute path:
 // import config from "@/sanity/sanity.config";
 
