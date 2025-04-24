@@ -1,1 +1,24 @@
-<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1155 1000"><path d="m577.3 0 577.4 1000H0z" fill="#fff"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 128 128">
+  <!-- Kea bird head shape -->
+  <path d="M64 16C37.5 16 16 37.5 16 64s21.5 48 48 48 48-21.5 48-48S90.5 16 64 16zm0 8c22.1 0 40 17.9 40 40s-17.9 40-40 40-40-17.9-40-40 17.9-40 40-40z" />
+  
+  <!-- Distinctive curved beak - key feature of the Kea -->
+  <path d="M64 70c0 0 12 5 18 0c6-5 8-15 0-20c-8-5-18 20-18 20z" />
+  
+  <!-- Eyes -->
+  <circle cx="45" cy="50" r="6" />
+  <circle cx="83" cy="50" r="6" />
+  
+  <!-- Feather details on head -->
+  <path d="M35 35c5-8 15-12 29-12c14 0 24 4 29 12c5 8 5 15 0 20c-5-8-15-12-29-12c-14 0-24 4-29 12c-5-5-5-12 0-20z" />
+  
+  <!-- Wing accent (showing the distinctive orange underwing) -->
+  <path d="M30 75c8 12 20 15 34 15c14 0 26-3 34-15c-8 0-20 5-34 5c-14 0-26-5-34-5z" />
+  
+  <style>
+    path, circle { fill: #E45E34; }
+    @media (prefers-color-scheme: dark) {
+      path, circle { fill: #FF7F50; }
+    }
+  </style>
+</svg>

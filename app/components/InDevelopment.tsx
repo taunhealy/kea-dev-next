@@ -5,9 +5,9 @@ import Image from "next/image";
 import { urlForImage } from "@/lib/urlForImage";
 import { PortableText, PortableTextBlock } from "@portabletext/react";
 import {
-  FigmaLogoIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  GitHubLogoIcon,
 } from "@radix-ui/react-icons";
 import { Button } from "@/app/components/ui/button";
 import {
@@ -47,6 +47,7 @@ interface WorkItem {
     projectDescription?: string;
   };
   figmaUrl?: string;
+  githubUrl?: string;
 }
 
 interface InDevelopmentProps {
@@ -90,6 +91,13 @@ export default function InDevelopment({
 
   const workItems = getWorkItems();
   const currentWorkItem = workItems[currentWorkItemIndex];
+
+  // Debug logging
+  console.log("All work items:", workItems);
+  console.log("Current work item:", currentWorkItem);
+  console.log("Figma URL:", currentWorkItem?.figmaUrl);
+  console.log("GitHub URL:", currentWorkItem?.githubUrl);
+
   const hasMultipleItems = workItems.length > 1;
 
   const nextWorkItem = () => {
@@ -293,22 +301,62 @@ export default function InDevelopment({
                 <div className="flex items-center justify-between">
                   <p className="text-white/60 font-primary text-sm">
                     Category:{" "}
-                    <span className="px-2 py-1 bg-black/40 border border-white/20 rounded-md text-white/70 inline-block mt-1">
+                    <span className="px-2 py-1 bg-black/40 border border-white/20 rounded-md text-white/70 inline-block mt-1 ml-2">
                       {currentWorkItem?.workType?.title || "Booking System"}
                     </span>
                   </p>
 
-                  {currentWorkItem?.figmaUrl && (
+                  <div className="flex items-center gap-2">
+                    {/* GitHub icon - always show */}
                     <a
-                      href={currentWorkItem.figmaUrl}
+                      href={currentWorkItem?.githubUrl || "#"}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="px-3 py-1.5 bg-black/40 border border-white/20 rounded-md text-white/70 hover:bg-black/60 transition-colors flex items-center gap-2"
                     >
-                      <FigmaLogoIcon className="w-4 h-4" />
+                      <GitHubLogoIcon className="w-4 h-4" />
+                      <span className="font-primary text-sm">GitHub</span>
+                    </a>
+
+                    {/* Figma icon - always show */}
+                    <a
+                      href={currentWorkItem?.figmaUrl || "#"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3 py-1.5 bg-black/40 border border-white/20 rounded-md text-white/70 hover:bg-black/60 transition-colors flex items-center gap-2"
+                    >
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-4 h-4"
+                      >
+                        <path
+                          d="M8 24C10.2091 24 12 22.2091 12 20V16H8C5.79086 16 4 17.7909 4 20C4 22.2091 5.79086 24 8 24Z"
+                          fill="currentColor"
+                        />
+                        <path
+                          d="M4 12C4 9.79086 5.79086 8 8 8H12V16H8C5.79086 16 4 14.2091 4 12Z"
+                          fill="currentColor"
+                        />
+                        <path
+                          d="M4 4C4 1.79086 5.79086 0 8 0H12V8H8C5.79086 8 4 6.20914 4 4Z"
+                          fill="currentColor"
+                        />
+                        <path
+                          d="M12 0H16C18.2091 0 20 1.79086 20 4C20 6.20914 18.2091 8 16 8H12V0Z"
+                          fill="currentColor"
+                        />
+                        <path
+                          d="M20 12C20 14.2091 18.2091 16 16 16C13.7909 16 12 14.2091 12 12C12 9.79086 13.7909 8 16 8C18.2091 8 20 9.79086 20 12Z"
+                          fill="currentColor"
+                        />
+                      </svg>
                       <span className="font-primary text-sm">Figma</span>
                     </a>
-                  )}
+                  </div>
                 </div>
               </div>
 
@@ -326,24 +374,72 @@ export default function InDevelopment({
 
       <div className="sanity-reference mt-5 pt-3 border-t border-white/20">
         <div className="flex items-center justify-between">
-          <p className="text-white/50 font-primary text-xs flex items-center space-x-3">
+          <div className="flex items-center space-x-3">
             <span className="inline-block w-2 h-2 bg-primary rounded-full animate-pulse"></span>
-            <span className="px-3 py-1.5 bg-black/40 border border-white/20 rounded-md text-white/70">
+            <span className="px-3 py-1.5 bg-black/40 border border-white/20 rounded-md text-white/70 font-primary text-xs">
               {currentWorkItem?.workType?.title || "Booking System"}
             </span>
-          </p>
 
-          {currentWorkItem?.figmaUrl && (
-            <a
-              href={currentWorkItem.figmaUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 bg-black/40 border border-white/20 rounded-md text-white/70 hover:bg-black/60 transition-colors"
-              aria-label="View in Figma"
-            >
-              <FigmaLogoIcon className="w-4 h-4" />
-            </a>
-          )}
+            {/* Always render icons for testing */}
+            <div className="flex items-center gap-2">
+              {/* GitHub icon - always show */}
+              <a
+                href={currentWorkItem?.githubUrl || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-1.5 bg-black/40 border border-white/20 rounded-md text-white/70 hover:bg-black/60 transition-colors"
+                aria-label="View on GitHub"
+              >
+                <GitHubLogoIcon className="w-3.5 h-3.5" />
+              </a>
+
+              {/* Figma icon - always show */}
+              <a
+                href={currentWorkItem?.figmaUrl || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-1.5 bg-black/40 border border-white/20 rounded-md text-white/70 hover:bg-black/60 transition-colors"
+                aria-label="View in Figma"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-3.5 h-3.5"
+                >
+                  <path
+                    d="M8 24C10.2091 24 12 22.2091 12 20V16H8C5.79086 16 4 17.7909 4 20C4 22.2091 5.79086 24 8 24Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M4 12C4 9.79086 5.79086 8 8 8H12V16H8C5.79086 16 4 14.2091 4 12Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M4 4C4 1.79086 5.79086 0 8 0H12V8H8C5.79086 8 4 6.20914 4 4Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M12 0H16C18.2091 0 20 1.79086 20 4C20 6.20914 18.2091 8 16 8H12V0Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M20 12C20 14.2091 18.2091 16 16 16C13.7909 16 12 14.2091 12 12C12 9.79086 13.7909 8 16 8C18.2091 8 20 9.79086 20 12Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          {/* Status indicator */}
+          <div className="flex items-center">
+            <span className="text-white/50 font-primary text-xs">
+              In Progress
+            </span>
+          </div>
         </div>
       </div>
     </div>

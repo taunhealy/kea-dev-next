@@ -512,10 +512,4 @@
   .animate-breathing {
     animation: breathing 7s infinite ease-in-out;
   }
-
-  /* Add this to hide maze paths initially */
-  .pyramid-path {
-    opacity: 0;
-    visibility: hidden;
-  }
 }

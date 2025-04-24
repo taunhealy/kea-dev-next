@@ -270,6 +270,18 @@ export default defineType({
       to: [{type: 'workType'}],
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: 'figmaUrl',
+      title: 'Figma URL',
+      type: 'url',
+      description: 'Link to the Figma design file for this project',
+    }),
+    defineField({
+      name: 'githubUrl',
+      title: 'GitHub URL',
+      type: 'url',
+      description: 'Link to the GitHub repository for this project',
+    }),
   ],
   preview: {
     select: {

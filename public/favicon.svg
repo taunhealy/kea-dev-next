@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 128 128">
+  <!-- Black background -->
+  <rect width="128" height="128" fill="#000000" />
+  
+  <!-- Outer circle (Malkuth) -->
+  <circle cx="64" cy="64" r="60" fill="#22c55e" opacity="0.2" />
+  
+  <!-- Middle circle (Path of ascent) -->
+  <circle cx="64" cy="64" r="45" fill="#f97316" opacity="0.3" />
+  
+  <!-- Inner circle (Approaching Tiferet) -->
+  <circle cx="64" cy="64" r="30" fill="#a855f7" opacity="0.5" />
+  
+  <!-- Center circle (Tiferet) -->
+  <circle cx="64" cy="64" r="15" fill="#f43f5e" opacity="0.8" />
+  
+  <!-- Central point (Divine spark) -->
+  <circle cx="64" cy="64" r="5" fill="#ffffff" />
+  
+  <!-- Connecting paths (representing the paths on the Tree of Life) -->
+  <path d="M64 124 L64 4" stroke="#22c55e" stroke-width="1.5" opacity="0.6" />
+  <path d="M4 64 L124 64" stroke="#f97316" stroke-width="1.5" opacity="0.6" />
+  <path d="M24 24 L104 104" stroke="#a855f7" stroke-width="1.5" opacity="0.6" />
+  <path d="M24 104 L104 24" stroke="#f43f5e" stroke-width="1.5" opacity="0.6" />
+  
+  <style>
+    circle, path {
+      transition: all 0.5s ease;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      circle:nth-child(2) { opacity: 0.3; }
+      circle:nth-child(3) { opacity: 0.4; }
+      circle:nth-child(4) { opacity: 0.6; }
+      circle:nth-child(5) { opacity: 0.9; }
+      path { opacity: 0.7; }
+    }
+    
+    /* Subtle breathing animation for the circles */
+    @keyframes breathing {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 0.4; }
+    }
+    
+    circle:nth-child(2) {
+      animation: breathing 8s infinite ease-in-out;
+    }
+    
+    circle:nth-child(3) {
+      animation: breathing 7s infinite ease-in-out;
+      animation-delay: 1s;
+    }
+    
+    circle:nth-child(4) {
+      animation: breathing 6s infinite ease-in-out;
+      animation-delay: 2s;
+    }
+    
+    circle:nth-child(5) {
+      animation: breathing 5s infinite ease-in-out;
+      animation-delay: 3s;
+    }
+  </style>
+</svg> 

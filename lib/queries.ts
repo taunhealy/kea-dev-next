@@ -22,6 +22,13 @@ export const homePageQuery = defineQuery(`{
         description,
         coverImage,
         mainImage,
+        figmaUrl,
+        githubUrl,
+        workType->{
+          title,
+          _key,
+          _type
+        },
         core {
           projectTitle,
           clientName,
@@ -37,6 +44,13 @@ export const homePageQuery = defineQuery(`{
         description,
         coverImage,
         mainImage,
+        figmaUrl,
+        githubUrl,
+        workType->{
+          title,
+          _key,
+          _type
+        },
         core {
           projectTitle,
           clientName,
