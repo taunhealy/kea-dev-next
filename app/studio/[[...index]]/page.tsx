@@ -1,8 +1,8 @@
 "use client";
 
 import { NextStudio } from "next-sanity/studio";
-// Fix the import path to use the alias instead of relative path
-import config from "@/sanity/sanity.config";
+// Use relative path instead of alias
+import config from "../../../sanity/sanity.config";
 // or using absolute path:
 // import config from "@/sanity/sanity.config";
 
