@@ -26,6 +26,7 @@ export default function WorkDetailTabs({
 }: WorkDetailTabsProps) {
   const [activeTab, setActiveTab] = useState("core");
   const [clickedTab, setClickedTab] = useState<string | null>(null);
+  const [imagesLoading, setImagesLoading] = useState(true);
   const sectionRefs = {
     core: useRef<HTMLDivElement>(null),
     "brand-identity": useRef<HTMLDivElement>(null),
@@ -127,6 +128,17 @@ export default function WorkDetailTabs({
     return () => window.removeEventListener("scroll", handleScroll);
   }, [ALL_TABS]);
 
+  // Add effect to simulate image loading completion
+  useEffect(() => {
+    // Set a timeout to simulate image loading
+    // In a real implementation, you might want to track actual image loading events
+    const imageLoadTimer = setTimeout(() => {
+      setImagesLoading(false);
+    }, 1500); // Adjust timing as needed
+
+    return () => clearTimeout(imageLoadTimer);
+  }, []);
+
   return (
     <div className="container-large py-20">
       {/* Sticky Navbar */}
@@ -139,8 +151,17 @@ export default function WorkDetailTabs({
         scrollToSection={scrollToSection}
       />
 
-      {/* Content Sections */}
-      <div className="mt-8">
+      {/* Loading Skeleton */}
+      {imagesLoading && (
+        <div className="mt-8 space-y-8">
+          <div className="w-full h-64 bg-gray-800/40 animate-pulse rounded-md"></div>
+          <div className="w-full h-96 bg-gray-800/40 animate-pulse rounded-md"></div>
+          <div className="w-3/4 h-48 bg-gray-800/40 animate-pulse rounded-md"></div>
+        </div>
+      )}
+
+      {/* Content Sections - Only show when images are loaded */}
+      <div className={`mt-8 ${imagesLoading ? "hidden" : "block"}`}>
         {/* Core Section */}
         {hasCoreSectionData() && (
           <div ref={sectionRefs.core} className="py-16">
