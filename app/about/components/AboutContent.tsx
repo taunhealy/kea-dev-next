@@ -61,8 +61,10 @@ export function AboutContent({ aboutData }: AboutContentProps) {
                 <div className="titles-container flex flex-col gap-8 relative md:w-1/2">
                   <div className="space-y-6">
                     <p className="text-white/60 text-base md:text-lg font-primary leading-relaxed">
-                      We&apos;re a small team focused on building effective
-                      digital solutions for businesses and organizations.
+                      Hi, my name is Taun. I focus on building simple, beautiful
+                      and effective digital solutions for businesses and
+                      organizations, with the result of increasing profit and
+                      saving time.
                     </p>
                     <p className="text-white/60 text-base md:text-lg font-primary leading-relaxed">
                       Named after the Kea, New Zealand&apos;s alpine parrot

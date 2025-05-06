@@ -67,15 +67,15 @@ export function AboutSection({ aboutData }: AboutContentProps) {
                     About Us
                   </h1>
                   <p className="text-white/60 text-base font-primary leading-relaxed mb-4">
-                    We're a small team focused on building effective digital
-                    solutions for businesses and organizations.
+                    Hi, my name is Taun. I focus on building simple, elegant and
+                    effective digital solutions for businesses and organizations
+                    that increases profit and saves time.
                   </p>
                   <p className="text-white/60 text-base font-primary leading-relaxed">
                     Named after the Kea, New Zealand's alpine parrot known for
                     its problem-solving abilities. Like our namesake, we
                     approach challenges with creativity and adaptability,
-                    finding innovative solutions in complex environments (and
-                    have fun while we're at it).
+                    finding innovative solutions in complex environments.
                   </p>
                 </div>
               </div>
