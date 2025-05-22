@@ -3,6 +3,7 @@ import { client } from "@/lib/sanity";
 import { workPageQuery } from "@/lib/queries";
 import WorkSection from "@/app/sections/WorkSection";
 import { Button } from "@/app/components/ui/button";
+import { CTASection } from "@/app/sections/CTASection";
 
 export const metadata: Metadata = {
   title: "Our Work | Kea Logic",
@@ -119,22 +120,7 @@ export default async function WorkPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="container-large py-16 md:py-24 px-6 md:px-8 border-t border-white/10">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl font-primary font-normal tracking-tight mb-6">
-            Ready to start your{" "}
-            <span className="text-color-primary">project</span>?
-          </h2>
-          <p className="text-white/60 font-primary mb-8">
-            Let's discuss how we can help bring your vision to life with our
-            expertise in design, development, and digital strategy.
-          </p>
-          <Button variant="outline" size="lg" asChild>
-            <a href="taunhealy@kealogic.dev">Get in Touch</a>
-          </Button>
-        </div>
-      </section>
+      <CTASection />
     </div>
   );
 }

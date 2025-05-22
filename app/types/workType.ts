@@ -4,6 +4,7 @@ export interface Work {
   slug: {
     current: string;
   };
+  order?: number;
   client?: {
     title: string;
     _id: string;

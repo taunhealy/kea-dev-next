@@ -33,7 +33,7 @@ export default function PartyButton() {
           </Button>
         </TooltipTrigger>
         <TooltipContent className="font-primary">
-          Cheers to epic adventures 🍻
+          Cheers!
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

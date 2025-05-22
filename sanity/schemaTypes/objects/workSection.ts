@@ -9,17 +9,21 @@ export default defineType({
       name: 'sectionTitle',
       title: 'Section Title',
       type: 'string',
-      initialValue: 'Our Work'
+      initialValue: 'Our Work',
     }),
     defineField({
       name: 'works',
       title: 'Featured Works',
+      description:
+        'Works will be displayed in the order selected here, or by their individual order field if set.',
       type: 'array',
-      of: [{
-        type: 'reference',
-        to: [{ type: 'work' }]
-      }],
-      validation: Rule => Rule.required().min(1)
+      of: [
+        {
+          type: 'reference',
+          to: [{type: 'work'}],
+        },
+      ],
+      validation: (Rule) => Rule.required().min(1),
     }),
   ],
 })

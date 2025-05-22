@@ -1,7 +1,6 @@
 "use client";
 
 import { usePartyMode } from "../context/PartyModeContext";
-import PartyModeBeams from "./PartyModeBeams";
 import PartyModeFireworks from "./PartyModeFireworks";
 import Confetti from "./Confetti";
 
@@ -16,7 +15,6 @@ export default function PartyMode() {
           isPartyMode ? "opacity-100" : "opacity-0"
         }`}
       >
-        <PartyModeBeams isActive={isPartyMode} />
         <PartyModeFireworks isActive={isPartyMode} />
       </div>
       <Confetti isActive={isPartyMode} />

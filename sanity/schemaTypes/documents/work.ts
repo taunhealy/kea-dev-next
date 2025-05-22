@@ -22,6 +22,13 @@ export default defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'order',
+      title: 'Display Order',
+      type: 'number',
+      description: 'Lower numbers will be displayed first. Leave blank for default ordering.',
+      validation: (Rule) => Rule.integer().positive(),
+    }),
+    defineField({
       name: 'client',
       title: 'Client',
       type: 'reference',
@@ -288,12 +295,14 @@ export default defineType({
       title: 'title',
       client: 'client.title',
       workType: 'workType.title',
+      order: 'order',
       media: 'coverImage',
     },
-    prepare({title, client, workType, media}) {
+    prepare({title, client, workType, order, media}) {
+      const orderDisplay = order !== undefined ? `#${order}` : ''
       return {
         title,
-        subtitle: `${client || 'No client'} · ${workType || 'No type'}`,
+        subtitle: `${orderDisplay ? orderDisplay + ' · ' : ''}${client || 'No client'} · ${workType || 'No type'}`,
         media,
       }
     },

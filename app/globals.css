@@ -20,7 +20,7 @@
   /* Text Colors */
   --color-text-primary: var(--color-black);
   --color-text-secondary: #4b5563;
-  --color-text-tertiary: #9ca3af;
+  --color-text-tertiary: rgba(255, 255, 255, 0.8);
   --color-text-muted: rgba(255, 255, 255, 0.6);
 
   /* Background Colors */
@@ -81,7 +81,7 @@
 [data-theme="dark"] {
   --color-text-primary: var(--color-white);
   --color-text-secondary: #e5e7eb;
-  --color-text-tertiary: #9ca3af;
+  --color-text-tertiary: rgba(255, 255, 255, 0.8);
 
   --color-background-primary: var(--color-black);
   --color-background-secondary: #1f2937;
@@ -127,7 +127,7 @@
   }
 
   p {
-    @apply font-primary leading-relaxed text-white/60;
+    @apply font-primary leading-relaxed text-white/80;
   }
 
   /* Add base styles for buttons to preserve cursor behavior */
@@ -377,8 +377,6 @@
 
   /* Animation utilities */
   .party-button {
-    background: linear-gradient(45deg, #22c55e, #f97316, #a855f7, #22c55e);
-    background-size: 400% 400%;
     animation: party-gradient 3s ease infinite;
   }
 
@@ -511,5 +509,34 @@
 
   .animate-breathing {
     animation: breathing 7s infinite ease-in-out;
+  }
+
+  @keyframes pulseBorder {
+    0% {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+    }
+    33% {
+      border-color: var(--color-secondary);
+      box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4);
+    }
+    66% {
+      border-color: var(--color-tertiary);
+      box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4);
+    }
+    100% {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+    }
+  }
+
+  .cta-pulse-border {
+    position: relative;
+    animation: pulseBorder 21s infinite;
+    transition: all 0.2s ease;
+  }
+
+  .cta-pulse-border:hover {
+    animation-play-state: paused;
   }
 }

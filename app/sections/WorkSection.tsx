@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, TouchEvent } from "react";
+import { useState, useEffect, useRef, TouchEvent, useCallback } from "react";
 import type { Work } from "../types/workType";
 import gsap from "gsap";
 import { urlForImage } from "@/lib/sanity";
@@ -41,6 +41,42 @@ export default function WorkSection({
   const containerRef = useRef<HTMLDivElement>(null);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  // Sort and filter works function
+  const getSortedAndFilteredWorks = useCallback(() => {
+    // Filter works based on category
+    let filtered = works || [];
+
+    if (selectedCategory) {
+      filtered = filtered.filter((work) =>
+        work.categories.some((cat) => cat.slug.current === selectedCategory)
+      );
+    }
+
+    // Sort works by order field
+    return [...filtered].sort((a, b) => {
+      // If both have order, sort by order
+      if (a.order !== undefined && b.order !== undefined) {
+        return a.order - b.order;
+      }
+      // If only a has order, it comes first
+      if (a.order !== undefined) return -1;
+      // If only b has order, it comes first
+      if (b.order !== undefined) return 1;
+      // If neither has order, maintain the original order
+      return 0;
+    });
+  }, [works, selectedCategory]);
+
+  // Initial load + whenever works or category changes
+  useEffect(() => {
+    const sortedAndFiltered = getSortedAndFilteredWorks();
+    console.log(
+      "Initial sorted works:",
+      sortedAndFiltered.map((w) => ({ title: w.title, order: w.order }))
+    );
+    setFilteredWorks(sortedAndFiltered);
+  }, [getSortedAndFilteredWorks]);
 
   // Check if we need to show scroll indicators
   useEffect(() => {
@@ -102,16 +138,13 @@ export default function WorkSection({
       duration: 0.7,
       stagger: 0.02,
       onComplete: () => {
-        // Filter works based on category only
-        let filtered = works;
-
-        if (selectedCategory) {
-          filtered = filtered.filter((work) =>
-            work.categories.some((cat) => cat.slug.current === selectedCategory)
-          );
-        }
-
-        setFilteredWorks(filtered);
+        // Use the reusable sort function instead of duplicating logic
+        const sortedAndFiltered = getSortedAndFilteredWorks();
+        console.log(
+          "Sorted works in animation effect:",
+          sortedAndFiltered.map((w) => ({ title: w.title, order: w.order }))
+        );
+        setFilteredWorks(sortedAndFiltered);
       },
     }).to(cards, {
       opacity: 1,
@@ -123,7 +156,7 @@ export default function WorkSection({
     return () => {
       tl.kill();
     };
-  }, [selectedCategory, works]);
+  }, [selectedCategory, works, getSortedAndFilteredWorks]);
 
   // Slide animation effect
   useEffect(() => {
@@ -256,21 +289,21 @@ export default function WorkSection({
   }, []);
 
   return (
-    <section className="flex flex-col min-h-screen md:min-h-[630px] w-full relative overflow-hidden pt-40 md:pt-40 gap-6 md:gap-8 bg-black border-b border-white/10">
+    <section className="flex flex-col min-h-screen md:min-h-[630px] w-full relative overflow-hidden pt-[95px] md:pt-[95px] gap-6 md:gap-8 bg-black border-b border-white/10">
       {/* Title and description */}
-      <div className="px-6 md:px-8">
-        <h1 className="text-xl md:text-3xl font-primary font-normal tracking-tight text-white mb-2 md:mb-3">
+      <div className="px-6 md:pl-[95px] md:pr-8">
+        <h1 className="text-xl md:text-3xl font-primary font-normal tracking-tight text-white mb-2 md:mb-[24px]">
           Our Work
         </h1>
-        <p className="text-white/60 text-base md:text-lg font-primary max-w-2xl">
-          Explore our portfolio of innovative digital solutions. From brand
-          identity and web design to full-stack development and media
-          production, we create experiences that drive results.
+        <p className="text-white/80 text-base md:text-lg font-primary max-w-xl">
+          Explore our portfolio of digital solutions. From brand identity and
+          web design to full-stack development and website media production, we
+          create experiences that drive results.
         </p>
       </div>
 
       {/* FILTER CONTROLS - ONLY CATEGORIES */}
-      <div className="flex flex-col md:flex-row gap-4 px-6 md:px-8">
+      <div className="flex flex-col md:flex-row gap-4 px-6 md:pl-[95px] md:pr-8 mt-5">
         {/* CATEGORY FILTERS */}
         <div className="work-filter-buttons flex flex-wrap md:flex-nowrap overflow-x-auto md:flex-wrap gap-2 md:gap-4 pb-2 md:pb-0">
           <button
@@ -332,9 +365,7 @@ export default function WorkSection({
         {/* Mobile view: Column layout */}
         <div className="md:hidden flex flex-col gap-10 px-6">
           {filteredWorks.slice(0, 5).map((work, index) => {
-            const isTideRaider =
-              work.title === "Tide Raider" ||
-              work.slug.current === "tide-raider";
+            const isTideRaider = work.title === "" || work.slug.current === "";
 
             // Get the border color for this card
             const borderColor = selectedCategory
@@ -439,7 +470,7 @@ export default function WorkSection({
         {/* Desktop view: Horizontal slider with bottom margin */}
         <div
           ref={containerRef}
-          className="work-items-container hidden md:flex flex-row flex-nowrap gap-x-[54px] px-8 transition-transform duration-500 mb-12"
+          className="work-items-container hidden md:flex flex-row flex-nowrap gap-x-[54px] md:pl-[95px] pr-8 transition-transform duration-500 mb-12"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}

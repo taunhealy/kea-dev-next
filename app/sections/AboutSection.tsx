@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Button } from "@/app/components/ui/button";
 import { ImageSlider } from "@/app/components/ImageSlider";
+import { CTASection } from "./CTASection";
 
 interface AboutContentProps {
   aboutData: {
@@ -237,21 +238,7 @@ export function AboutSection({ aboutData }: AboutContentProps) {
       </section>
 
       {/* CTA Section */}
-      <section className="container-large py-24 border-t border-white/10">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-[20px] md:text-3xl font-primary font-normal tracking-tight mb-6">
-            Ready to start your{" "}
-            <span className="text-color-primary">project</span>?
-          </h2>
-          <p className="text-white/60 text-base font-primary leading-relaxed mb-8">
-            Have a project in mind? We'd love to hear about it and discuss how
-            we can help.
-          </p>
-          <Button variant="outline" size="lg" asChild>
-            <a href="taunhealy@kealogic.dev">Get in Touch</a>
-          </Button>
-        </div>
-      </section>
+      <CTASection description="Have a project in mind? We'd love to hear about it and discuss how we can help." />
     </div>
   );
 }

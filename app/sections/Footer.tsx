@@ -108,7 +108,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://github.com/kea-logic"
+                href="https://github.com/taunhealy"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-white/60 hover:text-white transition-colors"

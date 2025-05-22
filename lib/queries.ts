@@ -61,7 +61,7 @@ export const homePageQuery = defineQuery(`{
       }
     )
   },
-  "works": *[_type == "work" && (!defined(inDevelopment) || inDevelopment == false)] | order(orderRank) {
+  "works": *[_type == "work" && (!defined(inDevelopment) || inDevelopment == false)] | order(coalesce(order, 100), title asc) {
     ...,
     "client": client->{title, _id},
     "workType": workType->{title, slug},
@@ -175,7 +175,7 @@ export const postQuery = `*[_type == "post" && slug.current == $slug][0]{
   }`;
 
 export const workSectionQuery = groq`{
-  "works": *[_type == "work" && (!defined(inDevelopment) || inDevelopment == false)] | order(orderRank) {
+  "works": *[_type == "work" && (!defined(inDevelopment) || inDevelopment == false)] | order(coalesce(order, 100), title asc) {
     ...,
     categories[]->{ title, slug { current } }
   },
@@ -187,6 +187,7 @@ export const workDetailQuery = groq`{
     _id,
     title,
     slug,
+    order,
     description,
     completionDate,
     technologies,
@@ -301,26 +302,21 @@ export const workDetailQuery = groq`{
       link
     }
   },
-  "allWorks": *[_type == "work" && (!defined(inDevelopment) || inDevelopment == false)] | order(orderRank) {
+  "allWorks": *[_type == "work"] | order(coalesce(order, 100), title asc) {
     _id,
     title,
-    slug {
-      current
-    },
-    description,
-    coverImage {
-      asset-> {
-        url
-      }
-    }
+    slug { current },
+    order,
+    coverImage
   }
 }`;
 
 export const workPageQuery = groq`{
-  "works": *[_type == "work" && (!defined(inDevelopment) || inDevelopment == false)] | order(orderRank) {
+  "works": *[_type == "work" && (!defined(inDevelopment) || inDevelopment == false)] | order(coalesce(order, 100), title asc) {
     _id,
     title,
     slug,
+    order,
     description,
     completionDate,
     technologies,
@@ -420,14 +416,15 @@ export const getRelatedWorksQuery = groq`
 {
   "currentWork": *[_type == "work" && slug.current == $slug][0] {
     _id,
-    orderRank
+    order
   },
-  "allWorks": *[_type == "work" && (!defined(inDevelopment) || inDevelopment == false)] | order(orderRank) {
+  "allWorks": *[_type == "work" && (!defined(inDevelopment) || inDevelopment == false)] | order(coalesce(order, 100), title asc) {
     _id,
     title,
     slug {
       current
     },
+    order,
     description,
     coverImage {
       asset-> {
